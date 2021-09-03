@@ -25,7 +25,6 @@ window/stretch/aspect="keep"
 
 [gui]
 
-theme/use_hidpi=true
 theme/custom_font="res://assets/orkney/Orkney.tres"
 
 [physics]

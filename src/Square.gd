@@ -41,5 +41,3 @@ func drop_data(_position, data):
 	var from_piece = data["from_square"].get_node("Piece")
 	$Piece.texture = from_piece.texture
 	from_piece.texture = null
-
-	print(data["from_square"].square_name + square_name)

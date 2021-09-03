@@ -16,9 +16,10 @@ __meta__ = {
 
 [node name="V" type="VBoxContainer" parent="."]
 margin_left = 487.0
-margin_top = 337.0
+margin_top = 316.0
 margin_right = 793.0
-margin_bottom = 383.0
+margin_bottom = 404.0
+custom_constants/separation = 12
 
 [node name="Title" type="Label" parent="V"]
 margin_right = 306.0
@@ -28,6 +29,26 @@ text = "Godot Simple Chess"
 align = 1
 
 [node name="Board" parent="V" instance=ExtResource( 1 )]
-margin_top = 46.0
+margin_top = 50.0
 margin_right = 306.0
-margin_bottom = 46.0
+margin_bottom = 50.0
+
+[node name="H" type="HBoxContainer" parent="V"]
+margin_top = 62.0
+margin_right = 306.0
+margin_bottom = 88.0
+custom_constants/separation = 20
+
+[node name="ResetButton" type="Button" parent="V/H"]
+margin_right = 53.0
+margin_bottom = 26.0
+text = "Reset"
+
+[node name="FlipButton" type="Button" parent="V/H"]
+margin_left = 73.0
+margin_right = 112.0
+margin_bottom = 26.0
+text = "Flip"
+
+[connection signal="pressed" from="V/H/ResetButton" to="V/Board" method="_on_ResetButton_pressed"]
+[connection signal="pressed" from="V/H/FlipButton" to="V/Board" method="_on_FlipButton_pressed"]
