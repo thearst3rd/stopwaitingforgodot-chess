@@ -12,7 +12,7 @@ The theme of the jam is "Keep it Simple", so rather than come up with any new fa
 
 I had the idea to implement chess in Godot a while ago, but I wasn't very familiar with the engine at the time and struggled to make the user interface in a "nice" way using control nodes. But participating in the GMTK game jam helped me get a lot of experience with the engine, and so I figured I could take another stab at it and be more succesful this time.
 
-Even with this simple theme, there's a lot I could do in this project. So sticking with the theme of "Keep it Simple", here is what I think will be a general guideline of how much I implement:
+Even with this simple project idea, there's a lot I could end up doing and I need to keep my scope in check. So sticking with the theme of "Keep it Simple", here is what I think will be a general guideline of how much I implement:
 
 * Chess logic
 	* Legal move generation
@@ -32,3 +32,7 @@ Even with this simple theme, there's a lot I could do in this project. So sticki
 * Enemy AI
 	* For now, the AI will probably just be a simple random move AI. Creating an actual AI using game tree search is probably out of scope for this weekend :)
 	* If it isn't too hard though, I can add support for UCI engine communication
+
+# Credits/Attributions
+
+See [CREDITS.md](CREDITS.md).
