@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://src/Board.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/orkney/Orkney Bold.otf" type="DynamicFontData" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+size = 32
+font_data = ExtResource( 2 )
+
+[node name="Game" type="CenterContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="V" type="VBoxContainer" parent="."]
+margin_left = 487.0
+margin_top = 337.0
+margin_right = 793.0
+margin_bottom = 383.0
+
+[node name="Title" type="Label" parent="V"]
+margin_right = 306.0
+margin_bottom = 38.0
+custom_fonts/font = SubResource( 1 )
+text = "Godot Simple Chess"
+align = 1
+
+[node name="Board" parent="V" instance=ExtResource( 1 )]
+margin_top = 46.0
+margin_right = 306.0
+margin_bottom = 46.0
