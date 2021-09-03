@@ -33,6 +33,20 @@ Even with this simple project idea, there's a lot I could end up doing and I nee
 	* For now, the AI will probably just be a simple random move AI. Creating an actual AI using game tree search is probably out of scope for this weekend :)
 	* If it isn't too hard though, I can add support for UCI engine communication
 
+## Log
+
+So I'll admit, I did a bit of prep work before hand. Particularly, this week I watched and followed along with the following tutorials by [Game Development Center](https://www.youtube.com/channel/UClseGZiVmeHamsjYmpbiAmQ):
+
+* [Grid Based Inventory System | Godot Inventory Tutorial](https://www.youtube.com/watch?v=lrAwX2t1mGY)
+* [Drag and Drop Inventory System | Godot Tutorial](https://www.youtube.com/watch?v=dZYlwmBCziM)
+
+These tutorials helped me get setup with a grid based 8x8 chess board, and a system where I can pick up the chess pieces and drag them to other squares.
+
+I still have a few questions though -
+
+* While dragging, the original chess piece stays where it is at full opacity. I would like to make it transparent, which I can easily do while picking up the piece, but I don't know how to undo that transparency if the user decided to cancel the drag. There isn't a `drag_cancelled()` method AFAIK. Will just listening for a global "mouse released" event work well?
+* Additionally, the "drag distance" seems pretty high, as in, you need to click and drag pretty far on the square before getting any feedback. Can I shorten that distance? Or, should I just nuke this whole built-in drag/drop system and do it myself? Time shall see :)
+
 # Credits/Attributions
 
 See [CREDITS.md](CREDITS.md).

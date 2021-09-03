@@ -15,6 +15,10 @@ func _ready():
 			square.color = dark_square_color if is_dark else light_square_color
 			add_child(square)
 
+			square.file = file
+			square.rank = rank
+			square.square_name = char(ord("a") - 1 + file) + str(rank)
+
 			# Hard code piece graphics for now
 			var col = "w" if rank < 5 else "b"
 			var piece = null
