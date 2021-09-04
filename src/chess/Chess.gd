@@ -24,6 +24,7 @@ static func square_get_file(square_index : int) -> int:
 	return (square_index % 8) + 1
 
 static func square_get_rank(square_index : int) -> int:
+# warning-ignore:integer_division
 	return 8 - (square_index / 8)
 
 static func square_get_name(square_index) -> String:
@@ -72,7 +73,7 @@ func duplicate():
 		new_chess.move_stack.push_back(move.duplicate())
 	return new_chess
 
-func set_fen(fen):
+func set_fen(_fen):
 	# TODO
 	pass
 
@@ -321,4 +322,120 @@ func generate_pawn_moves(col, square_index):
 		var piece = pieces[new_square]
 		if new_square == ep_target or (piece != null and piece_color(piece) != col):
 			moves.append_array(generate_pawn_move_list(square_index, new_square))
+	return moves
+
+# Returns the square of the given color's king
+func king(col : bool) -> int:
+	var target = "k" if col else "K"
+	for square in range(64):
+		if pieces[square] == target:
+			return square
+	return -1	# shouldn't happen
+
+# Returns if the given square is attacked by the given color
+func is_square_attacked(square : int, col : bool) -> bool:
+	if square < 0 or square >= 64:
+		return false
+	var file = square_get_file(square)
+	var rank = square_get_rank(square)
+
+	# Check for pawns
+	var delta = -8 if col else 8
+	var target = "p" if col else "P"
+	var new_square = square + delta
+	if new_square >= 0 and new_square < 64:
+		if file > 1:
+			if pieces[new_square - 1] == target:
+				return true
+		if file < 8:
+			if pieces[new_square + 1] == target:
+				return true
+
+	# Check for kings
+	target = "k" if col else "K"
+	for offset in ROYAL_OFFSETS:
+		file = square_get_file(square) + offset[0]
+		rank = square_get_rank(square) + offset[1]
+		if file < 1 or file > 8 or rank < 1 or rank > 8:
+			continue
+		if pieces[square_index(file, rank)] == target:
+			return true
+
+	# Check for knights
+	target = "n" if col else "N"
+	for offset in KNIGHT_OFFSETS:
+		file = square_get_file(square) + offset[0]
+		rank = square_get_rank(square) + offset[1]
+		if file < 1 or file > 8 or rank < 1 or rank > 8:
+			continue
+		if pieces[square_index(file, rank)] == target:
+			return true
+
+	# Check for rooks / queens
+	target = ["r", "q"] if col else ["R", "Q"]
+	for offset in ROOK_OFFSETS:
+		var d_file = offset[0]
+		var d_rank = offset[1]
+		file = square_get_file(square) + d_file
+		rank = square_get_rank(square) + d_rank
+		while file >= 1 and file <= 8 and rank >= 1 and rank <= 8:
+			var piece = pieces[square_index(file, rank)]
+			if piece != null:
+				if piece in target:
+					return true
+				break
+			file += d_file
+			rank += d_rank
+
+	# Check for bishops / queens
+	target = ["b", "q"] if col else ["B", "Q"]
+	for offset in BISHOP_OFFSETS:
+		var d_file = offset[0]
+		var d_rank = offset[1]
+		file = square_get_file(square) + d_file
+		rank = square_get_rank(square) + d_rank
+		while file >= 1 and file <= 8 and rank >= 1 and rank <= 8:
+			var piece = pieces[square_index(file, rank)]
+			if piece != null:
+				if piece in target:
+					return true
+				break
+			file += d_file
+			rank += d_rank
+
+	return false
+
+
+# Generate all legal moves. This can be done much faster
+func generate_legal_moves():
+	var moves = []
+	var pseudos = generate_pseudo_legal_moves()
+	for move in pseudos:
+		play_move(move)
+		if not is_square_attacked(king(not turn), turn):
+			moves.push_back(move)
+		undo()
+
+	# Now, check castling
+	if castling[2] if turn else castling[0]:	# O-O
+		var king = king(turn)
+		var e_attacked = is_square_attacked(king, not turn)
+		var f_attacked = is_square_attacked(king + 1, not turn)
+		var g_attacked = is_square_attacked(king + 2, not turn)
+		var f_empty = pieces[king + 1] == null
+		var g_empty = pieces[king + 2] == null
+		if not (e_attacked or f_attacked or g_attacked) and f_empty and g_empty:
+			moves.push_back(construct_move(king, king + 2))
+
+	if castling[3] if turn else castling[1]:	# O-O-O
+		var king = king(turn)
+		var e_attacked = is_square_attacked(king, not turn)
+		var d_attacked = is_square_attacked(king - 1, not turn)
+		var c_attacked = is_square_attacked(king - 2, not turn)
+		var d_empty = pieces[king - 1] == null
+		var c_empty = pieces[king - 2] == null
+		var b_empty = pieces[king - 3] == null
+		if not (e_attacked or d_attacked or c_attacked) and d_empty and c_empty and b_empty:
+			moves.push_back(construct_move(king, king - 2))
+
 	return moves

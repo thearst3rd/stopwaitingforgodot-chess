@@ -80,6 +80,7 @@ func duplicate():	# no `-> Chess`
 
 I got pseudo chess all implemented (minus castling, I'll handle that in full legal chess since it involves checks in the conditions). From there, I improved the interface to show legal moves so I could see if I did anything wrong (I did!!!), for which I had to answer some of my earlier questions along the way. I had to make the indicators squares instead of the originally-planned circles... looks like I'll have to add code to draw circles if I really want them. But so far, this is turning out great! Especially considering it's still Friday night (well, it's Saturday morning at 2:56 AM EDT but that doesn't count...)
 
+Check is now implemented! The code is (probably?) more efficient than my method in chesslib - before, I would generate all pseudo legal moves and see if any of them ended at our king. This was terribly inefficient, but works at least. This time, it's still not very good, but better. Rather than look at all of the opponent's pieces and generate all their moves to see if they can capture our king, just start at our king and move outwards for pieces that could capture it. So, look a knight's move away to check for knights, start sliding in the rook's directions to check for rooks/queens, etc. I had a bug where pawns "attacked" the wrong direction according to my function, but after fixing that, I think I got it all working! Some more testing needs to be done be sure, but AFAIK, all moves are now fully legal moves! I just need to handle the game end conditions.
 
 # Credits/Attributions
 

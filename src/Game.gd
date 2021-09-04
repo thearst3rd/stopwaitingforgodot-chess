@@ -10,7 +10,7 @@ var legal_moves = null
 func update():
 	board.setup_board(chess)
 	$V/Fen.text = chess.get_fen()
-	legal_moves = chess.generate_pseudo_legal_moves()
+	legal_moves = chess.generate_legal_moves()
 	$V/C/V/H/UndoButton.disabled = chess.move_stack.size() == 0
 
 	var last_move = null
