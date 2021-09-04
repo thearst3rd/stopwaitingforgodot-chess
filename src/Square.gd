@@ -1,6 +1,6 @@
 extends ColorRect
 
-signal piece_dropped
+signal piece_dropped(from_square, to_square)
 
 
 var file = -1
@@ -25,7 +25,7 @@ func get_drag_data(_position):
 	set_drag_preview(drag_preview_control)
 
 	var data = {}
-	data["from_square"] = self
+	data["from_square"] = index
 	return data
 
 func can_drop_data(_position, data):
@@ -35,14 +35,10 @@ func can_drop_data(_position, data):
 	if not data["from_square"]:
 		return false
 
-	if data["from_square"] == self:
+	if data["from_square"] == index:
 		return false
 
 	return true
 
 func drop_data(_position, data):
-	var chess = get_parent().chess
-	chess.pieces[index] = chess.pieces[data["from_square"].index]
-	chess.pieces[data["from_square"].index] = null
-	print(chess.get_fen())
-	get_parent().setup_board()
+	emit_signal("piece_dropped", data["from_square"], index)

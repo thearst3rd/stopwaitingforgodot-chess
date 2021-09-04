@@ -6,10 +6,8 @@ export (Color) var dark_square_color = Color(167.0/255.0, 129.0/255.0, 177.0/255
 
 const Square = preload("Square.tscn")
 
-var chess = null
 
-
-func setup_board():
+func setup_board(chess : Chess):
 	for square in get_children():
 		var piece = chess.pieces[square.index]
 		if piece != null:
@@ -32,8 +30,6 @@ func flip_board():
 ## CALLBACKS ##
 
 func _ready():
-	chess = Chess.new()
-
 	for rank in range(8, 0, -1):
 		for file in range(1, 9):
 			var square = Square.instance()
@@ -45,15 +41,3 @@ func _ready():
 
 			square.color = dark_square_color if Chess.square_is_dark(square.index) else light_square_color
 			add_child(square)
-
-	setup_board()
-
-
-## SIGNALS ##
-
-func _on_ResetButton_pressed():
-	chess = Chess.new()
-	setup_board()
-
-func _on_FlipButton_pressed():
-	flip_board()

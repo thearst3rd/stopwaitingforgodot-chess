@@ -49,6 +49,8 @@ I still have a few questions though -
 
 I've started with the "chess logic". So far, still no actual logic is implemented, but I've created a `Chess` class which keeps track of an internal position which can be manipulated. I've then hooked up the graphical side of things to draw the textures based on the internal chess data.
 
+First time using groups! I originally had the method `Board.connect_squares_piece_dropped` which took an argument of the parent `Game` object and connected all the signals like that. I didn't like that though, I felt a method wasn't needed on the Board side. So I added the `Square` nodes to a group called "Squares" and connected them up with the `get_tree().call_group` method! Pretty neat. I spent more time than I should have attempting that though, so I should really move on to the legal move generation :)
+
 # Credits/Attributions
 
 See [CREDITS.md](CREDITS.md).
