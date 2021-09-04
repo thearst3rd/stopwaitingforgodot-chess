@@ -11,7 +11,7 @@ func setup_board(chess : Chess):
 	for square in get_children():
 		var piece = chess.pieces[square.index]
 		if piece != null:
-			var col = "b" if (ord(piece) >= ord("a")) else "w"
+			var col = "b" if Chess.piece_color(piece) else "w"
 			piece = piece.to_upper()
 			square.get_node("Piece").texture = load("res://assets/tatiana/" + col + piece + ".svg")
 		else:

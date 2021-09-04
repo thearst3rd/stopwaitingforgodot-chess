@@ -53,6 +53,32 @@ First time using groups! I originally had the method `Board.connect_squares_piec
 
 In my [previous chess implementation](https://github.com/thearst3rd/chesslib), I literally stored a complete copy of every single position that has ever been reached in the game. This is... inefficient, but at least undoing a move is trivial (just revert back to the second to last board state). This time though, I figured, let's not do that. Rather, with each move, I want to store everything that's needed to undo that move. For instance, if there was a captured piece, we need to know what it was so we can put it back. I did some testing, and I'm feeling pretty good that I covered everything, but I might have missed something. Hopefully I'll find out sooner rather than later. Ok, on to legal move generation for real.
 
+I found something that I thought was pretty unintuitive. I want to be able to make duplicate objects of a chess position that can be edited while the original is preserved, to do stuff like calculating if two positions are repetitions during a threefold repetition check. But, a class cannot use its own name since that would create a cyclic dependancy, so for example, my `Chess` class cannot do the following:
+
+```gd
+extends Reference
+class_name Chess
+
+# ...
+
+func duplicate() -> Chess:
+	var new_chess = Chess.new()	# Cannot do this!!
+	# ... setup new_chess with the same as current chess
+	return new_chess
+```
+
+I figured, since that doesn't work, I can probably just replace `Chess.new()` with `new()`, since that should be the equivalent given the current scope. Turns out, that doesn't work. BUT, somehow, just `.new()` DOES work. Not sure what's up with that. Took me a while, but eventually I found that out through the Godot Discord. The current code looks like:
+
+```gd
+func duplicate():	# no `-> Chess`
+	var new_chess = .new()	# ???
+	# ... setup new_chess with the same as current chess
+	return new_chess
+```
+
+(Also, it looks like [this might be addressed in Godot 4.0](https://github.com/godotengine/godot-proposals/issues/460). Would be nice.)
+
+
 # Credits/Attributions
 
 See [CREDITS.md](CREDITS.md).

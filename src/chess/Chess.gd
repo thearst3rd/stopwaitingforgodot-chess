@@ -36,6 +36,9 @@ static func square_is_dark(square_index : int) -> bool:
 	var rank = square_get_rank(square_index)
 	return (rank + file) % 2 == 0
 
+static func piece_color(piece_char : String) -> bool:
+	return ord(piece_char) >= ord("a")
+
 
 var pieces = [
 	"r", "n", "b", "q", "k", "b", "n", "r",
@@ -55,6 +58,19 @@ var fullmove_counter = 1
 
 var move_stack = []
 
+
+func duplicate():
+	var new_chess = .new()	# ???? Took me a while. Chess.new() doesn't work, new() doesn't work, but .new() does
+	new_chess.pieces = pieces.duplicate()
+	new_chess.turn = turn
+	new_chess.castling = castling.duplicate()
+	new_chess.ep_target = ep_target
+	new_chess.halfmove_clock = halfmove_clock
+	new_chess.fullmove_counter = fullmove_counter
+	new_chess.move_stack = []
+	for move in move_stack:
+		new_chess.move_stack.push_back(move.duplicate())
+	return new_chess
 
 func set_fen(fen):
 	# TODO
@@ -205,3 +221,104 @@ func undo():
 		var delta = -8 if turn else 8
 		pieces[move.prev_ep_target + delta] = "P" if turn else "p"
 
+
+## MOVE GENERATION ##
+
+const ROOK_OFFSETS = [[-1, 0], [0, 1], [1, 0] ,[0, -1]]
+const BISHOP_OFFSETS = [[-1, -1], [-1, 1], [1, 1] ,[1, -1]]
+const ROYAL_OFFSETS = ROOK_OFFSETS + BISHOP_OFFSETS
+const KNIGHT_OFFSETS = [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]]
+
+# Generate all pseudo-legal moves (i.e., the pieces move by their rules but there is no check)
+func generate_pseudo_legal_moves():
+	var moves = []
+	for square in range(64):
+		var piece = pieces[square]
+		if piece == null:
+			continue
+		var color = piece_color(piece)
+		if color != turn:
+			continue
+
+		match piece:
+			"K", "k":
+				moves.append_array(generate_leaping_moves(color, square, ROYAL_OFFSETS))
+			"Q", "q":
+				moves.append_array(generate_sliding_moves(color, square, ROYAL_OFFSETS))
+			"R", "r":
+				moves.append_array(generate_sliding_moves(color, square, ROOK_OFFSETS))
+			"B", "b":
+				moves.append_array(generate_sliding_moves(color, square, BISHOP_OFFSETS))
+			"N", "n":
+				moves.append_array(generate_leaping_moves(color, square, KNIGHT_OFFSETS))
+			"p", "P":
+				moves.append_array(generate_pawn_moves(color, square))
+	return moves
+
+func generate_leaping_moves(col, square_index, offsets):
+	var moves = []
+	for offset in offsets:
+		var d_file = offset[0]
+		var d_rank = offset[1]
+		var file = square_get_file(square_index) + d_file
+		var rank = square_get_rank(square_index) + d_rank
+		if file >= 1 and file <= 8 and rank >= 1 and rank <= 8:
+			var new_square = square_index(file, rank)
+			var piece = pieces[new_square]
+			if piece == null or piece_color(piece) != col:
+				moves.append(construct_move(square_index, new_square))
+	return moves
+
+func generate_sliding_moves(col, square_index, offsets):
+	var moves = []
+	for offset in offsets:
+		var d_file = offset[0]
+		var d_rank = offset[1]
+		var file = square_get_file(square_index) + d_file
+		var rank = square_get_rank(square_index) + d_rank
+		while file >= 1 and file <= 8 and rank >= 1 and rank <= 8:
+			var new_square = square_index(file, rank)
+			var piece = pieces[new_square]
+			if piece != null && piece_color(piece) == col:
+				break
+			moves.append(construct_move(square_index, new_square))
+			if piece != null:
+				break
+			file += d_file
+			rank += d_rank
+	return moves
+
+func generate_pawn_move_list(from_square, to_square):
+	var rank = square_get_rank(to_square)
+	if rank == 1 or rank == 8:
+		return [
+			construct_move(from_square, to_square, "q"),
+			construct_move(from_square, to_square, "n"),
+			construct_move(from_square, to_square, "r"),
+			construct_move(from_square, to_square, "b"),
+		]
+	else:
+		return [
+			construct_move(from_square, to_square)
+		]
+
+func generate_pawn_moves(col, square_index):
+	var moves = []
+	var delta = 8 if col else -8
+	if pieces[square_index + delta] == null:
+		moves.append_array(generate_pawn_move_list(square_index, square_index + delta))
+		var target_rank = 7 if col else 2
+		if square_get_rank(square_index) == target_rank:
+			moves.append_array(generate_pawn_move_list(square_index, square_index + 2 * delta))
+	var file = square_get_file(square_index)
+	if file > 1:
+		var new_square = square_index + delta - 1
+		var piece = pieces[new_square]
+		if new_square == ep_target or (piece != null and piece_color(piece) != col):
+			moves.append_array(generate_pawn_move_list(square_index, new_square))
+	if file < 8:
+		var new_square = square_index + delta + 1
+		var piece = pieces[new_square]
+		if new_square == ep_target or (piece != null and piece_color(piece) != col):
+			moves.append_array(generate_pawn_move_list(square_index, new_square))
+	return moves
