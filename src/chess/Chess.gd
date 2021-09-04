@@ -308,7 +308,7 @@ func generate_pawn_moves(col, square_index):
 	if pieces[square_index + delta] == null:
 		moves.append_array(generate_pawn_move_list(square_index, square_index + delta))
 		var target_rank = 7 if col else 2
-		if square_get_rank(square_index) == target_rank:
+		if square_get_rank(square_index) == target_rank and pieces[square_index + 2 * delta] == null:
 			moves.append_array(generate_pawn_move_list(square_index, square_index + 2 * delta))
 	var file = square_get_file(square_index)
 	if file > 1:

@@ -13,10 +13,24 @@ func update():
 	legal_moves = chess.generate_pseudo_legal_moves()
 	$V/C/V/H/UndoButton.disabled = chess.move_stack.size() == 0
 
+	var last_move = null
+	if chess.move_stack.size() > 0:
+		last_move = chess.move_stack[-1]
+
+	for square in get_tree().get_nodes_in_group("Squares"):
+		var piece = chess.pieces[square.index]
+		if piece:
+			square.grabbable = Chess.piece_color(piece) == chess.turn
+		var highlight = square.get_node("LastMoveHighlight")
+		highlight.hide()
+		if last_move and (square.index == last_move.from_square or square.index == last_move.to_square):
+			highlight.show()
+
 
 ## CALLBACKS ##
 
 func _ready():
+	get_tree().call_group("Squares", "connect", "piece_grabbed", self, "_on_Square_piece_grabbed")
 	get_tree().call_group("Squares", "connect", "piece_dropped", self, "_on_Square_piece_dropped")
 	update()
 
@@ -30,14 +44,28 @@ func _on_ResetButton_pressed():
 func _on_FlipButton_pressed():
 	board.flip_board()
 
+func _on_UndoButton_pressed():
+	chess.undo()
+	update()
+
+func _on_Square_piece_grabbed(from_index):
+	var target_squares = []
+	for move in legal_moves:
+		if move.from_square == from_index:
+			target_squares.push_back(move.to_square)
+	for square in get_tree().get_nodes_in_group("Squares"):
+		if square.index in target_squares:
+			var indicator = square.get_node("LegalMoveIndicator/ColorRect")
+			if chess.pieces[square.index] == null:
+				indicator.rect_min_size = Vector2(15, 15)
+			else:
+				indicator.rect_min_size = Vector2(40, 40)
+			indicator.get_parent().show()
+
 func _on_Square_piece_dropped(from_index, to_index):
 	var m = chess.construct_move(from_index, to_index)
 	for lm in legal_moves:
 		if m.from_square == lm.from_square and m.to_square == lm.to_square and m.promotion == lm.promotion:
 			chess.play_move(m)
 			break
-	update()
-
-func _on_UndoButton_pressed():
-	chess.undo()
 	update()

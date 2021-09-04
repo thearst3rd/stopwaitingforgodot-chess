@@ -44,7 +44,7 @@ These tutorials helped me get setup with a grid based 8x8 chess board, and a sys
 
 I still have a few questions though -
 
-* While dragging, the original chess piece stays where it is at full opacity. I would like to make it transparent, which I can easily do while picking up the piece, but I don't know how to undo that transparency if the user decided to cancel the drag. There isn't a `drag_cancelled()` method AFAIK. Will just listening for a global "mouse released" event work well?
+* ~~While dragging, the original chess piece stays where it is at full opacity. I would like to make it transparent, which I can easily do while picking up the piece, but I don't know how to undo that transparency if the user decided to cancel the drag. There isn't a `drag_cancelled()` method AFAIK. Will just listening for a global "mouse released" event work well?~~ Looks like listening for global mouse released events works pretty well! I can make the piece transparent, and show legal move indicators, and when you're done (whether you made a move or not) it'll all be reset.
 * Additionally, the "drag distance" seems pretty high, as in, you need to click and drag pretty far on the square before getting any feedback. Can I shorten that distance? Or, should I just nuke this whole built-in drag/drop system and do it myself? Time shall see :)
 
 I've started with the "chess logic". So far, still no actual logic is implemented, but I've created a `Chess` class which keeps track of an internal position which can be manipulated. I've then hooked up the graphical side of things to draw the textures based on the internal chess data.
@@ -77,6 +77,8 @@ func duplicate():	# no `-> Chess`
 ```
 
 (Also, it looks like [this might be addressed in Godot 4.0](https://github.com/godotengine/godot-proposals/issues/460). Would be nice.)
+
+I got pseudo chess all implemented (minus castling, I'll handle that in full legal chess since it involves checks in the conditions). From there, I improved the interface to show legal moves so I could see if I did anything wrong (I did!!!), for which I had to answer some of my earlier questions along the way. I had to make the indicators squares instead of the originally-planned circles... looks like I'll have to add code to draw circles if I really want them. But so far, this is turning out great! Especially considering it's still Friday night (well, it's Saturday morning at 2:56 AM EDT but that doesn't count...)
 
 
 # Credits/Attributions
