@@ -18,9 +18,9 @@ __meta__ = {
 
 [node name="V" type="VBoxContainer" parent="."]
 margin_left = 140.0
-margin_top = 300.0
+margin_top = 297.0
 margin_right = 1140.0
-margin_bottom = 420.0
+margin_bottom = 423.0
 rect_min_size = Vector2( 1000, 0 )
 custom_constants/separation = 12
 
@@ -69,11 +69,38 @@ margin_right = 184.0
 margin_bottom = 26.0
 text = "Undo"
 
-[node name="Fen" type="Label" parent="V"]
+[node name="H" type="HBoxContainer" parent="V"]
 margin_top = 100.0
 margin_right = 1000.0
-margin_bottom = 120.0
+margin_bottom = 126.0
+custom_constants/separation = 12
+
+[node name="FenText" type="TextEdit" parent="V/H"]
+margin_right = 918.0
+margin_bottom = 26.0
+size_flags_horizontal = 3
+
+[node name="SetFen" type="Button" parent="V/H"]
+margin_left = 930.0
+margin_right = 1000.0
+margin_bottom = 26.0
+text = "Set FEN"
+
+[node name="InvalidFen" type="Label" parent="V/H"]
+visible = false
+margin_left = 694.0
+margin_top = 4.0
+margin_right = 776.0
+margin_bottom = 24.0
+custom_colors/font_color = Color( 0.913725, 0.247059, 0.247059, 1 )
+text = "Invalid FEN"
+
+[node name="InvalidFenTimer" type="Timer" parent="V/H"]
+wait_time = 5.0
+one_shot = true
 
 [connection signal="pressed" from="V/C/V/H/ResetButton" to="." method="_on_ResetButton_pressed"]
 [connection signal="pressed" from="V/C/V/H/FlipButton" to="." method="_on_FlipButton_pressed"]
 [connection signal="pressed" from="V/C/V/H/UndoButton" to="." method="_on_UndoButton_pressed"]
+[connection signal="pressed" from="V/H/SetFen" to="." method="_on_SetFen_pressed"]
+[connection signal="timeout" from="V/H/InvalidFenTimer" to="." method="_on_InvalidFenTimer_timeout"]

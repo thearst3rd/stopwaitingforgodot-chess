@@ -9,7 +9,7 @@ var legal_moves = null
 
 func update():
 	board.setup_board(chess)
-	$V/Fen.text = chess.get_fen()
+	$V/H/FenText.text = chess.get_fen()
 	legal_moves = chess.generate_legal_moves()
 	$V/C/V/H/UndoButton.disabled = chess.move_stack.size() == 0
 
@@ -38,7 +38,7 @@ func _ready():
 ## SIGNALS ##
 
 func _on_ResetButton_pressed():
-	chess = Chess.new()
+	chess.reset()
 	update()
 
 func _on_FlipButton_pressed():
@@ -47,6 +47,13 @@ func _on_FlipButton_pressed():
 func _on_UndoButton_pressed():
 	chess.undo()
 	update()
+
+func _on_SetFen_pressed():
+	if chess.set_fen($V/H/FenText.text):
+		update()
+	else:
+		$V/H/InvalidFen.show()
+		$V/H/InvalidFenTimer.start()
 
 func _on_Square_piece_grabbed(from_index):
 	var target_squares = []
@@ -69,3 +76,6 @@ func _on_Square_piece_dropped(from_index, to_index):
 			chess.play_move(m)
 			break
 	update()
+
+func _on_InvalidFenTimer_timeout():
+	$V/H/InvalidFen.hide()

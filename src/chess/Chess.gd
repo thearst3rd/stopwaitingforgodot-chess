@@ -37,6 +37,13 @@ static func square_is_dark(square_index : int) -> bool:
 	var rank = square_get_rank(square_index)
 	return (rank + file) % 2 == 0
 
+static func square_index_from_name(square_name : String) -> int:
+	if square_name.length() < 2:
+		return -1
+	var file = ord(square_name[0]) - ord("a") + 1
+	var rank = int(square_name[1])
+	return square_index(file, rank)
+
 static func piece_color(piece_char : String) -> bool:
 	return ord(piece_char) >= ord("a")
 
@@ -73,9 +80,87 @@ func duplicate():
 		new_chess.move_stack.push_back(move.duplicate())
 	return new_chess
 
-func set_fen(_fen):
-	# TODO
-	pass
+# Sets up the board with the given FEN, returns true if successful. If not successful, board does not change
+func set_fen(fen : String) -> bool:
+	var tokens = fen.split(" ", false)
+	if tokens.size() < 3 or tokens.size() > 6:
+		return false
+
+	# Pieces
+	var new_pieces = []
+	new_pieces.resize(64)	# Can I do this in a constructor instead?
+	var index = 0
+	for c in tokens[0]:
+		match c:
+			"K", "Q", "R", "B", "N", "P", "k", "q", "r", "b", "n", "p":
+				new_pieces[index] = c
+				index += 1
+			"/":
+				pass
+			"1", "2", "3", "4", "5", "6", "7", "8":
+				index += int(c)
+	if index != 64:
+		return false
+
+	# Turn
+	if tokens[1] != "b" and tokens[1] != "w":
+		return false
+	var new_turn = tokens[1] == "b"
+
+	# Castling
+	var new_castling = [false, false, false, false]
+	for c in tokens[2]:
+		match c:
+			"K": new_castling[0] = true
+			"Q": new_castling[1] = true
+			"k": new_castling[2] = true
+			"q": new_castling[3] = true
+			"-": pass
+	if new_pieces[SQUARES.E1] != "K":
+		new_castling[0] = false
+		new_castling[1] = false
+	if new_pieces[SQUARES.H1] != "R":
+		new_castling[0] = false
+	if new_pieces[SQUARES.A1] != "R":
+		new_castling[1] = false
+	if new_pieces[SQUARES.E8] != "k":
+		new_castling[2] = false
+		new_castling[3] = false
+	if new_pieces[SQUARES.H8] != "r":
+		new_castling[2] = false
+	if new_pieces[SQUARES.A8] != "r":
+		new_castling[3] = false
+
+	# EP target (optional)
+	var new_ep_target = null
+	if tokens.size() >= 4 and tokens[3] != "-":
+		new_ep_target = square_index_from_name(tokens[3])
+
+	# Half move clock (optional)
+	var new_halfmove_clock = 0
+	if tokens.size() >= 5:
+		new_halfmove_clock = int(tokens[4])
+
+	# Full move counter (optional)
+	var new_fullmove_counter = 1
+	if tokens.size() >= 6:
+		new_fullmove_counter = int(tokens[5])
+
+	# Looks valid, so update the state
+	pieces = new_pieces
+	turn = new_turn
+	castling = new_castling
+	ep_target = new_ep_target
+	halfmove_clock = new_halfmove_clock
+	fullmove_counter = new_fullmove_counter
+
+	move_stack = []
+
+	return true
+
+# Reset to initial FEN
+func reset():
+	set_fen(INITIAL_FEN)
 
 func get_fen():
 	var fen_pieces = ""
