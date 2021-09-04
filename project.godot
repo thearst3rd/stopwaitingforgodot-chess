@@ -8,6 +8,16 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Reference",
+"class": "Chess",
+"language": "GDScript",
+"path": "res://src/chess/Chess.gd"
+} ]
+_global_script_class_icons={
+"Chess": ""
+}
+
 [application]
 
 config/name="stopwaitingforgodot-chess"

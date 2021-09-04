@@ -1,9 +1,12 @@
 extends ColorRect
 
+signal piece_dropped
+
 
 var file = -1
 var rank = -1
-var square_name = "##"
+var index = -1
+var san_name = "-"
 
 
 func get_drag_data(_position):
@@ -38,6 +41,8 @@ func can_drop_data(_position, data):
 	return true
 
 func drop_data(_position, data):
-	var from_piece = data["from_square"].get_node("Piece")
-	$Piece.texture = from_piece.texture
-	from_piece.texture = null
+	var chess = get_parent().chess
+	chess.pieces[index] = chess.pieces[data["from_square"].index]
+	chess.pieces[data["from_square"].index] = null
+	print(chess.get_fen())
+	get_parent().setup_board()
