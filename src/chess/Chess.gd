@@ -5,6 +5,17 @@ class_name Chess
 
 const INITIAL_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
+enum SQUARES {
+	A8, B8, C8, D8, E8, F8, G8, H8,
+	A7, B7, C7, D7, E7, F7, G7, H7,
+	A6, B6, C6, D6, E6, F6, G6, H6,
+	A5, B5, C5, D5, E5, F5, G5, H5,
+	A4, B4, C4, D4, E4, F4, G4, H4,
+	A3, B3, C3, D3, E3, F3, G3, H3,
+	A2, B2, C2, D2, E2, F2, G2, H2,
+	A1, B1, C1, D1, E1, F1, G1, H1,
+}
+
 
 static func square_index(file : int, rank : int) -> int:
 	return 8 * (8 - rank) + file - 1
@@ -80,3 +91,80 @@ func get_fen():
 
 	return "%s %s %s %s %d %d" % [fen_pieces, fen_turn, fen_castling, square_get_name(ep_target), halfmove_clock,
 			fullmove_counter]
+
+# Creates a Move object from these squares. Does not check if the move is legal
+func construct_move(from_square, to_square, promotion = "q"):
+	var move = Move.new()
+	move.from_square = from_square
+	move.to_square = to_square
+	move.captured_piece = pieces[to_square]
+
+	if pieces[from_square].to_lower() == "p":
+		var rank = square_get_rank(to_square)
+		if rank == 1 or rank == 8:
+			move.promotion = promotion.to_lower()
+		if to_square == ep_target:
+			move.en_passant = true
+
+	if pieces[from_square].to_lower() == "k":
+		if turn:
+			if castling[2]: move.lose_castling[2] = true
+			if castling[3]: move.lose_castling[3] = true
+		else:
+			if castling[0]: move.lose_castling[0] = true
+			if castling[1]: move.lose_castling[1] = true
+
+	if castling[0] and to_square == SQUARES.H1 or from_square == SQUARES.H1:
+		move.lose_castling[0] = true
+	if castling[1] and to_square == SQUARES.A1 or from_square == SQUARES.A1:
+		move.lose_castling[1] = true
+	if castling[2] and to_square == SQUARES.H8 or from_square == SQUARES.H8:
+		move.lose_castling[2] = true
+	if castling[3] and to_square == SQUARES.A8 or from_square == SQUARES.A8:
+		move.lose_castling[3] = true
+
+	return move
+
+# Plays the given move on the board and updates the internal state accordingly
+func play_move(move):
+	if move.promotion:
+		pieces[move.to_square] = move.promotion
+		if not turn:
+			pieces[move.to_square] = pieces[move.to_square].to_upper()
+	else:
+		pieces[move.to_square] = pieces[move.from_square]
+	pieces[move.from_square] = null
+	if move.en_passant:
+		var delta = -8 if turn else 8
+		pieces[ep_target + delta] = null
+
+	# Castling
+	if pieces[move.to_square].to_lower() == "k":
+		if move.to_square == move.from_square + 2: # O-O
+			pieces[move.from_square + 1] = pieces[move.to_square + 1]
+			pieces[move.to_square + 1] = null
+		elif move.to_square == move.from_square - 2: # O-O-O
+			pieces[move.from_square - 1] = pieces[move.to_square - 2]
+			pieces[move.to_square - 2] = null
+
+	for i in range(4):
+		if move.lose_castling[i]:
+			castling[i] = false
+
+	# Double pawn step
+	ep_target = null
+	if pieces[move.to_square].to_lower() == "p":
+		var delta = 8 if turn else -8
+		if move.to_square == move.from_square + (2 * delta):
+			ep_target = move.from_square + delta
+
+	if move.en_passant or move.captured_piece != null or pieces[move.to_square].to_lower() == "p":
+		halfmove_clock = 0
+	else:
+		halfmove_clock += 1
+
+	turn = not turn
+	if not turn:
+		fullmove_counter += 1
+
+	move_stack.append(move)

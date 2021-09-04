@@ -13,9 +13,15 @@ _global_script_classes=[ {
 "class": "Chess",
 "language": "GDScript",
 "path": "res://src/chess/Chess.gd"
+}, {
+"base": "Reference",
+"class": "Move",
+"language": "GDScript",
+"path": "res://src/chess/Move.gd"
 } ]
 _global_script_class_icons={
-"Chess": ""
+"Chess": "",
+"Move": ""
 }
 
 [application]

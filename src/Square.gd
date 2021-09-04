@@ -32,7 +32,7 @@ func can_drop_data(_position, data):
 	if typeof(data) != TYPE_DICTIONARY:
 		return false
 
-	if not data["from_square"]:
+	if typeof(data["from_square"]) != TYPE_INT:
 		return false
 
 	if data["from_square"] == index:

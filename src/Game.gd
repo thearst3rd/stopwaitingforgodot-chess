@@ -27,6 +27,6 @@ func _on_FlipButton_pressed():
 	board.flip_board()
 
 func _on_Square_piece_dropped(from_index, to_index):
-	chess.pieces[to_index] = chess.pieces[from_index]
-	chess.pieces[from_index] = null
+	var move = chess.construct_move(from_index, to_index)
+	chess.play_move(move)
 	update()
