@@ -56,9 +56,9 @@ var pieces = [
 	null, null, null, null, null, null, null, null,
 	null, null, null, null, null, null, null, null,
 	"P", "P", "P", "P", "P", "P", "P", "P",
-	"R", "N", "B", "Q", "K", "B", "N", "R"
+	"R", "N", "B", "Q", "K", "B", "N", "R",
 ]	# indexed list of pieces. 0 = a8, 63 = h1
-var turn = false 	# false is white, true is black
+var turn = false	# false is white, true is black
 var castling = [true, true, true, true]	# white O-O, O-O-O, black O-O, O-O-O
 var ep_target = null	# Square index of ep target square
 var halfmove_clock = 0
@@ -160,7 +160,7 @@ func set_fen(fen : String) -> bool:
 
 # Reset to initial FEN
 func reset():
-	set_fen(INITIAL_FEN)
+	assert(set_fen(INITIAL_FEN))
 
 func get_fen():
 	var fen_pieces = ""
