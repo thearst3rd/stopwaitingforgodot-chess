@@ -51,6 +51,8 @@ I've started with the "chess logic". So far, still no actual logic is implemente
 
 First time using groups! I originally had the method `Board.connect_squares_piece_dropped` which took an argument of the parent `Game` object and connected all the signals like that. I didn't like that though, I felt a method wasn't needed on the Board side. So I added the `Square` nodes to a group called "Squares" and connected them up with the `get_tree().call_group` method! Pretty neat. I spent more time than I should have attempting that though, so I should really move on to the legal move generation :)
 
+In my [previous chess implementation](https://github.com/thearst3rd/chesslib), I literally stored a complete copy of every single position that has ever been reached in the game. This is... inefficient, but at least undoing a move is trivial (just revert back to the second to last board state). This time though, I figured, let's not do that. Rather, with each move, I want to store everything that's needed to undo that move. For instance, if there was a captured piece, we need to know what it was so we can put it back. I did some testing, and I'm feeling pretty good that I covered everything, but I might have missed something. Hopefully I'll find out sooner rather than later. Ok, on to legal move generation for real.
+
 # Credits/Attributions
 
 See [CREDITS.md](CREDITS.md).

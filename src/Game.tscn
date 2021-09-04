@@ -37,18 +37,18 @@ margin_right = 1000.0
 margin_bottom = 88.0
 
 [node name="V" type="VBoxContainer" parent="V/C"]
-margin_left = 444.0
-margin_right = 556.0
+margin_left = 408.0
+margin_right = 592.0
 margin_bottom = 38.0
 custom_constants/separation = 12
 
 [node name="Board" parent="V/C/V" instance=ExtResource( 1 )]
-margin_right = 112.0
+margin_right = 184.0
 margin_bottom = 0.0
 
 [node name="H" type="HBoxContainer" parent="V/C/V"]
 margin_top = 12.0
-margin_right = 112.0
+margin_right = 184.0
 margin_bottom = 38.0
 custom_constants/separation = 20
 
@@ -63,6 +63,12 @@ margin_right = 112.0
 margin_bottom = 26.0
 text = "Flip"
 
+[node name="UndoButton" type="Button" parent="V/C/V/H"]
+margin_left = 132.0
+margin_right = 184.0
+margin_bottom = 26.0
+text = "Undo"
+
 [node name="Fen" type="Label" parent="V"]
 margin_top = 100.0
 margin_right = 1000.0
@@ -70,3 +76,4 @@ margin_bottom = 120.0
 
 [connection signal="pressed" from="V/C/V/H/ResetButton" to="." method="_on_ResetButton_pressed"]
 [connection signal="pressed" from="V/C/V/H/FlipButton" to="." method="_on_FlipButton_pressed"]
+[connection signal="pressed" from="V/C/V/H/UndoButton" to="." method="_on_UndoButton_pressed"]

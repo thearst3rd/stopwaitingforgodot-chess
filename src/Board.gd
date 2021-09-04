@@ -20,7 +20,7 @@ func setup_board(chess : Chess):
 func flip_board():
 	var squares_flipped = []
 	for square in get_children():
-		squares_flipped.insert(0, square)
+		squares_flipped.push_front(square)
 		remove_child(square)
 
 	for square in squares_flipped:

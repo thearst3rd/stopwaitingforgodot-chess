@@ -102,7 +102,7 @@ func construct_move(from_square, to_square, promotion = "q"):
 	if pieces[from_square].to_lower() == "p":
 		var rank = square_get_rank(to_square)
 		if rank == 1 or rank == 8:
-			move.promotion = promotion.to_lower()
+			move.promotion = promotion.to_lower() if turn else promotion.to_upper()
 		if to_square == ep_target:
 			move.en_passant = true
 
@@ -129,8 +129,6 @@ func construct_move(from_square, to_square, promotion = "q"):
 func play_move(move):
 	if move.promotion:
 		pieces[move.to_square] = move.promotion
-		if not turn:
-			pieces[move.to_square] = pieces[move.to_square].to_upper()
 	else:
 		pieces[move.to_square] = pieces[move.from_square]
 	pieces[move.from_square] = null
@@ -152,12 +150,14 @@ func play_move(move):
 			castling[i] = false
 
 	# Double pawn step
+	move.prev_ep_target = ep_target
 	ep_target = null
 	if pieces[move.to_square].to_lower() == "p":
 		var delta = 8 if turn else -8
 		if move.to_square == move.from_square + (2 * delta):
 			ep_target = move.from_square + delta
 
+	move.prev_halfmove_clock = halfmove_clock
 	if move.en_passant or move.captured_piece != null or pieces[move.to_square].to_lower() == "p":
 		halfmove_clock = 0
 	else:
@@ -167,4 +167,41 @@ func play_move(move):
 	if not turn:
 		fullmove_counter += 1
 
-	move_stack.append(move)
+	move_stack.push_back(move)
+
+# Undoes the most recent move
+func undo():
+	if move_stack.size() == 0:
+		return
+
+	var move = move_stack.pop_back()
+
+	turn = not turn
+	if turn:
+		fullmove_counter -= 1
+
+	halfmove_clock = move.prev_halfmove_clock
+	ep_target = move.prev_ep_target
+
+	# Castling
+	if pieces[move.to_square].to_lower() == "k":
+		if move.to_square == move.from_square + 2: # O-O
+			pieces[move.to_square + 1] = pieces[move.from_square + 1]
+			pieces[move.from_square + 1] = null
+		elif move.to_square == move.from_square - 2: # O-O-O
+			pieces[move.to_square - 2] = pieces[move.from_square - 1]
+			pieces[move.from_square - 1] = null
+
+	for i in range(4):
+		if move.lose_castling[i]:
+			castling[i] = true
+
+	if move.promotion:
+		pieces[move.from_square] = "p" if turn else "P"
+	else:
+		pieces[move.from_square] = pieces[move.to_square]
+	pieces[move.to_square] = move.captured_piece
+	if move.en_passant:
+		var delta = -8 if turn else 8
+		pieces[move.prev_ep_target + delta] = "P" if turn else "p"
+

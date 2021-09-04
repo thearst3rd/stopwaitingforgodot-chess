@@ -9,3 +9,5 @@ var promotion = null
 var captured_piece = null
 var en_passant = false
 var lose_castling = [false, false, false, false]
+var prev_ep_target = null
+var prev_halfmove_clock = -1
