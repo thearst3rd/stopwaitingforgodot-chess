@@ -1,4 +1,4 @@
-extends ColorRect
+extends WindowDialog
 
 signal settings_changed
 
@@ -20,9 +20,6 @@ func _ready():
 
 
 ## SIGNALS ##
-
-func _on_BackButton_pressed():
-	hide()
 
 func _on_ShowDestsCheck_toggled(button_pressed):
 	Settings.show_dests = button_pressed

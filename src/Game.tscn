@@ -156,7 +156,6 @@ wait_time = 5.0
 one_shot = true
 
 [node name="SettingsMenu" parent="." instance=ExtResource( 5 )]
-visible = false
 
 [node name="MoveSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 6 )

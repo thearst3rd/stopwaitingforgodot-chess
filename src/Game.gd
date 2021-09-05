@@ -123,7 +123,7 @@ func _on_InvalidFenTimer_timeout():
 	find_node("InvalidFen").hide()
 
 func _on_SettingsButton_pressed():
-	find_node("SettingsMenu").show()
+	find_node("SettingsMenu").popup_centered()
 
 func _on_SettingsMenu_settings_changed():
 	if board:	# Workaround for crash on startup... Probably can check for some kind of is_ready instead
