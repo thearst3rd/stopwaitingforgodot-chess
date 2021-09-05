@@ -13,6 +13,16 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="CheckIndicator" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 1, 0, 0, 0.392157 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="LastMoveHighlight" type="ColorRect" parent="."]
 visible = false
 anchor_right = 1.0

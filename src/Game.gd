@@ -46,6 +46,12 @@ func update():
 		highlight.hide()
 		if last_move and (square.index == last_move.from_square or square.index == last_move.to_square):
 			highlight.show()
+		var checkIndicator = square.get_node("CheckIndicator")
+		if piece in ["K", "k"] and chess.is_square_attacked(square.index, not Chess.piece_color(piece)):
+			checkIndicator.show()
+		else:
+			checkIndicator.hide()
+
 
 	find_node("SanDisplay").update_moves(chess)
 
