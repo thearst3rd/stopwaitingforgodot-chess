@@ -1,4 +1,4 @@
-# Simple Godot Chess
+# #StopWaitingForGodot Chess
 
 A simple chess implementation in [Godot](https://godotengine.org/). This is my entry in Terry Cavanaugh's [STOP WAITING FOR GODOT](https://itch.io/jam/stop-waiting-for-godot) Jam!
 

@@ -46,4 +46,4 @@ func update_moves(chess):
 
 	# Thanks to https://godotengine.org/qa/4106/how-to-change-scrollbarcontainers-scrollbar-position
 	yield(scroll_bar, "changed")
-	find_node("ScrollContainer").set_v_scroll(scroll_bar.max_value)
+	scroll_container.set_v_scroll(scroll_bar.max_value)

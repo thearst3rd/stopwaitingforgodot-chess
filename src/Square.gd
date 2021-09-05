@@ -52,6 +52,6 @@ func drop_data(_position, data):
 
 func _input(event):
 	if event is InputEventMouseButton:
-		if not event.pressed:
+		if event.button_index == BUTTON_LEFT and not event.pressed:
 			$Piece.modulate = Color.white
 			$LegalMoveIndicator.hide()
