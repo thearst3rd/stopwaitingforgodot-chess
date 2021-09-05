@@ -16,6 +16,15 @@ enum SQUARES {
 	A1, B1, C1, D1, E1, F1, G1, H1,
 }
 
+enum RESULT {
+	ONGOING,
+	CHECKMATE,
+	STALEMATE,
+	INSUFFICIENT,
+	FIFTY_MOVE,
+	THREEFOLD,
+}
+
 
 static func square_index(file : int, rank : int) -> int:
 	return 8 * (8 - rank) + file - 1
@@ -216,13 +225,13 @@ func construct_move(from_square, to_square, promotion = "q"):
 			if castling[0]: move.lose_castling[0] = true
 			if castling[1]: move.lose_castling[1] = true
 
-	if castling[0] and to_square == SQUARES.H1 or from_square == SQUARES.H1:
+	if castling[0] and (to_square == SQUARES.H1 or from_square == SQUARES.H1):
 		move.lose_castling[0] = true
-	if castling[1] and to_square == SQUARES.A1 or from_square == SQUARES.A1:
+	if castling[1] and (to_square == SQUARES.A1 or from_square == SQUARES.A1):
 		move.lose_castling[1] = true
-	if castling[2] and to_square == SQUARES.H8 or from_square == SQUARES.H8:
+	if castling[2] and (to_square == SQUARES.H8 or from_square == SQUARES.H8):
 		move.lose_castling[2] = true
-	if castling[3] and to_square == SQUARES.A8 or from_square == SQUARES.A8:
+	if castling[3] and (to_square == SQUARES.A8 or from_square == SQUARES.A8):
 		move.lose_castling[3] = true
 
 	return move
@@ -502,7 +511,16 @@ func generate_legal_moves():
 		undo()
 
 	# Now, check castling
-	if castling[2] if turn else castling[0]:	# O-O
+	var castle_kingside
+	var castle_queenside
+	if turn:
+		castle_kingside = castling[0]
+		castle_queenside = castling[1]
+	else:
+		castle_kingside = castling[2]
+		castle_queenside = castling[3]
+
+	if castle_kingside:
 		var king = king(turn)
 		var e_attacked = is_square_attacked(king, not turn)
 		var f_attacked = is_square_attacked(king + 1, not turn)
@@ -512,7 +530,7 @@ func generate_legal_moves():
 		if not (e_attacked or f_attacked or g_attacked) and f_empty and g_empty:
 			moves.push_back(construct_move(king, king + 2))
 
-	if castling[3] if turn else castling[1]:	# O-O-O
+	if castle_queenside:
 		var king = king(turn)
 		var e_attacked = is_square_attacked(king, not turn)
 		var d_attacked = is_square_attacked(king - 1, not turn)
@@ -524,3 +542,94 @@ func generate_legal_moves():
 			moves.push_back(construct_move(king, king - 2))
 
 	return moves
+
+
+## GAME END CONDITIONS ##
+
+func is_game_over() -> bool:
+	return get_result() != RESULT.ONGOING
+
+func get_result():
+	# TODO: cache legal moves so we don't need to generate them again here
+	var moves = generate_legal_moves()
+	if moves.size() == 0:
+		if is_square_attacked(king(turn), not turn):
+			return RESULT.CHECKMATE
+		else:
+			return RESULT.STALEMATE
+
+	if is_insufficient_material():
+		return RESULT.INSUFFICIENT
+	if is_fifty_move():
+		return RESULT.FIFTY_MOVE
+	if is_threefold_repetition():
+		return RESULT.THREEFOLD
+
+	return RESULT.ONGOING
+
+func is_insufficient_material() -> bool:
+	var w_knights = []
+	var w_bishops = []
+	var w_bishop_light = false
+	var w_bishop_dark = false
+	var b_knights = []
+	var b_bishops = []
+	var b_bishop_light = false
+	var b_bishop_dark = false
+
+	for square in range(64):
+		var piece = pieces[square]
+		match piece:
+			null, "K", "k":
+				pass
+			"Q", "q", "R", "r", "P", "p":
+				# Found a major piece (or pawn), not draw
+				return false
+			"N":
+				w_knights.push_back(square)
+			"n":
+				b_knights.push_back(square)
+			"B":
+				w_bishops.push_back(square)
+				if square_is_dark(square):
+					w_bishop_dark = true
+				else:
+					w_bishop_light = true
+			"b":
+				b_bishops.push_back(square)
+				if square_is_dark(square):
+					b_bishop_dark = true
+				else:
+					b_bishop_light = true
+
+	var w_minors = w_knights + w_bishops
+	var b_minors = b_knights + b_bishops
+
+	# If both sides have minor pieces, NOT draw
+	if w_minors.size() > 0 and b_minors.size() > 0:
+		return false
+
+	# K vs K, draw
+	if w_minors.size() == 0 and b_minors.size() == 0:
+		return true
+
+	# K+minor vs K, draw
+	if w_minors.size() == 1 or b_minors.size() == 1:
+		return true
+
+	# Else, check if the only pieces remaining are same color bishops
+	if w_minors.size() > b_minors.size():
+		if w_minors.size() > w_bishops.size():
+			return false
+		return !(w_bishop_dark && w_bishop_light)
+	else:
+		if b_minors.size() > b_bishops.size():
+			return false
+		return !(b_bishop_dark && b_bishop_light)
+
+func is_fifty_move() -> bool:
+	return halfmove_clock >= 100
+
+func is_threefold_repetition() -> bool:
+	# TODO
+	return false

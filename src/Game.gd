@@ -3,6 +3,7 @@ extends CenterContainer
 
 var chess = Chess.new()
 onready var board = $V/C/V/Board
+onready var title_text = $V/Title.text
 
 var legal_moves = null
 
@@ -17,10 +18,30 @@ func update():
 	if chess.move_stack.size() > 0:
 		last_move = chess.move_stack[-1]
 
+	var result = chess.get_result()
+	var game_over = result != Chess.RESULT.ONGOING
+
+	var result_text = title_text
+	match result:
+		Chess.RESULT.ONGOING:
+			pass
+		Chess.RESULT.CHECKMATE:
+			result_text = "%s wins by checkmate!" % ("White" if chess.turn else "Black")
+		Chess.RESULT.STALEMATE:
+			result_text = "Draw by stalemate"
+		Chess.RESULT.INSUFFICIENT:
+			result_text = "Draw by insufficient material"
+		Chess.RESULT.FIFTY_MOVE:
+			result_text = "Draw by fifty-move rule"
+		Chess.RESULT.THREEFOLD:
+			result_text = "Draw by threefold repetition"
+
+	$V/Title.text = result_text
+
 	for square in get_tree().get_nodes_in_group("Squares"):
 		var piece = chess.pieces[square.index]
 		if piece:
-			square.grabbable = Chess.piece_color(piece) == chess.turn
+			square.grabbable = not game_over and Chess.piece_color(piece) == chess.turn
 		var highlight = square.get_node("LastMoveHighlight")
 		highlight.hide()
 		if last_move and (square.index == last_move.from_square or square.index == last_move.to_square):
