@@ -76,8 +76,8 @@ var fullmove_counter = 1
 var move_stack = []
 
 
-func duplicate():
-	var new_chess = .new()	# ???? Took me a while. Chess.new() doesn't work, new() doesn't work, but .new() does
+func duplicate(duplicate_move_stack = true):
+	var new_chess = get_script().new()
 	new_chess.pieces = pieces.duplicate()
 	new_chess.turn = turn
 	new_chess.castling = castling.duplicate()
@@ -85,8 +85,9 @@ func duplicate():
 	new_chess.halfmove_clock = halfmove_clock
 	new_chess.fullmove_counter = fullmove_counter
 	new_chess.move_stack = []
-	for move in move_stack:
-		new_chess.move_stack.push_back(move.duplicate())
+	if duplicate_move_stack:
+		for move in move_stack:
+			new_chess.move_stack.push_back(move.duplicate())
 	return new_chess
 
 # Sets up the board with the given FEN, returns true if successful. If not successful, board does not change
@@ -164,6 +165,7 @@ func set_fen(fen : String) -> bool:
 	fullmove_counter = new_fullmove_counter
 
 	move_stack = []
+	prune_ep_target()
 
 	return true
 
@@ -279,6 +281,7 @@ func play_move(move):
 		fullmove_counter += 1
 
 	move_stack.push_back(move)
+	prune_ep_target()
 
 # Undoes the most recent move
 func undo():
@@ -630,6 +633,70 @@ func is_insufficient_material() -> bool:
 func is_fifty_move() -> bool:
 	return halfmove_clock >= 100
 
+func is_repetition(other) -> bool:
+	if turn != other.turn:
+		return false
+
+	for i in range(4):
+		if castling[i] != other.castling[i]:
+			return false
+
+	# ep_targets are pruned so this works correctly!
+	if ep_target != other.ep_target:
+		return false
+
+	for i in range(64):
+		if pieces[i] != other.pieces[i]:
+			return false
+
+	# Halfmove clock and fullmove counter do not matter for repetitions (they will not match up anyway)
+
+	return true
+
 func is_threefold_repetition() -> bool:
-	# TODO
+	var reference = duplicate()
+	var repetitions = 1
+	while reference.move_stack.size() > 0:
+		# Optimization: if we reach an irreversable move (aka capture or pawn move), return false early
+		# This could also include moves that change castling rights. Potential TODO
+		var last_move = reference.move_stack[-1]
+		if last_move.captured_piece or last_move.promotion or reference.pieces[last_move.to_square] in ["P", "p"]:
+			return false
+
+		reference.undo()
+		if is_repetition(reference):
+			repetitions += 1
+			if repetitions >= 3:
+				return true
 	return false
+
+# After this function, ep_target will ONLY be set if there is a legal en passant capture available
+func prune_ep_target():
+	if ep_target == null:
+		return
+
+	var delta = -8 if turn else 8
+	var new_square = ep_target + delta
+	if new_square < 0 or new_square >= 64:	# shouldn't happen in a real game
+		ep_target = null
+		return
+
+	var file = square_get_file(new_square)
+	var target_piece = "p" if turn else "P"
+	if file > 1:
+		if pieces[new_square - 1] == target_piece:
+			var reference = duplicate(false)
+			reference.play_move(construct_move(new_square - 1, ep_target))
+			if not reference.is_square_attacked(reference.king(turn), not turn):
+				# found legal en passant!
+				return
+	if file < 8:
+		if pieces[new_square + 1] == target_piece:
+			var reference = duplicate(false)
+			reference.play_move(construct_move(new_square + 1, ep_target))
+			if not reference.is_square_attacked(reference.king(turn), not turn):
+				# found legal en passant!
+				return
+
+	# There were either no pawns in position, or the pawn(s) were pinned
+	ep_target = null

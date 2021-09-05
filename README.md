@@ -19,7 +19,7 @@ Even with this simple project idea, there's a lot I could end up doing and I nee
 		* Castling, en passant, pawn promotion
 	* Game end conditions
 		* Checkmate, stalemate, insufficient material, 50 move rule
-		* Threefold repetition _might_ be included, I'd love to but that will be the last one
+		* Threefold repetition ~~_might_ be~~ _is :)_ included, ~~I'd love to but that will be the last one~~ _it was the last one and it is done!_
 		* Claiming draws will automatically happen, so no 75 move rule or fivefold repetition
 	* FEN support
 	* But probably, no support for SAN. Maybe UCI
@@ -53,7 +53,7 @@ First time using groups! I originally had the method `Board.connect_squares_piec
 
 In my [previous chess implementation](https://github.com/thearst3rd/chesslib), I literally stored a complete copy of every single position that has ever been reached in the game. This is... inefficient, but at least undoing a move is trivial (just revert back to the second to last board state). This time though, I figured, let's not do that. Rather, with each move, I want to store everything that's needed to undo that move. For instance, if there was a captured piece, we need to know what it was so we can put it back. I did some testing, and I'm feeling pretty good that I covered everything, but I might have missed something. Hopefully I'll find out sooner rather than later. Ok, on to legal move generation for real.
 
-I found something that I thought was pretty unintuitive. I want to be able to make duplicate objects of a chess position that can be edited while the original is preserved, to do stuff like calculating if two positions are repetitions during a threefold repetition check. But, a class cannot use its own name since that would create a cyclic dependancy, so for example, my `Chess` class cannot do the following:
+~~I found something that I thought was pretty unintuitive. I want to be able to make duplicate objects of a chess position that can be edited while the original is preserved, to do stuff like calculating if two positions are repetitions during a threefold repetition check. But, a class cannot use its own name since that would create a cyclic dependancy, so for example, my `Chess` class cannot do the following:~~
 
 ```gd
 extends Reference
@@ -67,7 +67,7 @@ func duplicate() -> Chess:
 	return new_chess
 ```
 
-I figured, since that doesn't work, I can probably just replace `Chess.new()` with `new()`, since that should be the equivalent given the current scope. Turns out, that doesn't work. BUT, somehow, just `.new()` DOES work. Not sure what's up with that. Took me a while, but eventually I found that out through the Godot Discord. The current code looks like:
+~~I figured, since that doesn't work, I can probably just replace `Chess.new()` with `new()`, since that should be the equivalent given the current scope. Turns out, that doesn't work. BUT, somehow, just `.new()` DOES work. Not sure what's up with that. Took me a while, but eventually I found that out through the Godot Discord. The current code looks like:~~
 
 ```gd
 func duplicate():	# no `-> Chess`
@@ -76,13 +76,17 @@ func duplicate():	# no `-> Chess`
 	return new_chess
 ```
 
-(Also, it looks like [this might be addressed in Godot 4.0](https://github.com/godotengine/godot-proposals/issues/460). Would be nice.)
+~~(Also, it looks like [this might be addressed in Godot 4.0](https://github.com/godotengine/godot-proposals/issues/460). Would be nice.)~~ *GAH, just kidding!! That also doesn't work! It shows no errors in the editor, but doesn't actually work. Should have figured, and you know, maybe tested it... More info a few paragraphs below.*
 
 I got pseudo chess all implemented (minus castling, I'll handle that in full legal chess since it involves checks in the conditions). From there, I improved the interface to show legal moves so I could see if I did anything wrong (I did!!!), for which I had to answer some of my earlier questions along the way. I had to make the indicators squares instead of the originally-planned circles... looks like I'll have to add code to draw circles if I really want them. But so far, this is turning out great! Especially considering it's still Friday night (well, it's Saturday morning at 2:56 AM EDT but that doesn't count...)
 
 Check is now implemented! The code is (probably?) more efficient than my method in chesslib - before, I would generate all pseudo legal moves and see if any of them ended at our king. This was terribly inefficient, but works at least. This time, it's still not very good, but better. Rather than look at all of the opponent's pieces and generate all their moves to see if they can capture our king, just start at our king and move outwards for pieces that could capture it. So, look a knight's move away to check for knights, start sliding in the rook's directions to check for rooks/queens, etc. I had a bug where pawns "attacked" the wrong direction according to my function, but after fixing that, I think I got it all working! Some more testing needs to be done be sure, but AFAIK, all moves are now fully legal moves! I just need to handle the game end conditions.
 
 The (almost) last piece of the puzzle has been implemented - the game termination condtions! I have all of them implemented with the exception of threefold repetition, which I plan on getting to. While testing, I encountered a strange bug with my move generation where it claimed there was no stalemate when it was clearly stalemate (`k7/8/4B3/2B1B3/8/2B5/2K2B2/8 w - - 12 7`, move `Bc8`). It turned out to do with castling - even though the castling flags were turned off, somehow it still generated a castling move which brought the king off the board :) I found the bug, it had to do with how I wrote the ternary statements to look at a the castling flags for whose turn it is. I wrote it out to be more explicit, and the problem went away. I also found another place there might have been a bug and made that more explicit too. Regardless, once again, this project is starting to really shape up and it's super satisfying to be able to play out entire legal games of chess and watch it calculate the end result!
+
+GAHH!! So I was working on getting threefold repetition to work, and discovered that the whole paragraph I wrote about `Chess.new()` vs `new()` vs `.new()` was wrong! I, uhhh, should've tested it :) Regardless, after scouring through discord again, I found that the ACTUAL way to do it is to call `get_script().new()`. THAT WORKED and I was able to implement threefold repetition!!! To make things easier, I also now prune the en passant target square - that is, if a pawn moved two squares, but there aren't actually any pawns that can capture en passant (or those pawns are pinned), then remove the en passant target square. This makes checking if two positions are repetitions easier since I don't need to do it there. I even included some small optimizations! Now, truly, legal chess (with claimable draws getting auto-claimed) should be _fully_ implemented (so long as there are no bugs!).
+
+And it's only Saturday night! I've got potentially all of Sunday and most of Monday to add more features. I'll work on UI improvements for sure, and maybe, _just maybe_, I can do game tree search and make an AI that isn't just a random mover? _Maybe!!??_
 
 # Credits/Attributions
 

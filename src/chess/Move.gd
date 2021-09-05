@@ -13,7 +13,7 @@ var prev_ep_target = null
 var prev_halfmove_clock = -1
 
 func duplicate():
-	var new_move = .new()
+	var new_move = get_script().new()
 	new_move.from_square = from_square
 	new_move.to_square = to_square
 	new_move.promotion = promotion
