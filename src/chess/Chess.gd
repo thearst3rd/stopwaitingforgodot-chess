@@ -739,11 +739,10 @@ func notate_moves(moves):
 				if other_move.from_square == move.from_square:
 					continue
 				if other_move.to_square == move.to_square:
+					conflicts = true
 					if square_get_file(other_move.from_square) == square_get_file(move.from_square):
-						conflicts = true
 						conflicting_files = true
 					if square_get_rank(other_move.from_square) == square_get_rank(move.from_square):
-						conflicts = true
 						conflicting_ranks = true
 
 			var capture = move.captured_piece != null or move.en_passant
