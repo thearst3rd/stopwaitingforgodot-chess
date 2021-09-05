@@ -514,11 +514,11 @@ func generate_legal_moves():
 	var castle_kingside
 	var castle_queenside
 	if turn:
-		castle_kingside = castling[0]
-		castle_queenside = castling[1]
-	else:
 		castle_kingside = castling[2]
 		castle_queenside = castling[3]
+	else:
+		castle_kingside = castling[0]
+		castle_queenside = castling[1]
 
 	if castle_kingside:
 		var king = king(turn)
