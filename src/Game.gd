@@ -1,4 +1,4 @@
-extends CenterContainer
+extends Control
 
 
 var chess = Chess.new()
@@ -42,15 +42,16 @@ func update():
 		var piece = chess.pieces[square.index]
 		if piece:
 			square.grabbable = not game_over and Chess.piece_color(piece) == chess.turn
+
 		var highlight = square.get_node("LastMoveHighlight")
-		highlight.hide()
-		if last_move and (square.index == last_move.from_square or square.index == last_move.to_square):
-			highlight.show()
 		var checkIndicator = square.get_node("CheckIndicator")
-		if piece in ["K", "k"] and chess.is_square_attacked(square.index, not Chess.piece_color(piece)):
-			checkIndicator.show()
-		else:
-			checkIndicator.hide()
+		highlight.hide()
+		checkIndicator.hide()
+		if Settings.show_highlights:
+			if last_move and (square.index == last_move.from_square or square.index == last_move.to_square):
+				highlight.show()
+			if piece in ["K", "k"] and chess.is_square_attacked(square.index, not Chess.piece_color(piece)):
+				checkIndicator.show()
 
 
 	find_node("SanDisplay").update_moves(chess)
@@ -85,18 +86,19 @@ func _on_SetFen_pressed():
 		find_node("InvalidFenTimer").start()
 
 func _on_Square_piece_grabbed(from_index):
-	var target_squares = []
-	for move in legal_moves:
-		if move.from_square == from_index:
-			target_squares.push_back(move.to_square)
-	for square in get_tree().get_nodes_in_group("Squares"):
-		if square.index in target_squares:
-			var indicator = square.get_node("LegalMoveIndicator/ColorRect")
-			if chess.pieces[square.index] == null:
-				indicator.rect_min_size = Vector2(15, 15)
-			else:
-				indicator.rect_min_size = Vector2(40, 40)
-			indicator.get_parent().show()
+	if Settings.show_dests:
+		var target_squares = []
+		for move in legal_moves:
+			if move.from_square == from_index:
+				target_squares.push_back(move.to_square)
+		for square in get_tree().get_nodes_in_group("Squares"):
+			if square.index in target_squares:
+				var indicator = square.get_node("LegalMoveIndicator/ColorRect")
+				if chess.pieces[square.index] == null:
+					indicator.rect_min_size = Vector2(15, 15)
+				else:
+					indicator.rect_min_size = Vector2(40, 40)
+				indicator.get_parent().show()
 
 func _on_Square_piece_dropped(from_index, to_index):
 	var m = chess.construct_move(from_index, to_index)
@@ -108,3 +110,10 @@ func _on_Square_piece_dropped(from_index, to_index):
 
 func _on_InvalidFenTimer_timeout():
 	find_node("InvalidFen").hide()
+
+func _on_SettingsButton_pressed():
+	find_node("SettingsMenu").show()
+
+func _on_SettingsMenu_settings_changed():
+	if board:	# Workaround for crash on startup... Probably can check for some kind of is_ready instead
+		update()

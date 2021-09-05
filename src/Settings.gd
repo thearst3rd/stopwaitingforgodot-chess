@@ -4,6 +4,7 @@ extends Node
 const SETTINGS_FILENAME = "user://settings.txt"
 
 var show_dests = true
+var show_highlights = true
 
 
 func load_settings():
@@ -17,12 +18,10 @@ func load_settings():
 	if typeof(d) != TYPE_DICTIONARY:
 		return
 
-	if OS.get_name() != "HTML":
-		if "fullscreen" in d:
-			OS.window_fullscreen = bool(d.fullscreen)
-
 	if "show_dests" in d:
 		show_dests = bool(d.show_dests)
+	if "show_highlights" in d:
+		show_highlights = bool(d.show_highlights)
 
 func save_settings():
 	var f = File.new()
@@ -30,12 +29,9 @@ func save_settings():
 	assert(not error)
 
 	var d = {
-		"fullscreen": OS.window_fullscreen,
 		"show_dests": show_dests,
+		"show_highlights": show_highlights,
 	}
-
-	if OS.get_name() == "HTML5":
-		d["fullscreen"] = false
 
 	f.store_line(var2str(d))
 
@@ -49,3 +45,9 @@ func _unhandled_input(event):
 	if event.is_action_pressed("toggle_fullscreen"):
 		OS.window_fullscreen = not OS.window_fullscreen
 		get_tree().set_input_as_handled()
+
+# Save on quitting
+func _notification(what):
+	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
+		save_settings()
+		get_tree().quit() # default behavior

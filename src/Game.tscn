@@ -1,23 +1,28 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://src/Board.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/orkney/Orkney Bold.otf" type="DynamicFontData" id=2]
 [ext_resource path="res://src/Game.gd" type="Script" id=3]
 [ext_resource path="res://src/SanDisplay.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/SettingsMenu.tscn" type="PackedScene" id=5]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
 font_data = ExtResource( 2 )
 
-[node name="Game" type="CenterContainer"]
+[node name="Game" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 3 )
+
+[node name="C" type="CenterContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="V" type="VBoxContainer" parent="."]
+[node name="V" type="VBoxContainer" parent="C"]
 margin_left = 140.0
 margin_top = 297.0
 margin_right = 1140.0
@@ -25,77 +30,112 @@ margin_bottom = 423.0
 rect_min_size = Vector2( 1000, 0 )
 custom_constants/separation = 12
 
-[node name="Title" type="Label" parent="V"]
+[node name="H" type="HBoxContainer" parent="C/V"]
 margin_right = 1000.0
+margin_bottom = 38.0
+
+[node name="LSpacer" type="Control" parent="C/V/H"]
+margin_right = 266.0
+margin_bottom = 38.0
+size_flags_horizontal = 3
+
+[node name="Title" type="Label" parent="C/V/H"]
+margin_left = 270.0
+margin_right = 730.0
 margin_bottom = 38.0
 custom_fonts/font = SubResource( 1 )
 text = "#StopWaitingForGodot Chess"
 align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="C" type="CenterContainer" parent="V"]
+[node name="RSpacer" type="Control" parent="C/V/H"]
+margin_left = 734.0
+margin_right = 1000.0
+margin_bottom = 38.0
+size_flags_horizontal = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SettingsButton" type="Button" parent="C/V/H/RSpacer"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -74.0
+margin_top = -13.0
+margin_bottom = 13.0
+text = "Settings"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="C" type="CenterContainer" parent="C/V"]
 margin_top = 50.0
 margin_right = 1000.0
 margin_bottom = 88.0
 
-[node name="V" type="VBoxContainer" parent="V/C"]
-margin_left = 355.0
-margin_right = 645.0
+[node name="V" type="VBoxContainer" parent="C/V/C"]
+margin_left = 352.0
+margin_right = 647.0
 margin_bottom = 38.0
 custom_constants/separation = 12
 
-[node name="H" type="HBoxContainer" parent="V/C/V"]
-margin_right = 290.0
-custom_constants/separation = 25
+[node name="H" type="HBoxContainer" parent="C/V/C/V"]
+margin_right = 295.0
+custom_constants/separation = 30
 
-[node name="Board" parent="V/C/V/H" instance=ExtResource( 1 )]
+[node name="Board" parent="C/V/C/V/H" instance=ExtResource( 1 )]
 margin_right = 0.0
 margin_bottom = 0.0
 
-[node name="SanDisplay" parent="V/C/V/H" instance=ExtResource( 4 )]
-margin_left = 25.0
-margin_right = 290.0
+[node name="SanDisplay" parent="C/V/C/V/H" instance=ExtResource( 4 )]
+margin_left = 30.0
+margin_right = 295.0
 
-[node name="H2" type="HBoxContainer" parent="V/C/V"]
+[node name="H2" type="HBoxContainer" parent="C/V/C/V"]
 margin_top = 12.0
-margin_right = 290.0
+margin_right = 295.0
 margin_bottom = 38.0
 custom_constants/separation = 20
 
-[node name="ResetButton" type="Button" parent="V/C/V/H2"]
+[node name="ResetButton" type="Button" parent="C/V/C/V/H2"]
 margin_right = 53.0
 margin_bottom = 26.0
 text = "Reset"
 
-[node name="FlipButton" type="Button" parent="V/C/V/H2"]
+[node name="FlipButton" type="Button" parent="C/V/C/V/H2"]
 margin_left = 73.0
 margin_right = 112.0
 margin_bottom = 26.0
 text = "Flip"
 
-[node name="UndoButton" type="Button" parent="V/C/V/H2"]
+[node name="UndoButton" type="Button" parent="C/V/C/V/H2"]
 margin_left = 132.0
 margin_right = 184.0
 margin_bottom = 26.0
 text = "Undo"
 
-[node name="H" type="HBoxContainer" parent="V"]
+[node name="H2" type="HBoxContainer" parent="C/V"]
 margin_top = 100.0
 margin_right = 1000.0
 margin_bottom = 126.0
 custom_constants/separation = 12
 
-[node name="FenText" type="TextEdit" parent="V/H"]
+[node name="FenText" type="TextEdit" parent="C/V/H2"]
 margin_right = 918.0
 margin_bottom = 26.0
 size_flags_horizontal = 3
 
-[node name="SetFen" type="Button" parent="V/H"]
+[node name="SetFen" type="Button" parent="C/V/H2"]
 margin_left = 930.0
 margin_right = 1000.0
 margin_bottom = 26.0
 text = "Set FEN"
 
-[node name="InvalidFen" type="Label" parent="V/H"]
+[node name="InvalidFen" type="Label" parent="C/V/H2"]
 visible = false
 margin_left = 694.0
 margin_top = 4.0
@@ -104,12 +144,17 @@ margin_bottom = 24.0
 custom_colors/font_color = Color( 0.913725, 0.247059, 0.247059, 1 )
 text = "Invalid FEN"
 
-[node name="InvalidFenTimer" type="Timer" parent="V/H"]
+[node name="InvalidFenTimer" type="Timer" parent="C/V/H2"]
 wait_time = 5.0
 one_shot = true
 
-[connection signal="pressed" from="V/C/V/H2/ResetButton" to="." method="_on_ResetButton_pressed"]
-[connection signal="pressed" from="V/C/V/H2/FlipButton" to="." method="_on_FlipButton_pressed"]
-[connection signal="pressed" from="V/C/V/H2/UndoButton" to="." method="_on_UndoButton_pressed"]
-[connection signal="pressed" from="V/H/SetFen" to="." method="_on_SetFen_pressed"]
-[connection signal="timeout" from="V/H/InvalidFenTimer" to="." method="_on_InvalidFenTimer_timeout"]
+[node name="SettingsMenu" parent="." instance=ExtResource( 5 )]
+visible = false
+
+[connection signal="pressed" from="C/V/H/RSpacer/SettingsButton" to="." method="_on_SettingsButton_pressed"]
+[connection signal="pressed" from="C/V/C/V/H2/ResetButton" to="." method="_on_ResetButton_pressed"]
+[connection signal="pressed" from="C/V/C/V/H2/FlipButton" to="." method="_on_FlipButton_pressed"]
+[connection signal="pressed" from="C/V/C/V/H2/UndoButton" to="." method="_on_UndoButton_pressed"]
+[connection signal="pressed" from="C/V/H2/SetFen" to="." method="_on_SetFen_pressed"]
+[connection signal="timeout" from="C/V/H2/InvalidFenTimer" to="C" method="_on_InvalidFenTimer_timeout"]
+[connection signal="settings_changed" from="SettingsMenu" to="." method="_on_SettingsMenu_settings_changed"]
