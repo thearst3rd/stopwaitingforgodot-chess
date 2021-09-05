@@ -90,6 +90,8 @@ And it's only Saturday night! I've got potentially all of Sunday and most of Mon
 
 Implemented SAN :) Had some hiccups - it overly disambiguated pawn promotions (ex, `h8xg7=Q` instead of `hxg7=Q`), but I figured that was because each pawn promotion was counting as a conflict with all the rest, and once I started comparing starting squares instead, that worked out. I also forgot about castling at first, so `Kf1` would be moving white's king one square to the right, and... `Kg1` was white castling kingside :) I fixed that as well.
 
+Not only that, but I added a SAN display as well! It's Lichess-inspired, and it looks really nice, _definitely_ better than I expected out of a one-weekend project.
+
 # Credits/Attributions
 
 See [CREDITS.md](CREDITS.md).

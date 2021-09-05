@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/Board.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/orkney/Orkney Bold.otf" type="DynamicFontData" id=2]
 [ext_resource path="res://src/Game.gd" type="Script" id=3]
+[ext_resource path="res://src/SanDisplay.tscn" type="PackedScene" id=4]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -28,7 +29,7 @@ custom_constants/separation = 12
 margin_right = 1000.0
 margin_bottom = 38.0
 custom_fonts/font = SubResource( 1 )
-text = "Godot Simple Chess"
+text = "#StopWaitingForGodot Chess"
 align = 1
 
 [node name="C" type="CenterContainer" parent="V"]
@@ -37,33 +38,41 @@ margin_right = 1000.0
 margin_bottom = 88.0
 
 [node name="V" type="VBoxContainer" parent="V/C"]
-margin_left = 408.0
-margin_right = 592.0
+margin_left = 355.0
+margin_right = 645.0
 margin_bottom = 38.0
 custom_constants/separation = 12
 
-[node name="Board" parent="V/C/V" instance=ExtResource( 1 )]
-margin_right = 184.0
+[node name="H" type="HBoxContainer" parent="V/C/V"]
+margin_right = 290.0
+custom_constants/separation = 25
+
+[node name="Board" parent="V/C/V/H" instance=ExtResource( 1 )]
+margin_right = 0.0
 margin_bottom = 0.0
 
-[node name="H" type="HBoxContainer" parent="V/C/V"]
+[node name="SanDisplay" parent="V/C/V/H" instance=ExtResource( 4 )]
+margin_left = 25.0
+margin_right = 290.0
+
+[node name="H2" type="HBoxContainer" parent="V/C/V"]
 margin_top = 12.0
-margin_right = 184.0
+margin_right = 290.0
 margin_bottom = 38.0
 custom_constants/separation = 20
 
-[node name="ResetButton" type="Button" parent="V/C/V/H"]
+[node name="ResetButton" type="Button" parent="V/C/V/H2"]
 margin_right = 53.0
 margin_bottom = 26.0
 text = "Reset"
 
-[node name="FlipButton" type="Button" parent="V/C/V/H"]
+[node name="FlipButton" type="Button" parent="V/C/V/H2"]
 margin_left = 73.0
 margin_right = 112.0
 margin_bottom = 26.0
 text = "Flip"
 
-[node name="UndoButton" type="Button" parent="V/C/V/H"]
+[node name="UndoButton" type="Button" parent="V/C/V/H2"]
 margin_left = 132.0
 margin_right = 184.0
 margin_bottom = 26.0
@@ -99,8 +108,8 @@ text = "Invalid FEN"
 wait_time = 5.0
 one_shot = true
 
-[connection signal="pressed" from="V/C/V/H/ResetButton" to="." method="_on_ResetButton_pressed"]
-[connection signal="pressed" from="V/C/V/H/FlipButton" to="." method="_on_FlipButton_pressed"]
-[connection signal="pressed" from="V/C/V/H/UndoButton" to="." method="_on_UndoButton_pressed"]
+[connection signal="pressed" from="V/C/V/H2/ResetButton" to="." method="_on_ResetButton_pressed"]
+[connection signal="pressed" from="V/C/V/H2/FlipButton" to="." method="_on_FlipButton_pressed"]
+[connection signal="pressed" from="V/C/V/H2/UndoButton" to="." method="_on_UndoButton_pressed"]
 [connection signal="pressed" from="V/H/SetFen" to="." method="_on_SetFen_pressed"]
 [connection signal="timeout" from="V/H/InvalidFenTimer" to="." method="_on_InvalidFenTimer_timeout"]

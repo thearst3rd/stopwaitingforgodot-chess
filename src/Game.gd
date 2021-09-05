@@ -2,21 +2,17 @@ extends CenterContainer
 
 
 var chess = Chess.new()
-onready var board = $V/C/V/Board
-onready var title_text = $V/Title.text
+onready var board = find_node("Board")
+onready var title_text = find_node("Title").text
 
 var legal_moves = null
 
 
 func update():
 	board.setup_board(chess)
-	$V/H/FenText.text = chess.get_fen()
+	find_node("FenText").text = chess.get_fen()
 	legal_moves = chess.generate_legal_moves()
-	$V/C/V/H/UndoButton.disabled = chess.move_stack.size() == 0
-
-	print("====")
-	for move in legal_moves:
-		print(move.notation_san)
+	find_node("UndoButton").disabled = chess.move_stack.size() == 0
 
 	var last_move = null
 	if chess.move_stack.size() > 0:
@@ -40,7 +36,7 @@ func update():
 		Chess.RESULT.THREEFOLD:
 			result_text = "Draw by threefold repetition"
 
-	$V/Title.text = result_text
+	find_node("Title").text = result_text
 
 	for square in get_tree().get_nodes_in_group("Squares"):
 		var piece = chess.pieces[square.index]
@@ -50,6 +46,8 @@ func update():
 		highlight.hide()
 		if last_move and (square.index == last_move.from_square or square.index == last_move.to_square):
 			highlight.show()
+
+	find_node("SanDisplay").update_moves(chess)
 
 
 ## CALLBACKS ##
@@ -74,11 +72,11 @@ func _on_UndoButton_pressed():
 	update()
 
 func _on_SetFen_pressed():
-	if chess.set_fen($V/H/FenText.text):
+	if chess.set_fen(find_node("FenText").text):
 		update()
 	else:
-		$V/H/InvalidFen.show()
-		$V/H/InvalidFenTimer.start()
+		find_node("InvalidFen").show()
+		find_node("InvalidFenTimer").start()
 
 func _on_Square_piece_grabbed(from_index):
 	var target_squares = []
@@ -98,9 +96,9 @@ func _on_Square_piece_dropped(from_index, to_index):
 	var m = chess.construct_move(from_index, to_index)
 	for lm in legal_moves:
 		if m.from_square == lm.from_square and m.to_square == lm.to_square and m.promotion == lm.promotion:
-			chess.play_move(m)
+			chess.play_move(lm)
 			break
 	update()
 
 func _on_InvalidFenTimer_timeout():
-	$V/H/InvalidFen.hide()
+	find_node("InvalidFen").hide()
