@@ -504,7 +504,7 @@ func is_square_attacked(square : int, col : bool) -> bool:
 
 
 # Generate all legal moves. This can be done much faster
-func generate_legal_moves():
+func generate_legal_moves(notate_san = true):
 	var moves = []
 	var pseudos = generate_pseudo_legal_moves()
 	for move in pseudos:
@@ -544,6 +544,9 @@ func generate_legal_moves():
 		if not (e_attacked or d_attacked or c_attacked) and d_empty and c_empty and b_empty:
 			moves.push_back(construct_move(king, king - 2))
 
+	if notate_san:
+		notate_moves(moves)
+
 	return moves
 
 
@@ -554,7 +557,7 @@ func is_game_over() -> bool:
 
 func get_result():
 	# TODO: cache legal moves so we don't need to generate them again here
-	var moves = generate_legal_moves()
+	var moves = generate_legal_moves(false)
 	if moves.size() == 0:
 		if is_square_attacked(king(turn), not turn):
 			return RESULT.CHECKMATE
@@ -700,3 +703,81 @@ func prune_ep_target():
 
 	# There were either no pawns in position, or the pawn(s) were pinned
 	ep_target = null
+
+
+## SAN GENERATION ##
+
+# Populate the notation_san field of each move with it's SAN notation
+# This is pretty inefficient! Only do it when you need to
+func notate_moves(moves):
+	# First pass, put moves into dictionary based on piece type
+	var piece_moves = {
+		"K": [],
+		"Q": [],
+		"R": [],
+		"B": [],
+		"N": [],
+		"P": [],
+	}
+	for move in moves:
+		var piece_type = pieces[move.from_square].to_upper()
+		piece_moves[piece_type].push_back(move)
+
+	# Second pass, actually generate SAN
+	for move in moves:
+		var piece_type = pieces[move.from_square].to_upper()
+
+		if piece_type == "K" and (move.to_square == move.from_square + 2):
+			move.notation_san = "O-O"
+		elif piece_type == "K" and (move.to_square == move.from_square - 2):
+			move.notation_san = "O-O-O"
+		else:
+			var conflicts = false
+			var conflicting_ranks = false
+			var conflicting_files = false
+			for other_move in piece_moves[piece_type]:
+				if other_move.from_square == move.from_square:
+					continue
+				if other_move.to_square == move.to_square:
+					if square_get_file(other_move.from_square) == square_get_file(move.from_square):
+						conflicts = true
+						conflicting_files = true
+					if square_get_rank(other_move.from_square) == square_get_rank(move.from_square):
+						conflicts = true
+						conflicting_ranks = true
+
+			var capture = move.captured_piece != null or move.en_passant
+			if piece_type == "P":
+				move.notation_san = ""
+				if capture:
+					# Force it to print the file letter. Eg, "exd5" even if the "e" wasn't needed for disambiguation
+					conflicts = true
+			else:
+				move.notation_san = piece_type
+
+			# Disambiguate moves if needed
+			if conflicts:
+				if not (conflicting_files or conflicting_ranks):
+					conflicting_ranks = true
+				if conflicting_ranks:
+					move.notation_san += char(ord("a") + square_get_file(move.from_square) - 1)
+				if conflicting_files:
+					move.notation_san += str(square_get_rank(move.from_square))
+
+			if capture:
+				move.notation_san += "x"
+
+			move.notation_san += square_get_name(move.to_square)
+
+			if move.promotion:
+				move.notation_san += "=%s" % move.promotion.to_upper()
+
+		# Handle check/checkmate
+		play_move(move)
+		if is_square_attacked(king(turn), not turn):
+			var test_checkmate_moves = generate_legal_moves(false)
+			if test_checkmate_moves.size() == 0:
+				move.notation_san += "#"
+			else:
+				move.notation_san += "+"
+		undo()

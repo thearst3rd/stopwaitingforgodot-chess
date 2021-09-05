@@ -14,6 +14,10 @@ func update():
 	legal_moves = chess.generate_legal_moves()
 	$V/C/V/H/UndoButton.disabled = chess.move_stack.size() == 0
 
+	print("====")
+	for move in legal_moves:
+		print(move.notation_san)
+
 	var last_move = null
 	if chess.move_stack.size() > 0:
 		last_move = chess.move_stack[-1]

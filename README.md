@@ -22,7 +22,7 @@ Even with this simple project idea, there's a lot I could end up doing and I nee
 		* Threefold repetition ~~_might_ be~~ _is :)_ included, ~~I'd love to but that will be the last one~~ _it was the last one and it is done!_
 		* Claiming draws will automatically happen, so no 75 move rule or fivefold repetition
 	* FEN support
-	* But probably, no support for SAN. Maybe UCI
+	* ~~But probably, no support for SAN. Maybe UCI~~ _SAN implemented :)_
 	* I'm aiming for ease-of-programming, not high performance, so I'll be doing a lot of things the naive way :)
 * Graphical chess interface
 	* Drag and drop to move the pieces
@@ -87,6 +87,8 @@ The (almost) last piece of the puzzle has been implemented - the game terminatio
 GAHH!! So I was working on getting threefold repetition to work, and discovered that the whole paragraph I wrote about `Chess.new()` vs `new()` vs `.new()` was wrong! I, uhhh, should've tested it :) Regardless, after scouring through discord again, I found that the ACTUAL way to do it is to call `get_script().new()`. THAT WORKED and I was able to implement threefold repetition!!! To make things easier, I also now prune the en passant target square - that is, if a pawn moved two squares, but there aren't actually any pawns that can capture en passant (or those pawns are pinned), then remove the en passant target square. This makes checking if two positions are repetitions easier since I don't need to do it there. I even included some small optimizations! Now, truly, legal chess (with claimable draws getting auto-claimed) should be _fully_ implemented (so long as there are no bugs!).
 
 And it's only Saturday night! I've got potentially all of Sunday and most of Monday to add more features. I'll work on UI improvements for sure, and maybe, _just maybe_, I can do game tree search and make an AI that isn't just a random mover? _Maybe!!??_
+
+Implemented SAN :) Had some hiccups - it overly disambiguated pawn promotions (ex, `h8xg7=Q` instead of `hxg7=Q`), but I figured that was because each pawn promotion was counting as a conflict with all the rest, and once I started comparing starting squares instead, that worked out. I also forgot about castling at first, so `Kf1` would be moving white's king one square to the right, and... `Kg1` was white castling kingside :) I fixed that as well.
 
 # Credits/Attributions
 

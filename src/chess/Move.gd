@@ -11,6 +11,7 @@ var en_passant = false
 var lose_castling = [false, false, false, false]
 var prev_ep_target = null
 var prev_halfmove_clock = -1
+var notation_san = null
 
 func duplicate():
 	var new_move = get_script().new()
@@ -22,6 +23,7 @@ func duplicate():
 	new_move.lose_castling = lose_castling.duplicate()
 	new_move.prev_ep_target = null
 	new_move.prev_halfmove_clock = prev_halfmove_clock
+	# SAN will be populated by Chess.notate_moves (if needed)
 	return new_move
 
 # TODO: figure out if I can do this without creating a circular dependancy...
