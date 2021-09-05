@@ -5,6 +5,8 @@ const SETTINGS_FILENAME = "user://settings.txt"
 
 var show_dests = true
 var show_highlights = true
+var sounds = true
+var sound_check = true
 
 
 func load_settings():
@@ -22,6 +24,10 @@ func load_settings():
 		show_dests = bool(d.show_dests)
 	if "show_highlights" in d:
 		show_highlights = bool(d.show_highlights)
+	if "sounds" in d:
+		sounds = bool(d.sounds)
+	if "sound_check" in d:
+		sound_check = bool(d.sound_check)
 
 func save_settings():
 	var f = File.new()
@@ -31,6 +37,8 @@ func save_settings():
 	var d = {
 		"show_dests": show_dests,
 		"show_highlights": show_highlights,
+		"sounds": sounds,
+		"sound_check": sound_check,
 	}
 
 	f.store_line(var2str(d))

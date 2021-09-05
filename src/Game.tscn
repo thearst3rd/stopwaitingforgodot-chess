@@ -1,10 +1,14 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://src/Board.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/orkney/Orkney Bold.otf" type="DynamicFontData" id=2]
 [ext_resource path="res://src/Game.gd" type="Script" id=3]
 [ext_resource path="res://src/SanDisplay.tscn" type="PackedScene" id=4]
 [ext_resource path="res://src/SettingsMenu.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/sound/move.wav" type="AudioStream" id=6]
+[ext_resource path="res://assets/sound/check.wav" type="AudioStream" id=7]
+[ext_resource path="res://assets/sound/capture.wav" type="AudioStream" id=8]
+[ext_resource path="res://assets/sound/terminal.wav" type="AudioStream" id=9]
 
 [sub_resource type="DynamicFont" id=1]
 size = 32
@@ -14,6 +18,9 @@ font_data = ExtResource( 2 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="C" type="CenterContainer" parent="."]
 anchor_right = 1.0
@@ -150,6 +157,18 @@ one_shot = true
 
 [node name="SettingsMenu" parent="." instance=ExtResource( 5 )]
 visible = false
+
+[node name="MoveSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+
+[node name="CaptureSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 8 )
+
+[node name="CheckSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 7 )
+
+[node name="TerminalSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 9 )
 
 [connection signal="pressed" from="C/V/H/RSpacer/SettingsButton" to="." method="_on_SettingsButton_pressed"]
 [connection signal="pressed" from="C/V/C/V/H2/ResetButton" to="." method="_on_ResetButton_pressed"]

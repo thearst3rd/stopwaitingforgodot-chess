@@ -8,7 +8,7 @@ onready var title_text = find_node("Title").text
 var legal_moves = null
 
 
-func update():
+func update_state(after_move = false):
 	board.setup_board(chess)
 	find_node("FenText").text = chess.get_fen()
 	legal_moves = chess.generate_legal_moves()
@@ -53,34 +53,45 @@ func update():
 			if piece in ["K", "k"] and chess.is_square_attacked(square.index, not Chess.piece_color(piece)):
 				checkIndicator.show()
 
-
 	find_node("SanDisplay").update_moves(chess)
 
+	if after_move and last_move:
+		if Settings.sounds:
+			if last_move.en_passant or last_move.captured_piece:
+				find_node("CaptureSound").play()
+			else:
+				find_node("MoveSound").play()
+
+			if result != Chess.RESULT.ONGOING:
+				find_node("TerminalSound").play()
+			elif Settings.sound_check:
+				if last_move.notation_san[-1] == "+":
+					find_node("CheckSound").play()
 
 ## CALLBACKS ##
 
 func _ready():
 	get_tree().call_group("Squares", "connect", "piece_grabbed", self, "_on_Square_piece_grabbed")
 	get_tree().call_group("Squares", "connect", "piece_dropped", self, "_on_Square_piece_dropped")
-	update()
+	update_state()
 
 
 ## SIGNALS ##
 
 func _on_ResetButton_pressed():
 	chess.reset()
-	update()
+	update_state()
 
 func _on_FlipButton_pressed():
 	board.flip_board()
 
 func _on_UndoButton_pressed():
 	chess.undo()
-	update()
+	update_state()
 
 func _on_SetFen_pressed():
 	if chess.set_fen(find_node("FenText").text):
-		update()
+		update_state()
 	else:
 		find_node("InvalidFen").show()
 		find_node("InvalidFenTimer").start()
@@ -105,8 +116,8 @@ func _on_Square_piece_dropped(from_index, to_index):
 	for lm in legal_moves:
 		if m.from_square == lm.from_square and m.to_square == lm.to_square and m.promotion == lm.promotion:
 			chess.play_move(lm)
+			update_state(true)
 			break
-	update()
 
 func _on_InvalidFenTimer_timeout():
 	find_node("InvalidFen").hide()
@@ -116,4 +127,4 @@ func _on_SettingsButton_pressed():
 
 func _on_SettingsMenu_settings_changed():
 	if board:	# Workaround for crash on startup... Probably can check for some kind of is_ready instead
-		update()
+		update_state()

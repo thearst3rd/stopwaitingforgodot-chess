@@ -25,15 +25,15 @@ __meta__ = {
 
 [node name="PanelContainer" type="PanelContainer" parent="C"]
 margin_left = 506.0
-margin_top = 287.0
+margin_top = 255.0
 margin_right = 773.0
-margin_bottom = 433.0
+margin_bottom = 465.0
 
 [node name="V" type="VBoxContainer" parent="C/PanelContainer"]
 margin_left = 7.0
 margin_top = 7.0
 margin_right = 260.0
-margin_bottom = 139.0
+margin_bottom = 203.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -67,7 +67,7 @@ align = 1
 [node name="V" type="VBoxContainer" parent="C/PanelContainer/V"]
 margin_top = 72.0
 margin_right = 253.0
-margin_bottom = 132.0
+margin_bottom = 196.0
 
 [node name="ShowDestsCheck" type="CheckBox" parent="C/PanelContainer/V/V"]
 margin_right = 253.0
@@ -80,6 +80,29 @@ margin_right = 253.0
 margin_bottom = 60.0
 text = "Highlight Last Move/Check"
 
+[node name="SoundsCheck" type="CheckBox" parent="C/PanelContainer/V/V"]
+margin_top = 64.0
+margin_right = 253.0
+margin_bottom = 92.0
+text = "Play Sounds"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="M" type="MarginContainer" parent="C/PanelContainer/V/V"]
+margin_top = 96.0
+margin_right = 253.0
+margin_bottom = 124.0
+custom_constants/margin_left = 24
+
+[node name="SoundCheckCheck" type="CheckBox" parent="C/PanelContainer/V/V/M"]
+margin_left = 24.0
+margin_right = 253.0
+margin_bottom = 28.0
+text = "Play Sound on Check"
+
 [connection signal="pressed" from="C/PanelContainer/V/H/BackButton" to="." method="_on_BackButton_pressed"]
 [connection signal="toggled" from="C/PanelContainer/V/V/ShowDestsCheck" to="." method="_on_ShowDestsCheck_toggled"]
 [connection signal="toggled" from="C/PanelContainer/V/V/ShowHighlightsCheck" to="." method="_on_ShowHighlightsCheck_toggled"]
+[connection signal="toggled" from="C/PanelContainer/V/V/SoundsCheck" to="." method="_on_SoundsCheck_toggled"]
+[connection signal="toggled" from="C/PanelContainer/V/V/M/SoundCheckCheck" to="." method="_on_SoundCheckCheck_toggled"]
