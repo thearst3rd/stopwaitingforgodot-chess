@@ -15,10 +15,10 @@ font_data = ExtResource( 1 )
 size = 22
 font_data = ExtResource( 3 )
 
-[sub_resource type="DynamicFont" id=4]
+[sub_resource type="DynamicFont" id=3]
 font_data = ExtResource( 5 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=4]
 size = 20
 font_data = ExtResource( 1 )
 
@@ -52,11 +52,11 @@ font_data = ExtResource( 1 )
 size = 12
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=14]
+[sub_resource type="DynamicFont" id=13]
 size = 10
 font_data = ExtResource( 4 )
 
-[sub_resource type="DynamicFont" id=13]
+[sub_resource type="DynamicFont" id=14]
 size = 12
 font_data = ExtResource( 5 )
 
@@ -136,7 +136,7 @@ margin_left = 559.0
 margin_top = 2.0
 margin_right = 567.0
 margin_bottom = 23.0
-custom_fonts/font = SubResource( 4 )
+custom_fonts/font = SubResource( 3 )
 text = "v"
 __meta__ = {
 "_edit_use_anchors_": false
@@ -154,7 +154,7 @@ margin_left = 599.0
 margin_top = 1.0
 margin_right = 844.0
 margin_bottom = 25.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 4 )
 text = "Terry Hearst (thearst3rd)"
 
 [node name="Desc" type="Label" parent="M/Panel/M/ScrollContainer/V"]
@@ -740,7 +740,7 @@ margin_top = 38.0
 margin_right = 400.0
 margin_bottom = 1571.0
 rect_min_size = Vector2( 400, 0 )
-custom_fonts/font = SubResource( 14 )
+custom_fonts/font = SubResource( 13 )
 text = "Copyright (c) 2015, Alfredo Marco Pradil (https://behance.net/pradil), Samuel Oakes (http://oakes.co/), Cristiano Sobral (https://www.behance.net/cssobral20f492), with Reserved Font Name Orkney.
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
@@ -847,7 +847,7 @@ rect_min_size = Vector2( 0, 10 )
 margin_top = 2425.0
 margin_right = 1080.0
 margin_bottom = 2440.0
-custom_fonts/font = SubResource( 13 )
+custom_fonts/font = SubResource( 14 )
 text = "Man I spent way too long making this credits screen, I should've just linked to the GitHub and called it at that. It does look cool at least :)"
 align = 1
 

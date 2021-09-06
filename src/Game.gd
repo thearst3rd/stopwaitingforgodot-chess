@@ -4,8 +4,10 @@ extends Control
 var chess = Chess.new()
 onready var board = find_node("Board")
 onready var title_text = find_node("Title").text
+onready var bot_timer = find_node("BotTimer")
 
 var legal_moves = null
+var bot_thinking = false
 
 
 func update_state(after_move = false):
@@ -41,7 +43,7 @@ func update_state(after_move = false):
 	for square in get_tree().get_nodes_in_group("Squares"):
 		var piece = chess.pieces[square.index]
 		if piece:
-			square.grabbable = not game_over and Chess.piece_color(piece) == chess.turn
+			square.grabbable = (not game_over and not bot_thinking) and Chess.piece_color(piece) == chess.turn
 
 		var highlight = square.get_node("LastMoveHighlight")
 		var checkIndicator = square.get_node("CheckIndicator")
@@ -68,6 +70,26 @@ func update_state(after_move = false):
 				if last_move.notation_san[-1] == "+":
 					find_node("CheckSound").play()
 
+# This is the "thinking" function that the bot uses to choose which move it wants to play
+func bot_get_move():
+	# Just pick a random move for now...
+	# TODO, implement some sort of actual AI
+	var move = legal_moves[randi() % legal_moves.size()]
+	return move
+
+func bot_play(with_timeout = false):
+	if chess.is_game_over():
+		return
+	if with_timeout:
+		bot_thinking = true
+		bot_timer.start()
+	else:
+		var move = bot_get_move()
+		chess.play_move(move)
+		bot_thinking = false
+		bot_timer.stop()
+		update_state(true)
+
 ## CALLBACKS ##
 
 func _ready():
@@ -79,6 +101,8 @@ func _ready():
 ## SIGNALS ##
 
 func _on_ResetButton_pressed():
+	bot_thinking = false
+	bot_timer.stop()
 	chess.reset()
 	update_state()
 
@@ -86,10 +110,14 @@ func _on_FlipButton_pressed():
 	board.flip_board()
 
 func _on_UndoButton_pressed():
+	bot_thinking = false
+	bot_timer.stop()
 	chess.undo()
 	update_state()
 
 func _on_SetFen_pressed():
+	bot_thinking = false
+	bot_timer.stop()
 	if chess.set_fen(find_node("FenText").text):
 		update_state()
 	else:
@@ -117,6 +145,8 @@ func _on_Square_piece_dropped(from_index, to_index):
 		if m.from_square == lm.from_square and m.to_square == lm.to_square and m.promotion == lm.promotion:
 			chess.play_move(lm)
 			update_state(true)
+			if find_node("BotCheck").pressed:
+				bot_play(true)
 			break
 
 func _on_InvalidFenTimer_timeout():
@@ -131,3 +161,13 @@ func _on_SettingsMenu_settings_changed():
 
 func _on_CreditsButton_pressed():
 	find_node("CreditsMenu").show()
+
+func _on_BotButton_pressed():
+	bot_play()
+
+func _on_BotCheck_pressed():
+	# Nothing to do?
+	pass
+
+func _on_BotTimer_timeout():
+	bot_play()

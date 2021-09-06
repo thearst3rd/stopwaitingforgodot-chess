@@ -32,9 +32,9 @@ __meta__ = {
 
 [node name="V" type="VBoxContainer" parent="C"]
 margin_left = 140.0
-margin_top = 297.0
+margin_top = 296.0
 margin_right = 1140.0
-margin_bottom = 423.0
+margin_bottom = 424.0
 rect_min_size = Vector2( 1000, 0 )
 custom_constants/separation = 12
 __meta__ = {
@@ -103,16 +103,16 @@ __meta__ = {
 [node name="C" type="CenterContainer" parent="C/V"]
 margin_top = 50.0
 margin_right = 1000.0
-margin_bottom = 88.0
+margin_bottom = 90.0
 
 [node name="V" type="VBoxContainer" parent="C/V/C"]
-margin_left = 352.0
-margin_right = 647.0
-margin_bottom = 38.0
+margin_left = 225.0
+margin_right = 775.0
+margin_bottom = 40.0
 custom_constants/separation = 12
 
 [node name="H" type="HBoxContainer" parent="C/V/C/V"]
-margin_right = 295.0
+margin_right = 550.0
 custom_constants/separation = 30
 
 [node name="Board" parent="C/V/C/V/H" instance=ExtResource( 1 )]
@@ -125,31 +125,56 @@ margin_right = 295.0
 
 [node name="H2" type="HBoxContainer" parent="C/V/C/V"]
 margin_top = 12.0
-margin_right = 295.0
-margin_bottom = 38.0
+margin_right = 550.0
+margin_bottom = 40.0
 custom_constants/separation = 20
 
 [node name="ResetButton" type="Button" parent="C/V/C/V/H2"]
-margin_right = 53.0
-margin_bottom = 26.0
-text = "Reset"
+margin_right = 92.0
+margin_bottom = 28.0
+text = "New Game"
 
 [node name="FlipButton" type="Button" parent="C/V/C/V/H2"]
-margin_left = 73.0
-margin_right = 112.0
-margin_bottom = 26.0
+margin_left = 112.0
+margin_right = 151.0
+margin_bottom = 28.0
 text = "Flip"
 
 [node name="UndoButton" type="Button" parent="C/V/C/V/H2"]
-margin_left = 132.0
-margin_right = 184.0
-margin_bottom = 26.0
+margin_left = 171.0
+margin_right = 223.0
+margin_bottom = 28.0
 text = "Undo"
 
+[node name="Spacer" type="Control" parent="C/V/C/V/H2"]
+margin_left = 243.0
+margin_right = 273.0
+margin_bottom = 28.0
+rect_min_size = Vector2( 30, 0 )
+
+[node name="BotButton" type="Button" parent="C/V/C/V/H2"]
+margin_left = 293.0
+margin_right = 412.0
+margin_bottom = 28.0
+text = "Play Bot Move"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BotCheck" type="CheckBox" parent="C/V/C/V/H2"]
+margin_left = 432.0
+margin_right = 550.0
+margin_bottom = 28.0
+text = "Bot Enabled"
+
+[node name="BotTimer" type="Timer" parent="C/V/C/V/H2"]
+wait_time = 0.1
+one_shot = true
+
 [node name="H2" type="HBoxContainer" parent="C/V"]
-margin_top = 100.0
+margin_top = 102.0
 margin_right = 1000.0
-margin_bottom = 126.0
+margin_bottom = 128.0
 custom_constants/separation = 12
 
 [node name="FenText" type="TextEdit" parent="C/V/H2"]
@@ -202,6 +227,9 @@ volume_db = -6.0
 [connection signal="pressed" from="C/V/C/V/H2/ResetButton" to="." method="_on_ResetButton_pressed"]
 [connection signal="pressed" from="C/V/C/V/H2/FlipButton" to="." method="_on_FlipButton_pressed"]
 [connection signal="pressed" from="C/V/C/V/H2/UndoButton" to="." method="_on_UndoButton_pressed"]
+[connection signal="pressed" from="C/V/C/V/H2/BotButton" to="." method="_on_BotButton_pressed"]
+[connection signal="pressed" from="C/V/C/V/H2/BotCheck" to="." method="_on_BotCheck_pressed"]
+[connection signal="timeout" from="C/V/C/V/H2/BotTimer" to="." method="_on_BotTimer_timeout"]
 [connection signal="pressed" from="C/V/H2/SetFen" to="." method="_on_SetFen_pressed"]
 [connection signal="timeout" from="C/V/H2/InvalidFenTimer" to="C" method="_on_InvalidFenTimer_timeout"]
 [connection signal="settings_changed" from="SettingsMenu" to="." method="_on_SettingsMenu_settings_changed"]
