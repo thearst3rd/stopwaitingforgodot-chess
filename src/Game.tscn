@@ -183,15 +183,19 @@ visible = false
 
 [node name="MoveSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 6 )
+volume_db = -6.0
 
 [node name="CaptureSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 8 )
+volume_db = -6.0
 
 [node name="CheckSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 7 )
+volume_db = -6.0
 
 [node name="TerminalSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 9 )
+volume_db = -6.0
 
 [connection signal="pressed" from="C/V/H/RSpacer/H/SettingsButton" to="." method="_on_SettingsButton_pressed"]
 [connection signal="pressed" from="C/V/H/RSpacer/H/CreditsButton" to="." method="_on_CreditsButton_pressed"]
