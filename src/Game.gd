@@ -128,3 +128,6 @@ func _on_SettingsButton_pressed():
 func _on_SettingsMenu_settings_changed():
 	if board:	# Workaround for crash on startup... Probably can check for some kind of is_ready instead
 		update_state()
+
+func _on_CreditsButton_pressed():
+	find_node("CreditsMenu").show()

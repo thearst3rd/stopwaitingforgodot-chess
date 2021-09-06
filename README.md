@@ -94,6 +94,8 @@ Not only that, but I added a SAN display as well! It's Lichess-inspired, and it 
 
 Man, I need to get better at constructing GUIs in the 2D scene view. I always end up with 10 billion VBoxes and HBoxes and CenterContainers and such, when I'm sure there's a simpler way to achieve the exact same result. That's something I should focus on learning soon. At least I've figured out about `find_node()`, that way I don't need to change the hard-coded node path every time I alter the structure. I'm not sure - is using `find_node` on everything bad practice? Anyways, I created a simple settings menu which lets you toggle some settings, which get saved to disk. Nice!
 
+It's about time, but I added proper attributions for everything that requires it. I probably should have done that earlier :) Regardless, [CREDITS.md](CREDITS.md) should be fully up to date, as well as a new fancy in game credits screen (that took me a really long time to make!!!). I will probably upload the project as it is now to itch.io, since I think it's in a really nice state! The one major feature I still want to add is some form of AI. I'm definitely not going to get to making a real minimax-powered game tree search AI which _tries_ to play well, but at least I should include a random-mover so that someone can play a single player game without needing to supply the moves of both sides :)
+
 # Credits/Attributions
 
 See [CREDITS.md](CREDITS.md).
