@@ -1,10 +1,10 @@
 # #StopWaitingForGodot Chess
 
-A simple chess implementation in [Godot](https://godotengine.org/). This is my entry in Terry Cavanaugh's [STOP WAITING FOR GODOT](https://itch.io/jam/stop-waiting-for-godot) Jam!
+A simple chess implementation in [Godot](https://godotengine.org/). This is [my submission](https://itch.io/jam/stop-waiting-for-godot/rate/1188240) to Terry Cavanaugh's [STOP WAITING FOR GODOT](https://itch.io/jam/stop-waiting-for-godot) Jam!
 
----
+You can play this in your web browser or download builds for Linux, Windows, or macOS on [the itch.io page](https://thearst3rd.itch.io/stopwaitingforgodot-chess)!
 
-This readme will detail some of the things I learned and the resources I used to learn them. Come back later when the jam is done :)
+This readme details some of the thought and development process, including some of the brainstorming I did at the beginning, and the features I added as I went along. Enjoy!
 
 ## Brainstorming
 
@@ -95,6 +95,23 @@ Not only that, but I added a SAN display as well! It's Lichess-inspired, and it 
 Man, I need to get better at constructing GUIs in the 2D scene view. I always end up with 10 billion VBoxes and HBoxes and CenterContainers and such, when I'm sure there's a simpler way to achieve the exact same result. That's something I should focus on learning soon. At least I've figured out about `find_node()`, that way I don't need to change the hard-coded node path every time I alter the structure. I'm not sure - is using `find_node` on everything bad practice? Anyways, I created a simple settings menu which lets you toggle some settings, which get saved to disk. Nice!
 
 It's about time, but I added proper attributions for everything that requires it. I probably should have done that earlier :) Regardless, [CREDITS.md](CREDITS.md) should be fully up to date, as well as a new fancy in game credits screen (that took me a really long time to make!!!). I will probably upload the project as it is now to itch.io, since I think it's in a really nice state! The one major feature I still want to add is some form of AI. I'm definitely not going to get to making a real minimax-powered game tree search AI which _tries_ to play well, but at least I should include a random-mover so that someone can play a single player game without needing to supply the moves of both sides :)
+
+I've added a random-mover bot, and that's the last feature I'm adding before submitting this. I'd say, the end result turned out pretty well compared to what I was expecting! I still think that the SAN display is my favorite feature, it makes it look really nice and makes it feel like a much more official chess project. I had a pretty big hiccup towards the end - hitting the "New Game" button didn't work when I exported the project!! After a bit, I figured it out - I had the functionality that reset the board in an `assert` statement, since it uses another function to setup the board and it should always return successful. It looked like:
+
+```gd
+assert(set_fen(INITIAL_FEN))
+```
+
+That worked in debug mode, which is what happens run you run the game in the editor. But it turns out, when you build the game in _release_ mode, it strips out the assert statements! That makes sense - you don't want the release game to seemingly randomly crash if some assert doesn't return what it expected, if the game could go on without it. All I needed do to make that work was replace that code with:
+
+```gd
+var success = set_fen(INITIAL_FEN)
+assert(success)
+```
+
+Very simple - it now runs that code even in release mode, and I can still catch potential regressions when running the game in debug mode! I had to make similar changes to a few other assert statements.
+
+And with that, I'm submitting!! I still might come back and add new features (having a button to copy the current game's PGN seems like a feasible and nice option), but I probably won't touch it again for a few days at least. I hope you all enjoy, and please let me know if you find any bugs!!
 
 # Credits/Attributions
 

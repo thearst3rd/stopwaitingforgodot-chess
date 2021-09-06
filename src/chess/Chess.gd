@@ -171,7 +171,8 @@ func set_fen(fen : String) -> bool:
 
 # Reset to initial FEN
 func reset():
-	assert(set_fen(INITIAL_FEN))
+	var success = set_fen(INITIAL_FEN)
+	assert(success)
 
 func get_fen():
 	var fen_pieces = ""

@@ -57,6 +57,8 @@ func update_state(after_move = false):
 
 	find_node("SanDisplay").update_moves(chess)
 
+	find_node("BotButton").disabled = game_over
+
 	if after_move and last_move:
 		if Settings.sounds:
 			if last_move.en_passant or last_move.captured_piece:
@@ -80,8 +82,9 @@ func bot_get_move():
 func bot_play(with_timeout = false):
 	if chess.is_game_over():
 		return
+	bot_thinking = true
+	update_state()
 	if with_timeout:
-		bot_thinking = true
 		bot_timer.start()
 	else:
 		var move = bot_get_move()

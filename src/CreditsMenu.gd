@@ -13,4 +13,5 @@ func _on_BackButton_pressed():
 	hide()
 
 func _on_RepoLink_pressed():
-	assert(not OS.shell_open(find_node("RepoLink").text))
+	var error = OS.shell_open(find_node("RepoLink").text)
+	assert(not error)
