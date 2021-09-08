@@ -231,5 +231,5 @@ volume_db = -6.0
 [connection signal="pressed" from="C/V/C/V/H2/BotCheck" to="." method="_on_BotCheck_pressed"]
 [connection signal="timeout" from="C/V/C/V/H2/BotTimer" to="." method="_on_BotTimer_timeout"]
 [connection signal="pressed" from="C/V/H2/SetFen" to="." method="_on_SetFen_pressed"]
-[connection signal="timeout" from="C/V/H2/InvalidFenTimer" to="C" method="_on_InvalidFenTimer_timeout"]
+[connection signal="timeout" from="C/V/H2/InvalidFenTimer" to="." method="_on_InvalidFenTimer_timeout"]
 [connection signal="settings_changed" from="SettingsMenu" to="." method="_on_SettingsMenu_settings_changed"]

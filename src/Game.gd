@@ -5,6 +5,7 @@ var chess = Chess.new()
 onready var board = find_node("Board")
 onready var title_text = find_node("Title").text
 onready var bot_timer = find_node("BotTimer")
+onready var bot_check = find_node("BotCheck")
 
 var legal_moves = null
 var bot_thinking = false
@@ -93,9 +94,11 @@ func bot_play(with_timeout = false):
 		bot_timer.stop()
 		update_state(true)
 
+
 ## CALLBACKS ##
 
 func _ready():
+	randomize()
 	get_tree().call_group("Squares", "connect", "piece_grabbed", self, "_on_Square_piece_grabbed")
 	get_tree().call_group("Squares", "connect", "piece_dropped", self, "_on_Square_piece_dropped")
 	update_state()
@@ -108,6 +111,9 @@ func _on_ResetButton_pressed():
 	bot_timer.stop()
 	chess.reset()
 	update_state()
+	if bot_check.pressed and board.get_child(0).index == 63:
+		# Board is flipped, play move
+		bot_play(true)
 
 func _on_FlipButton_pressed():
 	board.flip_board()
@@ -148,7 +154,7 @@ func _on_Square_piece_dropped(from_index, to_index):
 		if m.from_square == lm.from_square and m.to_square == lm.to_square and m.promotion == lm.promotion:
 			chess.play_move(lm)
 			update_state(true)
-			if find_node("BotCheck").pressed:
+			if bot_check.pressed:
 				bot_play(true)
 			break
 
