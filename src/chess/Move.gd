@@ -21,9 +21,9 @@ func duplicate():
 	new_move.captured_piece = captured_piece
 	new_move.en_passant = en_passant
 	new_move.lose_castling = lose_castling.duplicate()
-	new_move.prev_ep_target = null
+	new_move.prev_ep_target = prev_ep_target
 	new_move.prev_halfmove_clock = prev_halfmove_clock
-	# SAN will be populated by Chess.notate_moves (if needed)
+	new_move.notation_san = notation_san
 	return new_move
 
 # TODO: figure out if I can do this without creating a circular dependancy...
