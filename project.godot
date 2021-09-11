@@ -45,7 +45,7 @@ window/stretch/aspect="keep"
 
 [global]
 
-Version="0.2"
+Version="0.2.1"
 
 [gui]
 
