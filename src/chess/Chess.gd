@@ -93,6 +93,8 @@ func duplicate(duplicate_move_stack = true):
 	if duplicate_move_stack:
 		for move in move_stack:
 			new_chess.move_stack.push_back(move.duplicate())
+	new_chess.w_king = w_king
+	new_chess.b_king = b_king
 	return new_chess
 
 # Sets up the board with the given FEN, returns true if successful. If not successful, board does not change
@@ -182,10 +184,11 @@ func set_fen(fen : String) -> bool:
 	fullmove_counter = new_fullmove_counter
 
 	move_stack = []
-	prune_ep_target()
 
 	w_king = new_w_king
 	b_king = new_b_king
+
+	prune_ep_target()
 
 	return true
 
