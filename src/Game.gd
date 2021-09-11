@@ -35,9 +35,13 @@ func update_state(after_move = false):
 		Chess.RESULT.INSUFFICIENT:
 			result_text = "Draw by insufficient material"
 		Chess.RESULT.FIFTY_MOVE:
-			result_text = "Draw by fifty-move rule"
+			result_text = "Draw by fifty move rule"
+		Chess.RESULT.SEVENTY_FIVE_MOVE:
+			result_text = "Draw by seventy-five move rule"
 		Chess.RESULT.THREEFOLD:
 			result_text = "Draw by threefold repetition"
+		Chess.RESULT.FIVEFOLD:
+			result_text = "Draw by fivefold repetition"
 
 	find_node("Title").text = result_text
 
