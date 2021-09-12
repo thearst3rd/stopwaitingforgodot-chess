@@ -90,6 +90,10 @@ var b_queen_table = flip_table(w_queen_table)
 var b_king_middle_table = flip_table(w_king_middle_table)
 var b_king_end_table = flip_table(w_king_end_table)
 
+var num_positions_searched = 0
+var num_positions_searched_q = 0
+var search_time = 0
+
 
 static func flip_table(table):
 	var new_table = []
@@ -103,7 +107,18 @@ static func flip_table(table):
 
 
 func get_move(chess : Chess):
-	return negamax(chess, search_depth, -INF_SCORE, INF_SCORE)
+	# We generate the moves without notating them, but we need the final move notated
+	num_positions_searched = 0
+	num_positions_searched_q = 0
+	var before_time = OS.get_ticks_usec()
+	var r = negamax(chess, search_depth, -INF_SCORE, INF_SCORE)
+	search_time = OS.get_ticks_usec() - before_time
+	var moves = chess.generate_legal_moves()
+	for m in moves:
+		if m.from_square == r[1].from_square and m.to_square == r[1].to_square and m.promotion == r[1].promotion:
+			r[1] = m
+			break
+	return r
 
 static func get_piece_value(piece) -> int:
 	match piece:
@@ -151,17 +166,18 @@ func evaluate(chess : Chess) -> int:
 	return eval
 
 func negamax(chess : Chess, depth, alpha, beta):
+	num_positions_searched += 1
 	if depth <= 0:
 		if chess.in_check():
-			var moves = chess.generate_legal_moves()
+			var moves = chess.generate_legal_moves(false)
 			if moves.size() == 0:
 				return [-MATE_SCORE, null]
-		return [evaluate(chess), null]
-	var moves = chess.generate_legal_moves()
-	var best_score = -INF_SCORE
-	var best_move = null
+		return [negamax_quiescence(chess, alpha, beta), null]
+	var moves = chess.generate_legal_moves(false)
 	if moves.size() == 0:
-		best_score = -MATE_SCORE if chess.in_check() else 0
+		return [-MATE_SCORE if chess.in_check() else 0, null]
+	var value = -INF_SCORE
+	var best_move = null
 	for move in moves:
 		chess.play_move(move)
 		var curr_score = -negamax(chess, depth - 1, -beta, -alpha)[0]
@@ -170,10 +186,28 @@ func negamax(chess : Chess, depth, alpha, beta):
 		elif curr_score < -MATE_THRESHOLD:
 			curr_score += 1
 		chess.undo()
-		if curr_score > best_score:
-			best_score = curr_score
+		if curr_score > value:
+			value = curr_score
 			best_move = move
-			alpha = max(alpha, best_score)
-			if alpha >= beta:
+		alpha = max(alpha, value)
+		if curr_score >= beta:
+			break
+	return [value, best_move]
+
+func negamax_quiescence(chess : Chess, alpha, beta) -> int:
+	num_positions_searched_q += 1
+	var value = evaluate(chess)
+	if value >= beta:
+		return beta
+	alpha = max(value, alpha)
+	var moves = chess.generate_legal_moves(false, true)
+	for move in moves:
+		chess.play_move(move)
+		var curr_score = -negamax_quiescence(chess, -beta, -alpha)
+		chess.undo()
+		if curr_score > value:
+			value = curr_score
+			if value >= beta:
 				break
-	return [best_score, best_move]
+			alpha = max(alpha, value)
+	return value

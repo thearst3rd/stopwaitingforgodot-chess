@@ -538,24 +538,29 @@ func in_check() -> bool:
 
 
 # Generate all legal moves. This can be done much faster
-func generate_legal_moves(notate_san = true):
+func generate_legal_moves(notate_san = true, only_captures = false):
 	var moves = []
 	var pseudos = generate_pseudo_legal_moves()
 	for move in pseudos:
-		play_move(move)
-		if not is_king_attacked(not turn):
-			moves.push_back(move)
-		undo()
+		if not only_captures or move.captured_piece or move.en_passant:
+			play_move(move)
+			if not is_king_attacked(not turn):
+				moves.push_back(move)
+			undo()
 
 	# Now, check castling
 	var castle_kingside
 	var castle_queenside
-	if turn:
-		castle_kingside = castling[2]
-		castle_queenside = castling[3]
+	if only_captures:
+		castle_kingside = false
+		castle_queenside = false
 	else:
-		castle_kingside = castling[0]
-		castle_queenside = castling[1]
+		if turn:
+			castle_kingside = castling[2]
+			castle_queenside = castling[3]
+		else:
+			castle_kingside = castling[0]
+			castle_queenside = castling[1]
 
 	if castle_kingside:
 		var king = get_king(turn)
