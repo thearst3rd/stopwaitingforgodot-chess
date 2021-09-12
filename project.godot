@@ -15,12 +15,18 @@ _global_script_classes=[ {
 "path": "res://src/chess/Chess.gd"
 }, {
 "base": "Reference",
+"class": "ChessEngine",
+"language": "GDScript",
+"path": "res://src/chess/ChessEngine.gd"
+}, {
+"base": "Reference",
 "class": "Move",
 "language": "GDScript",
 "path": "res://src/chess/Move.gd"
 } ]
 _global_script_class_icons={
 "Chess": "",
+"ChessEngine": "",
 "Move": ""
 }
 

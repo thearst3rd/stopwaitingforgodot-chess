@@ -2,6 +2,7 @@ extends Control
 
 
 var chess = Chess.new()
+var engine = ChessEngine.new()
 onready var board = find_node("Board")
 onready var title_text = find_node("Title").text
 onready var bot_timer = find_node("BotTimer")
@@ -77,13 +78,6 @@ func update_state(after_move = false):
 				if last_move.notation_san[-1] == "+":
 					find_node("CheckSound").play()
 
-# This is the "thinking" function that the bot uses to choose which move it wants to play
-func bot_get_move():
-	# Just pick a random move for now...
-	# TODO, implement some sort of actual AI
-	var move = legal_moves[randi() % legal_moves.size()]
-	return move
-
 func bot_play(with_timeout = false):
 	if chess.is_game_over():
 		return
@@ -92,8 +86,9 @@ func bot_play(with_timeout = false):
 	if with_timeout:
 		bot_timer.start()
 	else:
-		var move = bot_get_move()
-		chess.play_move(move)
+		var result = engine.get_move(chess)
+		print(result[0])
+		chess.play_move(result[1])
 		bot_thinking = false
 		bot_timer.stop()
 		update_state(true)
