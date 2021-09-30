@@ -87,8 +87,9 @@ func bot_play(with_timeout = false):
 		bot_timer.start()
 	else:
 		var result = engine.get_move(chess)
-		print("%s  score: %d  searched: %d %d  time: %dms" % [result[1].notation_san, result[0],
-				engine.num_positions_searched, engine.num_positions_searched_q, engine.search_time / 1000])
+		print("%s  score: %d  searched: %d %d  eval: %d  time: %dms" % [result[1].notation_san, result[0],
+				engine.num_positions_searched, engine.num_positions_searched_q, engine.num_positions_evaluated,
+				engine.search_time / 1000.0])
 		chess.play_move(result[1])
 		bot_thinking = false
 		bot_timer.stop()

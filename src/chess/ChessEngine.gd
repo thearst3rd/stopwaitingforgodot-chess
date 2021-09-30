@@ -9,6 +9,7 @@ const MATE_THRESHOLD = 999_000_000
 const INF_SCORE = 0xFFFF_FFFF_FFFF
 
 var search_depth = 3
+var quiescence_depth = 5
 
 
 # Simplified Evaluation Function piece tables
@@ -90,8 +91,11 @@ var b_queen_table = flip_table(w_queen_table)
 var b_king_middle_table = flip_table(w_king_middle_table)
 var b_king_end_table = flip_table(w_king_end_table)
 
+# Search debug info
+
 var num_positions_searched = 0
 var num_positions_searched_q = 0
+var num_positions_evaluated = 0
 var search_time = 0
 
 
@@ -110,6 +114,7 @@ func get_move(chess : Chess):
 	# We generate the moves without notating them, but we need the final move notated
 	num_positions_searched = 0
 	num_positions_searched_q = 0
+	num_positions_evaluated = 0
 	var before_time = OS.get_ticks_usec()
 	var r = negamax(chess, search_depth, -INF_SCORE, INF_SCORE)
 	search_time = OS.get_ticks_usec() - before_time
@@ -119,6 +124,9 @@ func get_move(chess : Chess):
 			r[1] = m
 			break
 	return r
+
+
+## EVALUATION ##
 
 static func get_piece_value(piece) -> int:
 	match piece:
@@ -156,6 +164,7 @@ func get_piece_placement(piece, square) -> int:
 # Evaluates a position from the POV of whose turn it is
 # Largely based on https://www.chessprogramming.org/Simplified_Evaluation_Function
 func evaluate(chess : Chess) -> int:
+	num_positions_evaluated += 1
 	var eval = 0
 	for i in range(64):
 		var piece = chess.pieces[i]
@@ -165,20 +174,23 @@ func evaluate(chess : Chess) -> int:
 		eval += mult * (get_piece_value(piece) + get_piece_placement(piece, i))
 	return eval
 
+
+## GAME TREE SEARCH ##
+
 func negamax(chess : Chess, depth, alpha, beta):
-	num_positions_searched += 1
 	if depth <= 0:
 		if chess.in_check():
 			var moves = chess.generate_legal_moves(false)
 			if moves.size() == 0:
 				return [-MATE_SCORE, null]
-		return [negamax_quiescence(chess, alpha, beta), null]
-	var moves = chess.generate_legal_moves(false)
+		return [negamax_quiescence(chess, quiescence_depth, alpha, beta), null]
+	var moves = order_moves(chess, chess.generate_legal_moves(false))
 	if moves.size() == 0:
 		return [-MATE_SCORE if chess.in_check() else 0, null]
 	var value = -INF_SCORE
 	var best_move = null
 	for move in moves:
+		num_positions_searched += 1
 		chess.play_move(move)
 		var curr_score = -negamax(chess, depth - 1, -beta, -alpha)[0]
 		if curr_score > MATE_THRESHOLD:
@@ -194,20 +206,65 @@ func negamax(chess : Chess, depth, alpha, beta):
 			break
 	return [value, best_move]
 
-func negamax_quiescence(chess : Chess, alpha, beta) -> int:
-	num_positions_searched_q += 1
+func negamax_quiescence(chess : Chess, depth, alpha, beta) -> int:
 	var value = evaluate(chess)
 	if value >= beta:
 		return beta
+	if depth == 0:
+		return value
 	alpha = max(value, alpha)
-	var moves = chess.generate_legal_moves(false, true)
+	var moves = order_moves(chess, chess.generate_legal_moves(false, true))
 	for move in moves:
+		num_positions_searched_q += 1
 		chess.play_move(move)
-		var curr_score = -negamax_quiescence(chess, -beta, -alpha)
+		value = -negamax_quiescence(chess, depth - 1, -beta, -alpha)
 		chess.undo()
-		if curr_score > value:
-			value = curr_score
-			if value >= beta:
-				break
-			alpha = max(alpha, value)
+		if value >= beta:
+			return beta
+		if value > alpha:
+			alpha = value
 	return value
+
+
+## MOVE ORDERING ##
+
+func order_moves(chess : Chess, moves):
+	var moves_and_bonuses = []
+	for move in moves:
+		var bonus = 0
+		var moving_piece = chess.pieces[move.from_square]
+
+		# Prefer capturing higher value pieces with lower value pieces
+		if move.captured_piece:
+			bonus += get_piece_value(move.captured_piece) - get_piece_value(moving_piece)
+
+		# Prefer not moving pieces onto squares attacked by opponent pawns
+		if not (moving_piece in ["P", "p", "K", "k"]):
+			if move.to_square > Chess.SQUARES.H8 and move.to_square < Chess.SQUARES.A1:
+				var delta = 8 if chess.turn else -8
+				var file = Chess.square_get_file(move.to_square)
+				var target = "P" if chess.turn else "p"
+				if file > 1:
+					if chess.pieces[move.to_square + delta - 1] == target:
+						bonus -= 1000
+				if file < 8:
+					if chess.pieces[move.to_square + delta + 1] == target:
+						bonus -= 1000
+
+		# Prefer promotions
+		if move.promotion:
+			bonus += get_piece_value(move.promotion)
+
+		moves_and_bonuses.push_back([move, bonus])
+
+	# Sort array
+	moves_and_bonuses.sort_custom(self, "sort_comparison")
+
+	var sorted_moves = []
+	for move_and_bonus in moves_and_bonuses:
+		sorted_moves.push_back(move_and_bonus[0])
+
+	return sorted_moves
+
+func sort_comparison(move_a, move_b):
+	return move_a[1] > move_b[1]
