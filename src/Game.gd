@@ -74,7 +74,7 @@ func update_state(after_move = false):
 	undo_button.disabled = bot_thinking
 
 	if after_move and last_move:
-		if Settings.sounds:
+		if Settings.sounds and not (bot_check.pressed and OS.get_name() == "HTML5"):
 			if last_move.en_passant or last_move.captured_piece:
 				find_node("CaptureSound").play()
 			else:
@@ -94,17 +94,22 @@ func bot_play(with_timeout = false):
 	if with_timeout:
 		bot_timer.start()
 	else:
-		bot_thinking_thread = Thread.new()
-		var error = bot_thinking_thread.start(self, "bot_think")
-		assert(not error)
+		if OS.get_name() == "HTML5":
+			# TODO: Remove this when itch.io supports CORS
+			bot_think()
+		else:
+			bot_thinking_thread = Thread.new()
+			var error = bot_thinking_thread.start(self, "bot_think")
+			assert(not error)
 
 func bot_think():
 	var result = engine.get_move(chess)
 	call_deferred("bot_finalize", result)
 
 func bot_finalize(result):
-	bot_thinking_thread.wait_to_finish()
-	bot_thinking_thread = null
+	if OS.get_name() != "HTML5":
+		bot_thinking_thread.wait_to_finish()
+		bot_thinking_thread = null
 	print("%s  score: %d  searched: %d %d  eval: %d  time: %dms" % [result[1].notation_san, result[0],
 			engine.num_positions_searched, engine.num_positions_searched_q, engine.num_positions_evaluated,
 			engine.search_time / 1000.0])

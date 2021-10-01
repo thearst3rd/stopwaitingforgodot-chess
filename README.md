@@ -113,6 +113,20 @@ Very simple - it now runs that code even in release mode, and I can still catch 
 
 And with that, I'm submitting!! I still might come back and add new features (having a button to copy the current game's PGN seems like a feasible and nice option), but I probably won't touch it again for a few days at least. I hope you all enjoy, and please let me know if you find any bugs!!
 
+## Post-Jam Log
+
+It's been a few weeks! While I did make some small touch ups and bug fixes shortly after the jam ended, nothing was really too notable. But about a week or so after, I started trying to write an actual chess engine into my program. I had some hiccups, but after a bit, I'm unexpectedly happy with the results so far! It's not _great_, and it certainly should be _way_ _**wayy**_ faster, but honestly... it can beat me basically every time ~~which means almost nothing because I'm complete trash at chess :D~~
+
+Most of the engine I wrote a few weeks ago, so it's not all quite fresh in my mind. That said, I'll try to go over it.
+
+The base of my AI is [negamax](https://en.wikipedia.org/wiki/Negamax) (variant of [minimax](https://en.wikipedia.org/wiki/Minimax)) with alpha beta pruning up to depth 3, followed by [quiescense search](https://en.wikipedia.org/wiki/Quiescence_search) up to depth 5. For the evaluation function, I am using the [simplified evaluation function](https://www.chessprogramming.org/Simplified_Evaluation_Function) (except currently I'm assuming we're always in a midgame). Really, that's most of it. I spent a lot of time mashing my head at the keyboard because some of this stuff is quite confusing, and the ending result is something that _really slow_ considering it's only searching to depth 3. A large portion of the slowness is due to my laziness in move generation - I'm doing quite a few things the naive way at the moment and could probably get a sizeable performance boost by optimizing that code.
+
+On to smaller things: this week, I also updated what version of Godot I was using from 3.3.3 to 3.4 beta 5. That doesn't really affect much, but there were a few QOL improvements that I noticed that even affect the exported games (notably, in the game's settings menu, if you uncheck "Play Sounds", then the checkbox for "Play Sound on Check" gets properly dimmed. Neat).
+
+Another thing I needed to do with the program was to make sure that the engine ran on another thread, since without it the entire program would freeze when the bot was thinking. For the desktop versions, that wasn't too hard - I could move the code where the bot was thinking into its own thread, add a nice little spinning animation, and that's it! I did have to make sure that you can't change the board state (undo, reset, make the bot start thinking again) while the bot is currently thinking, or else things would crash. But by disabling some buttons when you shouldn't be able to press them, that should all be mitigated.
+
+Unfortunately I ran into a roadblock when exporting to the web. In order for Godot on the web to support threads, you need to [supply the web page with specific headers](https://docs.godotengine.org/en/3.4/getting_started/workflow/export/exporting_for_web.html#threads) for security reasons. Currently, [itch.io does not support that](https://itch.io/t/1028526/cross-origin-policies-for-webassembly), so I cannot use threading. For now, I've added some if statements that if you're running on HTML5, just use a blocking method. That causes the sound to absolutely freak out (so I disabled it during AI moves), but at least it works..... I'll be very happy when CORS gets implemented on itch and I can just use threading.
+
 # Credits/Attributions
 
 See [CREDITS.md](CREDITS.md).

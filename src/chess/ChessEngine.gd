@@ -111,18 +111,19 @@ static func flip_table(table):
 
 
 func get_move(chess : Chess):
-	# We generate the moves without notating them, but we need the final move notated
 	num_positions_searched = 0
 	num_positions_searched_q = 0
 	num_positions_evaluated = 0
 	var before_time = OS.get_ticks_usec()
 	var r = negamax(chess, search_depth, -INF_SCORE, INF_SCORE)
 	search_time = OS.get_ticks_usec() - before_time
+	# We generate the moves without notating them, but we need the final move notated
 	var moves = chess.generate_legal_moves()
 	for m in moves:
 		if m.from_square == r[1].from_square and m.to_square == r[1].to_square and m.promotion == r[1].promotion:
 			r[1] = m
 			break
+	assert(r[1].notation_san != null)
 	return r
 
 
@@ -192,7 +193,11 @@ func negamax(chess : Chess, depth, alpha, beta):
 	for move in moves:
 		num_positions_searched += 1
 		chess.play_move(move)
-		var curr_score = -negamax(chess, depth - 1, -beta, -alpha)[0]
+		var curr_score
+		if depth == search_depth and chess.is_threefold_repetition():
+			curr_score = 0
+		else:
+			curr_score = -negamax(chess, depth - 1, -beta, -alpha)[0]
 		if curr_score > MATE_THRESHOLD:
 			curr_score -= 1
 		elif curr_score < -MATE_THRESHOLD:
