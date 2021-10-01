@@ -8,8 +8,13 @@ onready var title_text = find_node("Title").text
 onready var bot_timer = find_node("BotTimer")
 onready var bot_check = find_node("BotCheck")
 
+onready var reset_button = find_node("ResetButton")
+onready var undo_button = find_node("UndoButton")
+onready var bot_button = find_node("BotButton")
+
 var legal_moves = null
 var bot_thinking = false
+var bot_thinking_thread : Thread = null
 
 
 func update_state(after_move = false):
@@ -63,7 +68,10 @@ func update_state(after_move = false):
 
 	find_node("SanDisplay").update_moves(chess)
 
-	find_node("BotButton").disabled = game_over
+	bot_button.disabled = game_over or bot_thinking
+
+	reset_button.disabled = bot_thinking
+	undo_button.disabled = bot_thinking
 
 	if after_move and last_move:
 		if Settings.sounds:
@@ -86,14 +94,24 @@ func bot_play(with_timeout = false):
 	if with_timeout:
 		bot_timer.start()
 	else:
-		var result = engine.get_move(chess)
-		print("%s  score: %d  searched: %d %d  eval: %d  time: %dms" % [result[1].notation_san, result[0],
-				engine.num_positions_searched, engine.num_positions_searched_q, engine.num_positions_evaluated,
-				engine.search_time / 1000.0])
-		chess.play_move(result[1])
-		bot_thinking = false
-		bot_timer.stop()
-		update_state(true)
+		bot_thinking_thread = Thread.new()
+		var error = bot_thinking_thread.start(self, "bot_think")
+		assert(not error)
+
+func bot_think():
+	var result = engine.get_move(chess)
+	call_deferred("bot_finalize", result)
+
+func bot_finalize(result):
+	bot_thinking_thread.wait_to_finish()
+	bot_thinking_thread = null
+	print("%s  score: %d  searched: %d %d  eval: %d  time: %dms" % [result[1].notation_san, result[0],
+			engine.num_positions_searched, engine.num_positions_searched_q, engine.num_positions_evaluated,
+			engine.search_time / 1000.0])
+	chess.play_move(result[1])
+	bot_thinking = false
+	bot_timer.stop()
+	update_state(true)
 
 
 ## CALLBACKS ##
@@ -103,6 +121,11 @@ func _ready():
 	get_tree().call_group("Squares", "connect", "piece_grabbed", self, "_on_Square_piece_grabbed")
 	get_tree().call_group("Squares", "connect", "piece_dropped", self, "_on_Square_piece_dropped")
 	update_state()
+
+# Thread must be disposed (or "joined"), for portability.
+func _exit_tree():
+	if bot_thinking_thread != null:
+		bot_thinking_thread.wait_to_finish()
 
 
 ## SIGNALS ##
