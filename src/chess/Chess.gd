@@ -538,7 +538,7 @@ func in_check() -> bool:
 
 
 # Generate all legal moves. This can be done much faster
-func generate_legal_moves(notate_san = true, only_captures = false):
+func generate_legal_moves(notate_san = true, only_captures = false) -> Array:
 	var moves = []
 	var pseudos = generate_pseudo_legal_moves()
 	for move in pseudos:

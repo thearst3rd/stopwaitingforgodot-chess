@@ -23,11 +23,17 @@ _global_script_classes=[ {
 "class": "Move",
 "language": "GDScript",
 "path": "res://src/chess/Move.gd"
+}, {
+"base": "SceneTree",
+"class": "Perft",
+"language": "GDScript",
+"path": "res://src/chess/Perft.gd"
 } ]
 _global_script_class_icons={
 "Chess": "",
 "ChessEngine": "",
-"Move": ""
+"Move": "",
+"Perft": ""
 }
 
 [application]
