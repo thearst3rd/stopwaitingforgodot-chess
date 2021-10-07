@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://assets/orkney/Orkney Bold.otf" type="DynamicFontData" id=1]
 [ext_resource path="res://src/CreditsMenu.gd" type="Script" id=2]
@@ -21,9 +21,6 @@ font_data = ExtResource( 5 )
 [sub_resource type="DynamicFont" id=4]
 size = 20
 font_data = ExtResource( 1 )
-
-[sub_resource type="DynamicFont" id=5]
-font_data = ExtResource( 4 )
 
 [sub_resource type="DynamicFont" id=6]
 size = 22
@@ -106,7 +103,7 @@ scroll_horizontal_enabled = false
 
 [node name="V" type="VBoxContainer" parent="M/Panel/M/ScrollContainer"]
 margin_right = 1080.0
-margin_bottom = 2440.0
+margin_bottom = 2432.0
 size_flags_horizontal = 3
 custom_constants/separation = 12
 
@@ -164,11 +161,22 @@ margin_bottom = 200.0
 text = "#StopWaitingForGodot Chess is my entry to Terry Cavanaugh's #StopWaitingForGodot game jam. I had a lot of fun working on this project! I previously attempted to make chess in Godot some months ago but failed miserably. But after participating in the GMTK Game Jam 2021 and using Godot for that, I felt I had a better shot and that I could give it another go. I learned a lot during this project, including how to use the built in drag and drop functionality, groups, singletons, and defining my own object classes! I documented some of the development process in the readme of the GitHub repository, go check it out if you're interested!"
 autowrap = true
 
-[node name="RepoLink" type="ToolButton" parent="M/Panel/M/ScrollContainer/V"]
+[node name="RepoLinkCenterer" type="Control" parent="M/Panel/M/ScrollContainer/V"]
 margin_top = 212.0
 margin_right = 1080.0
-margin_bottom = 240.0
-custom_fonts/font = SubResource( 5 )
+margin_bottom = 232.0
+rect_min_size = Vector2( 0, 20 )
+
+[node name="RepoLink" type="LinkButton" parent="M/Panel/M/ScrollContainer/V/RepoLinkCenterer"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -221.0
+margin_top = -10.0
+margin_right = 221.0
+margin_bottom = 10.0
+size_flags_horizontal = 0
 custom_colors/font_color = Color( 0.239216, 0.537255, 1, 1 )
 custom_colors/font_color_hover = Color( 0.439216, 0.662745, 1, 1 )
 custom_colors/font_color_pressed = Color( 0.1704, 0.38624, 0.71, 1 )
@@ -178,9 +186,9 @@ __meta__ = {
 }
 
 [node name="CreditsInRepo" type="Label" parent="M/Panel/M/ScrollContainer/V"]
-margin_top = 252.0
+margin_top = 244.0
 margin_right = 1080.0
-margin_bottom = 272.0
+margin_bottom = 264.0
 text = "Additionally, these credits (with links and more detail) are available in the GitHub repo - in CREDITS.md."
 autowrap = true
 __meta__ = {
@@ -188,23 +196,23 @@ __meta__ = {
 }
 
 [node name="Spacer" type="Control" parent="M/Panel/M/ScrollContainer/V"]
-margin_top = 284.0
+margin_top = 276.0
 margin_right = 1080.0
-margin_bottom = 294.0
+margin_bottom = 286.0
 rect_min_size = Vector2( 0, 10 )
 
 [node name="Assets" type="Label" parent="M/Panel/M/ScrollContainer/V"]
-margin_top = 306.0
+margin_top = 298.0
 margin_right = 1080.0
-margin_bottom = 344.0
+margin_bottom = 336.0
 custom_fonts/font = SubResource( 1 )
 text = "Assets"
 align = 1
 
 [node name="CenterContainer" type="CenterContainer" parent="M/Panel/M/ScrollContainer/V"]
-margin_top = 356.0
+margin_top = 348.0
 margin_right = 1080.0
-margin_bottom = 736.0
+margin_bottom = 728.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -348,8 +356,8 @@ margin_left = 452.0
 margin_top = 87.0
 margin_right = 613.0
 margin_bottom = 132.0
-custom_fonts/font = SubResource( 9 )
 custom_constants/line_spacing = -6
+custom_fonts/font = SubResource( 9 )
 text = "Samuel Oakes
 and
 Alfredo Marco Pradil"
@@ -360,8 +368,8 @@ margin_left = 633.0
 margin_top = 84.0
 margin_right = 854.0
 margin_bottom = 135.0
-custom_fonts/font = SubResource( 7 )
 custom_constants/line_spacing = -3
+custom_fonts/font = SubResource( 7 )
 text = "SIL Open Font License
 (OFL, see below)"
 align = 1
@@ -582,23 +590,23 @@ __meta__ = {
 }
 
 [node name="Spacer2" type="Control" parent="M/Panel/M/ScrollContainer/V"]
-margin_top = 748.0
+margin_top = 740.0
 margin_right = 1080.0
-margin_bottom = 758.0
+margin_bottom = 750.0
 rect_min_size = Vector2( 0, 10 )
 
 [node name="Licenses" type="Label" parent="M/Panel/M/ScrollContainer/V"]
-margin_top = 770.0
+margin_top = 762.0
 margin_right = 1080.0
-margin_bottom = 808.0
+margin_bottom = 800.0
 custom_fonts/font = SubResource( 1 )
 text = "Licenses"
 align = 1
 
 [node name="CenterContainer2" type="CenterContainer" parent="M/Panel/M/ScrollContainer/V"]
-margin_top = 820.0
+margin_top = 812.0
 margin_right = 1080.0
-margin_bottom = 2391.0
+margin_bottom = 2383.0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="M/Panel/M/ScrollContainer/V/CenterContainer2"]
 margin_left = 38.0
@@ -838,15 +846,15 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 autowrap = true
 
 [node name="Spacer3" type="Control" parent="M/Panel/M/ScrollContainer/V"]
-margin_top = 2403.0
+margin_top = 2395.0
 margin_right = 1080.0
-margin_bottom = 2413.0
+margin_bottom = 2405.0
 rect_min_size = Vector2( 0, 10 )
 
 [node name="Footer" type="Label" parent="M/Panel/M/ScrollContainer/V"]
-margin_top = 2425.0
+margin_top = 2417.0
 margin_right = 1080.0
-margin_bottom = 2440.0
+margin_bottom = 2432.0
 custom_fonts/font = SubResource( 14 )
 text = "Man I spent way too long making this credits screen, I should've just linked to the GitHub and called it at that. It does look cool at least :)"
 align = 1
@@ -861,5 +869,5 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[connection signal="pressed" from="M/Panel/M/ScrollContainer/V/RepoLink" to="." method="_on_RepoLink_pressed"]
+[connection signal="pressed" from="M/Panel/M/ScrollContainer/V/RepoLinkCenterer/RepoLink" to="." method="_on_RepoLink_pressed"]
 [connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]

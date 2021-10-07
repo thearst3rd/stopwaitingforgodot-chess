@@ -11,6 +11,7 @@ onready var bot_check = find_node("BotCheck")
 onready var reset_button = find_node("ResetButton")
 onready var undo_button = find_node("UndoButton")
 onready var bot_button = find_node("BotButton")
+onready var fen_text = find_node("FenText")
 
 var legal_moves = null
 var bot_thinking = false
@@ -156,7 +157,16 @@ func _on_UndoButton_pressed():
 func _on_SetFen_pressed():
 	bot_thinking = false
 	bot_timer.stop()
-	if chess.set_fen(find_node("FenText").text):
+	if chess.set_fen(fen_text):
+		update_state()
+	else:
+		find_node("InvalidFen").show()
+		find_node("InvalidFenTimer").start()
+
+func _on_FenText_text_entered(new_text):
+	if bot_thinking:
+		return
+	if chess.set_fen(new_text):
 		update_state()
 	else:
 		find_node("InvalidFen").show()

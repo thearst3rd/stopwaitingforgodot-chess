@@ -33,9 +33,9 @@ __meta__ = {
 
 [node name="V" type="VBoxContainer" parent="C"]
 margin_left = 140.0
-margin_top = 296.0
+margin_top = 294.0
 margin_right = 1140.0
-margin_bottom = 424.0
+margin_bottom = 426.0
 rect_min_size = Vector2( 1000, 0 )
 custom_constants/separation = 12
 __meta__ = {
@@ -182,18 +182,18 @@ script = ExtResource( 11 )
 [node name="H2" type="HBoxContainer" parent="C/V"]
 margin_top = 102.0
 margin_right = 1000.0
-margin_bottom = 128.0
+margin_bottom = 132.0
 custom_constants/separation = 12
 
-[node name="FenText" type="TextEdit" parent="C/V/H2"]
+[node name="FenText" type="LineEdit" parent="C/V/H2"]
 margin_right = 918.0
-margin_bottom = 26.0
+margin_bottom = 30.0
 size_flags_horizontal = 3
 
 [node name="SetFen" type="Button" parent="C/V/H2"]
 margin_left = 930.0
 margin_right = 1000.0
-margin_bottom = 26.0
+margin_bottom = 30.0
 text = "Set FEN"
 
 [node name="InvalidFen" type="Label" parent="C/V/H2"]
@@ -238,6 +238,7 @@ volume_db = -6.0
 [connection signal="pressed" from="C/V/C/V/H2/BotButton" to="." method="_on_BotButton_pressed"]
 [connection signal="pressed" from="C/V/C/V/H2/BotCheck" to="." method="_on_BotCheck_pressed"]
 [connection signal="timeout" from="C/V/C/V/H2/BotTimer" to="." method="_on_BotTimer_timeout"]
+[connection signal="text_entered" from="C/V/H2/FenText" to="." method="_on_FenText_text_entered"]
 [connection signal="pressed" from="C/V/H2/SetFen" to="." method="_on_SetFen_pressed"]
 [connection signal="timeout" from="C/V/H2/InvalidFenTimer" to="." method="_on_InvalidFenTimer_timeout"]
 [connection signal="settings_changed" from="SettingsMenu" to="." method="_on_SettingsMenu_settings_changed"]
