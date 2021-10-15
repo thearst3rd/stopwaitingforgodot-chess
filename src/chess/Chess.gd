@@ -100,7 +100,7 @@ func duplicate(duplicate_move_stack = true):
 # Sets up the board with the given FEN, returns true if successful. If not successful, board does not change
 func set_fen(fen : String) -> bool:
 	var tokens = fen.split(" ", false)
-	if tokens.size() < 3 or tokens.size() > 6:
+	if tokens.size() < 1 or tokens.size() > 6:
 		return false
 
 	# Pieces
@@ -131,20 +131,26 @@ func set_fen(fen : String) -> bool:
 	if new_w_king == null or new_b_king == null:
 		return false
 
-	# Turn
-	if tokens[1] != "b" and tokens[1] != "w":
-		return false
-	var new_turn = tokens[1] == "b"
+	# Turn (optional)
+	var new_turn = false
+	if tokens.size() >= 2:
+		if tokens[1] != "b" and tokens[1] != "w":
+			return false
+		new_turn = tokens[1] == "b"
 
-	# Castling
+	# Castling (optional)
 	var new_castling = [false, false, false, false]
-	for c in tokens[2]:
-		match c:
-			"K": new_castling[0] = true
-			"Q": new_castling[1] = true
-			"k": new_castling[2] = true
-			"q": new_castling[3] = true
-			"-": pass
+	if tokens.size() >= 3:
+		for c in tokens[2]:
+			match c:
+				"K": new_castling[0] = true
+				"Q": new_castling[1] = true
+				"k": new_castling[2] = true
+				"q": new_castling[3] = true
+				"-": pass
+	else:
+		# If not specified, assume all castlings available and remove them if the pieces aren't in place
+		new_castling = [true, true, true, true]
 	if new_pieces[SQUARES.E1] != "K":
 		new_castling[0] = false
 		new_castling[1] = false
@@ -164,6 +170,13 @@ func set_fen(fen : String) -> bool:
 	var new_ep_target = null
 	if tokens.size() >= 4 and tokens[3] != "-":
 		new_ep_target = square_index_from_name(tokens[3])
+		if new_ep_target < (SQUARES.A7 if turn else SQUARES.A8) or new_ep_target > (SQUARES.H2 if turn else SQUARES.H1):
+			new_ep_target = null
+		else:
+			var delta = -8 if new_turn else 8
+			var target = "P" if turn else "p"
+			if new_pieces[new_ep_target + delta] != target:
+				new_ep_target = null
 
 	# Half move clock (optional)
 	var new_halfmove_clock = 0
@@ -174,6 +187,8 @@ func set_fen(fen : String) -> bool:
 	var new_fullmove_counter = 1
 	if tokens.size() >= 6:
 		new_fullmove_counter = int(tokens[5])
+
+	# TODO: Figure out a nice way to validate that the non-current player isn't in check...
 
 	# Looks valid, so update the state
 	pieces = new_pieces

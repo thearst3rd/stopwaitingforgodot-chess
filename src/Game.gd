@@ -157,7 +157,7 @@ func _on_UndoButton_pressed():
 func _on_SetFen_pressed():
 	bot_thinking = false
 	bot_timer.stop()
-	if chess.set_fen(fen_text):
+	if chess.set_fen(fen_text.text):
 		update_state()
 	else:
 		find_node("InvalidFen").show()
