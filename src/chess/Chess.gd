@@ -103,106 +103,142 @@ func set_fen(fen : String) -> bool:
 	if tokens.size() < 1 or tokens.size() > 6:
 		return false
 
+	# Remember previous state in case we need to revert
+	var old_pieces = pieces
+	var old_turn = turn
+	var old_castling = castling
+	var old_ep_target = ep_target
+	var old_halfmove_clock = halfmove_clock
+	var old_fullmove_counter = fullmove_counter
+
+	var old_move_stack = move_stack
+
+	var old_w_king = w_king
+	var old_b_king = b_king
+
 	# Pieces
-	var new_pieces = []
-	new_pieces.resize(64)	# Can I do this in a constructor instead?
+	pieces = []
+	pieces.resize(64)	# Can I do this in a constructor instead?
 	var index = 0
-	var new_w_king = null
-	var new_b_king = null
+	w_king = null
+	b_king = null
 	for c in tokens[0]:
 		match c:
 			"K", "Q", "R", "B", "N", "P", "k", "q", "r", "b", "n", "p":
 				if c == "K":
-					if new_w_king != null:
+					if w_king != null:
+						pieces = old_pieces
+						turn = old_turn
+						castling = old_castling
+						ep_target = old_ep_target
+						halfmove_clock = old_halfmove_clock
+						fullmove_counter = old_fullmove_counter
+						move_stack = old_move_stack
+						w_king = old_w_king
+						b_king = old_b_king
 						return false
-					new_w_king = index
+					w_king = index
 				elif c == "k":
-					if new_b_king != null:
+					if b_king != null:
+						pieces = old_pieces
+						turn = old_turn
+						castling = old_castling
+						ep_target = old_ep_target
+						halfmove_clock = old_halfmove_clock
+						fullmove_counter = old_fullmove_counter
+						move_stack = old_move_stack
+						w_king = old_w_king
+						b_king = old_b_king
 						return false
-					new_b_king = index
-				new_pieces[index] = c
+					b_king = index
+				pieces[index] = c
 				index += 1
 			"/":
 				pass
 			"1", "2", "3", "4", "5", "6", "7", "8":
 				index += int(c)
-	if index != 64:
-		return false
-	if new_w_king == null or new_b_king == null:
+	if index != 64 or w_king == null or b_king == null:
+		pieces = old_pieces
+		turn = old_turn
+		castling = old_castling
+		ep_target = old_ep_target
+		halfmove_clock = old_halfmove_clock
+		fullmove_counter = old_fullmove_counter
+		move_stack = old_move_stack
+		w_king = old_w_king
+		b_king = old_b_king
 		return false
 
 	# Turn (optional)
-	var new_turn = false
+	turn = false
 	if tokens.size() >= 2:
-		if tokens[1] != "b" and tokens[1] != "w":
-			return false
-		new_turn = tokens[1] == "b"
+		turn = tokens[1] == "b"
 
 	# Castling (optional)
-	var new_castling = [false, false, false, false]
+	castling = [false, false, false, false]
 	if tokens.size() >= 3:
 		for c in tokens[2]:
 			match c:
-				"K": new_castling[0] = true
-				"Q": new_castling[1] = true
-				"k": new_castling[2] = true
-				"q": new_castling[3] = true
+				"K": castling[0] = true
+				"Q": castling[1] = true
+				"k": castling[2] = true
+				"q": castling[3] = true
 				"-": pass
 	else:
 		# If not specified, assume all castlings available and remove them if the pieces aren't in place
-		new_castling = [true, true, true, true]
-	if new_pieces[SQUARES.E1] != "K":
-		new_castling[0] = false
-		new_castling[1] = false
-	if new_pieces[SQUARES.H1] != "R":
-		new_castling[0] = false
-	if new_pieces[SQUARES.A1] != "R":
-		new_castling[1] = false
-	if new_pieces[SQUARES.E8] != "k":
-		new_castling[2] = false
-		new_castling[3] = false
-	if new_pieces[SQUARES.H8] != "r":
-		new_castling[2] = false
-	if new_pieces[SQUARES.A8] != "r":
-		new_castling[3] = false
+		castling = [true, true, true, true]
+	if pieces[SQUARES.E1] != "K":
+		castling[0] = false
+		castling[1] = false
+	if pieces[SQUARES.H1] != "R":
+		castling[0] = false
+	if pieces[SQUARES.A1] != "R":
+		castling[1] = false
+	if pieces[SQUARES.E8] != "k":
+		castling[2] = false
+		castling[3] = false
+	if pieces[SQUARES.H8] != "r":
+		castling[2] = false
+	if pieces[SQUARES.A8] != "r":
+		castling[3] = false
 
 	# EP target (optional)
-	var new_ep_target = null
+	ep_target = null
 	if tokens.size() >= 4 and tokens[3] != "-":
-		new_ep_target = square_index_from_name(tokens[3])
-		if new_ep_target < (SQUARES.A7 if turn else SQUARES.A8) or new_ep_target > (SQUARES.H2 if turn else SQUARES.H1):
-			new_ep_target = null
+		ep_target = square_index_from_name(tokens[3])
+		if ep_target < (SQUARES.A7 if turn else SQUARES.A8) or ep_target > (SQUARES.H2 if turn else SQUARES.H1):
+			ep_target = null
 		else:
-			var delta = -8 if new_turn else 8
+			var delta = -8 if turn else 8
 			var target = "P" if turn else "p"
-			if new_pieces[new_ep_target + delta] != target:
-				new_ep_target = null
+			if pieces[ep_target + delta] != target:
+				ep_target = null
 
 	# Half move clock (optional)
-	var new_halfmove_clock = 0
+	halfmove_clock = 0
 	if tokens.size() >= 5:
-		new_halfmove_clock = int(tokens[4])
+		halfmove_clock = int(tokens[4])
 
 	# Full move counter (optional)
-	var new_fullmove_counter = 1
+	fullmove_counter = 1
 	if tokens.size() >= 6:
-		new_fullmove_counter = int(tokens[5])
+		fullmove_counter = int(tokens[5])
 
-	# TODO: Figure out a nice way to validate that the non-current player isn't in check...
+	# Make sure the opponent player isn't in check
+	if is_king_attacked(not turn):
+		pieces = old_pieces
+		turn = old_turn
+		castling = old_castling
+		ep_target = old_ep_target
+		halfmove_clock = old_halfmove_clock
+		fullmove_counter = old_fullmove_counter
+		move_stack = old_move_stack
+		w_king = old_w_king
+		b_king = old_b_king
+		return false
 
-	# Looks valid, so update the state
-	pieces = new_pieces
-	turn = new_turn
-	castling = new_castling
-	ep_target = new_ep_target
-	halfmove_clock = new_halfmove_clock
-	fullmove_counter = new_fullmove_counter
-
+	# Looks valid!
 	move_stack = []
-
-	w_king = new_w_king
-	b_king = new_b_king
-
 	prune_ep_target()
 
 	return true
