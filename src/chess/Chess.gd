@@ -3,7 +3,6 @@ class_name Chess
 
 # This class contains all the code for a chess position, including legal move generation, game end conditions, etc
 
-const INITIAL_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
 enum SQUARES {
 	A8, B8, C8, D8, E8, F8, G8, H8,
@@ -27,39 +26,47 @@ enum RESULT {
 	FIVEFOLD,	# Currently unused
 }
 
+const INITIAL_FEN := "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+
 
 static func square_index(file : int, rank : int) -> int:
 	return 8 * (8 - rank) + file - 1
 
+
 static func square_get_file(square_index : int) -> int:
 	return (square_index % 8) + 1
+
 
 static func square_get_rank(square_index : int) -> int:
 # warning-ignore:integer_division
 	return 8 - (square_index / 8)
+
 
 static func square_get_name(square_index) -> String:
 	if typeof(square_index) != TYPE_INT or square_index < 0 or square_index >= 64:
 		return "-"
 	return char(ord("a") - 1 + square_get_file(square_index)) + str(square_get_rank(square_index))
 
+
 static func square_is_dark(square_index : int) -> bool:
-	var file = square_get_file(square_index)
-	var rank = square_get_rank(square_index)
+	var file := square_get_file(square_index)
+	var rank := square_get_rank(square_index)
 	return (rank + file) % 2 == 0
+
 
 static func square_index_from_name(square_name : String) -> int:
 	if square_name.length() < 2:
 		return -1
-	var file = ord(square_name[0]) - ord("a") + 1
-	var rank = int(square_name[1])
+	var file := ord(square_name[0]) - ord("a") + 1
+	var rank := int(square_name[1])
 	return square_index(file, rank)
+
 
 static func piece_color(piece_char : String) -> bool:
 	return ord(piece_char) >= ord("a")
 
 
-var pieces = [
+var pieces := [
 	"r", "n", "b", "q", "k", "b", "n", "r",
 	"p", "p", "p", "p", "p", "p", "p", "p",
 	null, null, null, null, null, null, null, null,
@@ -69,19 +76,19 @@ var pieces = [
 	"P", "P", "P", "P", "P", "P", "P", "P",
 	"R", "N", "B", "Q", "K", "B", "N", "R",
 ]	# indexed list of pieces. 0 = a8, 63 = h1
-var turn = false	# false is white, true is black
-var castling = [true, true, true, true]	# white O-O, O-O-O, black O-O, O-O-O
-var ep_target = null	# Square index of ep target square
-var halfmove_clock = 0
-var fullmove_counter = 1
+var turn := false	# false is white, true is black
+var castling := [true, true, true, true]	# white O-O, O-O-O, black O-O, O-O-O
+var ep_target := -1	# Square index of ep target square
+var halfmove_clock := 0
+var fullmove_counter := 1
 
-var move_stack = []
+var move_stack := []
 
-var w_king = SQUARES.E1
-var b_king = SQUARES.E8
+var w_king: int = SQUARES.E1
+var b_king: int = SQUARES.E8
 
 
-func duplicate(duplicate_move_stack = true):
+func duplicate(duplicate_move_stack := true):
 	var new_chess = get_script().new()
 	new_chess.pieces = pieces.duplicate()
 	new_chess.turn = turn
@@ -97,36 +104,37 @@ func duplicate(duplicate_move_stack = true):
 	new_chess.b_king = b_king
 	return new_chess
 
+
 # Sets up the board with the given FEN, returns true if successful. If not successful, board does not change
-func set_fen(fen : String) -> bool:
-	var tokens = fen.split(" ", false)
+func set_fen(fen: String) -> bool:
+	var tokens := fen.split(" ", false)
 	if tokens.size() < 1 or tokens.size() > 6:
 		return false
 
 	# Remember previous state in case we need to revert
-	var old_pieces = pieces
-	var old_turn = turn
-	var old_castling = castling
+	var old_pieces := pieces
+	var old_turn := turn
+	var old_castling := castling
 	var old_ep_target = ep_target
-	var old_halfmove_clock = halfmove_clock
-	var old_fullmove_counter = fullmove_counter
+	var old_halfmove_clock := halfmove_clock
+	var old_fullmove_counter := fullmove_counter
 
-	var old_move_stack = move_stack
+	var old_move_stack := move_stack
 
-	var old_w_king = w_king
-	var old_b_king = b_king
+	var old_w_king := w_king
+	var old_b_king := b_king
 
 	# Pieces
 	pieces = []
 	pieces.resize(64)	# Can I do this in a constructor instead?
-	var index = 0
-	w_king = null
-	b_king = null
+	var index := 0
+	w_king = -1
+	b_king = -1
 	for c in tokens[0]:
 		match c:
 			"K", "Q", "R", "B", "N", "P", "k", "q", "r", "b", "n", "p":
 				if c == "K":
-					if w_king != null:
+					if w_king != -1:
 						pieces = old_pieces
 						turn = old_turn
 						castling = old_castling
@@ -139,7 +147,7 @@ func set_fen(fen : String) -> bool:
 						return false
 					w_king = index
 				elif c == "k":
-					if b_king != null:
+					if b_king != -1:
 						pieces = old_pieces
 						turn = old_turn
 						castling = old_castling
@@ -157,7 +165,7 @@ func set_fen(fen : String) -> bool:
 				pass
 			"1", "2", "3", "4", "5", "6", "7", "8":
 				index += int(c)
-	if index != 64 or w_king == null or b_king == null:
+	if index != 64 or w_king == -1 or b_king == -1:
 		pieces = old_pieces
 		turn = old_turn
 		castling = old_castling
@@ -203,16 +211,16 @@ func set_fen(fen : String) -> bool:
 		castling[3] = false
 
 	# EP target (optional)
-	ep_target = null
+	ep_target = -1
 	if tokens.size() >= 4 and tokens[3] != "-":
 		ep_target = square_index_from_name(tokens[3])
 		if ep_target < (SQUARES.A7 if turn else SQUARES.A8) or ep_target > (SQUARES.H2 if turn else SQUARES.H1):
-			ep_target = null
+			ep_target = -1
 		else:
-			var delta = -8 if turn else 8
-			var target = "P" if turn else "p"
+			var delta := -8 if turn else 8
+			var target := "P" if turn else "p"
 			if pieces[ep_target + delta] != target:
-				ep_target = null
+				ep_target = -1
 
 	# Half move clock (optional)
 	halfmove_clock = 0
@@ -243,14 +251,16 @@ func set_fen(fen : String) -> bool:
 
 	return true
 
+
 # Reset to initial FEN
-func reset():
-	var success = set_fen(INITIAL_FEN)
+func reset() -> void:
+	var success := set_fen(INITIAL_FEN)
 	assert(success)
 
-func get_fen():
-	var fen_pieces = ""
-	var blanks = 0
+
+func get_fen() -> String:
+	var fen_pieces := ""
+	var blanks := 0
 	for i in range(64):
 		if i > 0 and i % 8 == 0:
 			if blanks > 0:
@@ -267,9 +277,9 @@ func get_fen():
 	if blanks > 0:
 		fen_pieces += str(blanks)
 
-	var fen_turn = "b" if turn else "w"
+	var fen_turn := "b" if turn else "w"
 
-	var fen_castling = ""
+	var fen_castling := ""
 	if castling[0]: fen_castling += "K"
 	if castling[1]: fen_castling += "Q"
 	if castling[2]: fen_castling += "k"
@@ -280,9 +290,10 @@ func get_fen():
 	return "%s %s %s %s %d %d" % [fen_pieces, fen_turn, fen_castling, square_get_name(ep_target), halfmove_clock,
 			fullmove_counter]
 
+
 # Creates a Move object from these squares. Does not check if the move is legal
-func construct_move(from_square, to_square, promotion = "q"):
-	var move = Move.new()
+func construct_move(from_square: int, to_square: int, promotion := "q") -> Move:
+	var move := Move.new()
 	move.from_square = from_square
 	move.to_square = to_square
 	move.captured_piece = pieces[to_square]
@@ -316,15 +327,16 @@ func construct_move(from_square, to_square, promotion = "q"):
 
 	return move
 
+
 # Plays the given move on the board and updates the internal state accordingly
-func play_move(move):
+func play_move(move: Move) -> void:
 	if move.promotion:
 		pieces[move.to_square] = move.promotion
 	else:
 		pieces[move.to_square] = pieces[move.from_square]
 	pieces[move.from_square] = null
 	if move.en_passant:
-		var delta = -8 if turn else 8
+		var delta := -8 if turn else 8
 		pieces[ep_target + delta] = null
 
 	if pieces[move.to_square].to_lower() == "k":
@@ -346,7 +358,7 @@ func play_move(move):
 			castling[i] = false
 
 	# Double pawn step
-	ep_target = null
+	ep_target = -1
 	if pieces[move.to_square].to_lower() == "p":
 		var delta = 8 if turn else -8
 		if move.to_square == move.from_square + (2 * delta):
@@ -364,12 +376,13 @@ func play_move(move):
 	move_stack.push_back(move)
 	prune_ep_target()
 
+
 # Undoes the most recent move
-func undo():
+func undo() -> void:
 	if move_stack.size() == 0:
 		return
 
-	var move = move_stack.pop_back()
+	var move := move_stack.pop_back() as Move
 
 	turn = not turn
 	if turn:
@@ -413,10 +426,11 @@ const BISHOP_OFFSETS = [[-1, -1], [-1, 1], [1, 1] ,[1, -1]]
 const ROYAL_OFFSETS = ROOK_OFFSETS + BISHOP_OFFSETS
 const KNIGHT_OFFSETS = [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]]
 
+
 # Generate all pseudo-legal moves (i.e., the pieces move by their rules but there is no check)
 # This function will not generate castling moves
-func generate_pseudo_legal_moves():
-	var moves = []
+func generate_pseudo_legal_moves() -> Array:
+	var moves := []
 	for square in range(64):
 		var piece = pieces[square]
 		if piece == null:
@@ -440,29 +454,31 @@ func generate_pseudo_legal_moves():
 				moves.append_array(generate_pawn_moves(color, square))
 	return moves
 
-func generate_leaping_moves(col, square_index, offsets):
-	var moves = []
+
+func generate_leaping_moves(col: bool, square_index: int, offsets: Array) -> Array:
+	var moves := []
 	for offset in offsets:
-		var d_file = offset[0]
-		var d_rank = offset[1]
-		var file = square_get_file(square_index) + d_file
-		var rank = square_get_rank(square_index) + d_rank
+		var d_file := offset[0] as int
+		var d_rank := offset[1] as int
+		var file := square_get_file(square_index) + d_file
+		var rank := square_get_rank(square_index) + d_rank
 		if file >= 1 and file <= 8 and rank >= 1 and rank <= 8:
-			var new_square = square_index(file, rank)
+			var new_square := square_index(file, rank)
 			var piece = pieces[new_square]
 			if piece == null or piece_color(piece) != col:
 				moves.push_back(construct_move(square_index, new_square))
 	return moves
 
-func generate_sliding_moves(col, square_index, offsets):
-	var moves = []
+
+func generate_sliding_moves(col: bool, square_index: int, offsets: Array) -> Array:
+	var moves := []
 	for offset in offsets:
-		var d_file = offset[0]
-		var d_rank = offset[1]
-		var file = square_get_file(square_index) + d_file
-		var rank = square_get_rank(square_index) + d_rank
+		var d_file := offset[0] as int
+		var d_rank := offset[1] as int
+		var file := square_get_file(square_index) + d_file
+		var rank := square_get_rank(square_index) + d_rank
 		while file >= 1 and file <= 8 and rank >= 1 and rank <= 8:
-			var new_square = square_index(file, rank)
+			var new_square := square_index(file, rank)
 			var piece = pieces[new_square]
 			if piece != null && piece_color(piece) == col:
 				break
@@ -473,8 +489,9 @@ func generate_sliding_moves(col, square_index, offsets):
 			rank += d_rank
 	return moves
 
-func generate_pawn_move_list(array, from_square, to_square):
-	var rank = square_get_rank(to_square)
+
+func generate_pawn_move_list(array: Array, from_square: int, to_square: int) -> void:
+	var rank := square_get_rank(to_square)
 	if rank == 1 or rank == 8:
 		array.push_back(construct_move(from_square, to_square, "q"))
 		array.push_back(construct_move(from_square, to_square, "n"))
@@ -483,42 +500,45 @@ func generate_pawn_move_list(array, from_square, to_square):
 	else:
 		array.push_back(construct_move(from_square, to_square))
 
-func generate_pawn_moves(col, square_index):
-	var moves = []
-	var delta = 8 if col else -8
+
+func generate_pawn_moves(col: bool, square_index: int) -> Array:
+	var moves := []
+	var delta := 8 if col else -8
 	if pieces[square_index + delta] == null:
 		generate_pawn_move_list(moves, square_index, square_index + delta)
 		var target_rank = 7 if col else 2
 		if square_get_rank(square_index) == target_rank and pieces[square_index + 2 * delta] == null:
 			generate_pawn_move_list(moves, square_index, square_index + 2 * delta)
-	var file = square_get_file(square_index)
+	var file := square_get_file(square_index)
 	if file > 1:
-		var new_square = square_index + delta - 1
+		var new_square := square_index + delta - 1
 		var piece = pieces[new_square]
 		if new_square == ep_target or (piece != null and piece_color(piece) != col):
 			generate_pawn_move_list(moves, square_index, new_square)
 	if file < 8:
-		var new_square = square_index + delta + 1
+		var new_square := square_index + delta + 1
 		var piece = pieces[new_square]
 		if new_square == ep_target or (piece != null and piece_color(piece) != col):
 			generate_pawn_move_list(moves, square_index, new_square)
 	return moves
 
+
 # Returns the square of the given color's king
-func get_king(col : bool) -> int:
+func get_king(col: bool) -> int:
 	return b_king if col else w_king
 
+
 # Returns if the given square is attacked by the given color
-func is_square_attacked(square : int, col : bool) -> bool:
+func is_square_attacked(square: int, col: bool) -> bool:
 	if square < 0 or square >= 64:
 		return false
-	var file = square_get_file(square)
-	var rank = square_get_rank(square)
+	var file := square_get_file(square)
+	var rank := square_get_rank(square)
 
 	# Check for pawns
-	var delta = -8 if col else 8
+	var delta := -8 if col else 8
 	var target = "p" if col else "P"
-	var new_square = square + delta
+	var new_square := square + delta
 	if new_square >= 0 and new_square < 64:
 		if file > 1:
 			if pieces[new_square - 1] == target:
@@ -550,8 +570,8 @@ func is_square_attacked(square : int, col : bool) -> bool:
 	# Check for rooks / queens
 	target = ["r", "q"] if col else ["R", "Q"]
 	for offset in ROOK_OFFSETS:
-		var d_file = offset[0]
-		var d_rank = offset[1]
+		var d_file := offset[0] as int
+		var d_rank := offset[1] as int
 		file = square_get_file(square) + d_file
 		rank = square_get_rank(square) + d_rank
 		while file >= 1 and file <= 8 and rank >= 1 and rank <= 8:
@@ -566,8 +586,8 @@ func is_square_attacked(square : int, col : bool) -> bool:
 	# Check for bishops / queens
 	target = ["b", "q"] if col else ["B", "Q"]
 	for offset in BISHOP_OFFSETS:
-		var d_file = offset[0]
-		var d_rank = offset[1]
+		var d_file := offset[0] as int
+		var d_rank := offset[1] as int
 		file = square_get_file(square) + d_file
 		rank = square_get_rank(square) + d_rank
 		while file >= 1 and file <= 8 and rank >= 1 and rank <= 8:
@@ -581,17 +601,19 @@ func is_square_attacked(square : int, col : bool) -> bool:
 
 	return false
 
-func is_king_attacked(col : bool) -> bool:
+
+func is_king_attacked(col: bool) -> bool:
 	return is_square_attacked(get_king(col), not col)
+
 
 func in_check() -> bool:
 	return is_king_attacked(turn)
 
 
 # Generate all legal moves. This can be done much faster
-func generate_legal_moves(notate_san = true, only_captures = false):
-	var moves = []
-	var pseudos = generate_pseudo_legal_moves()
+func generate_legal_moves(notate_san := true, only_captures := false) -> Array:
+	var moves := []
+	var pseudos := generate_pseudo_legal_moves()
 	for move in pseudos:
 		if not only_captures or move.captured_piece or move.en_passant:
 			play_move(move)
@@ -600,8 +622,8 @@ func generate_legal_moves(notate_san = true, only_captures = false):
 			undo()
 
 	# Now, check castling
-	var castle_kingside
-	var castle_queenside
+	var castle_kingside: bool
+	var castle_queenside: bool
 	if only_captures:
 		castle_kingside = false
 		castle_queenside = false
@@ -614,23 +636,23 @@ func generate_legal_moves(notate_san = true, only_captures = false):
 			castle_queenside = castling[1]
 
 	if castle_kingside:
-		var king = get_king(turn)
-		var e_attacked = is_square_attacked(king, not turn)
-		var f_attacked = is_square_attacked(king + 1, not turn)
-		var g_attacked = is_square_attacked(king + 2, not turn)
-		var f_empty = pieces[king + 1] == null
-		var g_empty = pieces[king + 2] == null
+		var king := get_king(turn)
+		var e_attacked := is_square_attacked(king, not turn)
+		var f_attacked := is_square_attacked(king + 1, not turn)
+		var g_attacked := is_square_attacked(king + 2, not turn)
+		var f_empty: bool = pieces[king + 1] == null
+		var g_empty: bool = pieces[king + 2] == null
 		if not (e_attacked or f_attacked or g_attacked) and f_empty and g_empty:
 			moves.push_back(construct_move(king, king + 2))
 
 	if castle_queenside:
-		var king = get_king(turn)
-		var e_attacked = is_square_attacked(king, not turn)
-		var d_attacked = is_square_attacked(king - 1, not turn)
-		var c_attacked = is_square_attacked(king - 2, not turn)
-		var d_empty = pieces[king - 1] == null
-		var c_empty = pieces[king - 2] == null
-		var b_empty = pieces[king - 3] == null
+		var king := get_king(turn)
+		var e_attacked := is_square_attacked(king, not turn)
+		var d_attacked := is_square_attacked(king - 1, not turn)
+		var c_attacked := is_square_attacked(king - 2, not turn)
+		var d_empty: bool = pieces[king - 1] == null
+		var c_empty: bool = pieces[king - 2] == null
+		var b_empty: bool = pieces[king - 3] == null
 		if not (e_attacked or d_attacked or c_attacked) and d_empty and c_empty and b_empty:
 			moves.push_back(construct_move(king, king - 2))
 
@@ -645,9 +667,10 @@ func generate_legal_moves(notate_san = true, only_captures = false):
 func is_game_over() -> bool:
 	return get_result() != RESULT.ONGOING
 
-func get_result():
+
+func get_result() -> int:
 	# TODO: cache legal moves so we don't need to generate them again here
-	var moves = generate_legal_moves(false)
+	var moves := generate_legal_moves(false)
 	if moves.size() == 0:
 		if in_check():
 			return RESULT.CHECKMATE
@@ -668,14 +691,14 @@ func get_result():
 	return RESULT.ONGOING
 
 func is_insufficient_material() -> bool:
-	var w_knights = []
-	var w_bishops = []
-	var w_bishop_light = false
-	var w_bishop_dark = false
-	var b_knights = []
-	var b_bishops = []
-	var b_bishop_light = false
-	var b_bishop_dark = false
+	var w_knights := []
+	var w_bishops := []
+	var w_bishop_light := false
+	var w_bishop_dark := false
+	var b_knights := []
+	var b_bishops := []
+	var b_bishop_light := false
+	var b_bishop_dark := false
 
 	for square in range(64):
 		var piece = pieces[square]
@@ -702,8 +725,8 @@ func is_insufficient_material() -> bool:
 				else:
 					b_bishop_light = true
 
-	var w_minors = w_knights + w_bishops
-	var b_minors = b_knights + b_bishops
+	var w_minors := w_knights + w_bishops
+	var b_minors := b_knights + b_bishops
 
 	# If both sides have minor pieces, NOT draw
 	if w_minors.size() > 0 and b_minors.size() > 0:
@@ -727,11 +750,14 @@ func is_insufficient_material() -> bool:
 			return false
 		return !(b_bishop_dark && b_bishop_light)
 
+
 func is_fifty_move() -> bool:
 	return halfmove_clock >= 100
 
+
 func is_seventy_five_move() -> bool:
 	return halfmove_clock >= 150
+
 
 func is_repetition(other) -> bool:
 	if turn != other.turn:
@@ -753,15 +779,16 @@ func is_repetition(other) -> bool:
 
 	return true
 
-func is_nfold_repetition(n : int) -> bool:
+
+func is_nfold_repetition(n: int) -> bool:
 	if n <= 1:
 		return true
 	var reference = duplicate()
-	var repetitions = 1
+	var repetitions := 1
 	while reference.move_stack.size() > 0:
 		# Optimization: if we reach an irreversable move (aka capture or pawn move), return false early
 		# This could also include moves that change castling rights. Potential TODO
-		var last_move = reference.move_stack[-1]
+		var last_move := reference.move_stack[-1] as Move
 		if last_move.captured_piece or last_move.promotion or reference.pieces[last_move.to_square] in ["P", "p"]:
 			return false
 
@@ -772,21 +799,24 @@ func is_nfold_repetition(n : int) -> bool:
 				return true
 	return false
 
+
 func is_threefold_repetition() -> bool:
 	return is_nfold_repetition(3)
+
 
 func is_fivefold_repetition() -> bool:
 	return is_nfold_repetition(5)
 
+
 # After this function, ep_target will ONLY be set if there is a legal en passant capture available
-func prune_ep_target():
-	if ep_target == null:
+func prune_ep_target() -> void:
+	if ep_target == -1:
 		return
 
 	var delta = -8 if turn else 8
 	var new_square = ep_target + delta
 	if new_square < 0 or new_square >= 64:	# shouldn't happen in a real game
-		ep_target = null
+		ep_target = -1
 		return
 
 	var file = square_get_file(new_square)
@@ -807,16 +837,16 @@ func prune_ep_target():
 				return
 
 	# There were either no pawns in position, or the pawn(s) were pinned
-	ep_target = null
+	ep_target = -1
 
 
 ## SAN GENERATION ##
 
 # Populate the notation_san field of each move with it's SAN notation
 # This is pretty inefficient! Only do it when you need to
-func notate_moves(moves):
+func notate_moves(moves: Array) -> void:
 	# First pass, put moves into dictionary based on piece type
-	var piece_moves = {
+	var piece_moves := {
 		"K": [],
 		"Q": [],
 		"R": [],
@@ -837,9 +867,9 @@ func notate_moves(moves):
 		elif piece_type == "K" and (move.to_square == move.from_square - 2):
 			move.notation_san = "O-O-O"
 		else:
-			var conflicts = false
-			var conflicting_ranks = false
-			var conflicting_files = false
+			var conflicts := false
+			var conflicting_ranks := false
+			var conflicting_files := false
 			for other_move in piece_moves[piece_type]:
 				if other_move.from_square == move.from_square:
 					continue
@@ -850,7 +880,7 @@ func notate_moves(moves):
 					if square_get_rank(other_move.from_square) == square_get_rank(move.from_square):
 						conflicting_ranks = true
 
-			var capture = move.captured_piece != null or move.en_passant
+			var capture: bool = move.captured_piece != null or move.en_passant
 			if piece_type == "P":
 				move.notation_san = ""
 				if capture:

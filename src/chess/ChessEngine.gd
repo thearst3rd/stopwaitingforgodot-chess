@@ -3,13 +3,14 @@ class_name ChessEngine
 
 # The class that handles the actual chess AI
 
-const MATE_SCORE = 1_000_000_000
-const MATE_THRESHOLD = 999_000_000
 
-const INF_SCORE = 0xFFFF_FFFF_FFFF
+const MATE_SCORE := 1_000_000_000
+const MATE_THRESHOLD := 999_000_000
 
-var search_depth = 3
-var quiescence_depth = 5
+const INF_SCORE := 0xFFFF_FFFF_FFFF
+
+var search_depth := 3
+var quiescence_depth := 5
 
 
 # Simplified Evaluation Function piece tables
@@ -93,32 +94,32 @@ var b_king_end_table = flip_table(w_king_end_table)
 
 # Search debug info
 
-var num_positions_searched = 0
-var num_positions_searched_q = 0
-var num_positions_evaluated = 0
-var search_time = 0
+var num_positions_searched := 0
+var num_positions_searched_q := 0
+var num_positions_evaluated := 0
+var search_time := 0
 
 
-static func flip_table(table):
-	var new_table = []
+static func flip_table(table: Array) -> Array:
+	var new_table := []
 	new_table.resize(64)
 	for i in range(64):
-		var file = Chess.square_get_file(i)
-		var rank = 9 - Chess.square_get_rank(i)
-		var new_i = Chess.square_index(file, rank)
+		var file := Chess.square_get_file(i)
+		var rank := 9 - Chess.square_get_rank(i)
+		var new_i := Chess.square_index(file, rank)
 		new_table[new_i] = table[i]
 	return new_table
 
 
-func get_move(chess : Chess):
+func get_move(chess: Chess) -> Array:
 	num_positions_searched = 0
 	num_positions_searched_q = 0
 	num_positions_evaluated = 0
-	var before_time = OS.get_ticks_usec()
-	var r = negamax(chess, search_depth, -INF_SCORE, INF_SCORE)
+	var before_time := OS.get_ticks_usec()
+	var r := negamax(chess, search_depth, -INF_SCORE, INF_SCORE)
 	search_time = OS.get_ticks_usec() - before_time
 	# We generate the moves without notating them, but we need the final move notated
-	var moves = chess.generate_legal_moves()
+	var moves := chess.generate_legal_moves()
 	for m in moves:
 		if m.from_square == r[1].from_square and m.to_square == r[1].to_square and m.promotion == r[1].promotion:
 			r[1] = m
@@ -145,7 +146,8 @@ static func get_piece_value(piece) -> int:
 			return 100
 	return 0;
 
-func get_piece_placement(piece, square) -> int:
+
+func get_piece_placement(piece, square: int) -> int:
 	match piece:
 		null: pass
 		"K": return w_king_middle_table[square]
@@ -162,38 +164,39 @@ func get_piece_placement(piece, square) -> int:
 		"p": return b_pawn_table[square]
 	return 0
 
+
 # Evaluates a position from the POV of whose turn it is
 # Largely based on https://www.chessprogramming.org/Simplified_Evaluation_Function
-func evaluate(chess : Chess) -> int:
+func evaluate(chess: Chess) -> int:
 	num_positions_evaluated += 1
-	var eval = 0
+	var eval := 0
 	for i in range(64):
 		var piece = chess.pieces[i]
 		if piece == null:
 			continue
-		var mult = 1 if (Chess.piece_color(piece) == chess.turn) else -1
+		var mult := 1 if (Chess.piece_color(piece) == chess.turn) else -1
 		eval += mult * (get_piece_value(piece) + get_piece_placement(piece, i))
 	return eval
 
 
 ## GAME TREE SEARCH ##
 
-func negamax(chess : Chess, depth, alpha, beta):
+func negamax(chess: Chess, depth: int, alpha: int, beta: int) -> Array:
 	if depth <= 0:
 		if chess.in_check():
-			var moves = chess.generate_legal_moves(false)
+			var moves := chess.generate_legal_moves(false)
 			if moves.size() == 0:
 				return [-MATE_SCORE, null]
 		return [negamax_quiescence(chess, quiescence_depth, alpha, beta), null]
-	var moves = order_moves(chess, chess.generate_legal_moves(false))
+	var moves := order_moves(chess, chess.generate_legal_moves(false))
 	if moves.size() == 0:
 		return [-MATE_SCORE if chess.in_check() else 0, null]
-	var value = -INF_SCORE
+	var value := -INF_SCORE
 	var best_move = null
 	for move in moves:
 		num_positions_searched += 1
 		chess.play_move(move)
-		var curr_score
+		var curr_score: int
 		if depth == search_depth and chess.is_threefold_repetition():
 			curr_score = 0
 		else:
@@ -206,19 +209,20 @@ func negamax(chess : Chess, depth, alpha, beta):
 		if curr_score > value:
 			value = curr_score
 			best_move = move
-		alpha = max(alpha, value)
+		alpha = alpha if alpha > value else value
 		if curr_score >= beta:
 			break
 	return [value, best_move]
 
-func negamax_quiescence(chess : Chess, depth, alpha, beta) -> int:
-	var value = evaluate(chess)
+
+func negamax_quiescence(chess: Chess, depth: int, alpha: int, beta: int) -> int:
+	var value := evaluate(chess)
 	if value >= beta:
 		return beta
 	if depth == 0:
 		return value
-	alpha = max(value, alpha)
-	var moves = order_moves(chess, chess.generate_legal_moves(false, true))
+	alpha = alpha if alpha > value else value
+	var moves := order_moves(chess, chess.generate_legal_moves(false, true))
 	for move in moves:
 		num_positions_searched_q += 1
 		chess.play_move(move)
@@ -233,10 +237,10 @@ func negamax_quiescence(chess : Chess, depth, alpha, beta) -> int:
 
 ## MOVE ORDERING ##
 
-func order_moves(chess : Chess, moves):
-	var moves_and_bonuses = []
+func order_moves(chess: Chess, moves: Array) -> Array:
+	var moves_and_bonuses := []
 	for move in moves:
-		var bonus = 0
+		var bonus := 0
 		var moving_piece = chess.pieces[move.from_square]
 
 		# Prefer capturing higher value pieces with lower value pieces
@@ -246,9 +250,9 @@ func order_moves(chess : Chess, moves):
 		# Prefer not moving pieces onto squares attacked by opponent pawns
 		if not (moving_piece in ["P", "p", "K", "k"]):
 			if move.to_square > Chess.SQUARES.H8 and move.to_square < Chess.SQUARES.A1:
-				var delta = 8 if chess.turn else -8
-				var file = Chess.square_get_file(move.to_square)
-				var target = "P" if chess.turn else "p"
+				var delta := 8 if chess.turn else -8
+				var file := Chess.square_get_file(move.to_square)
+				var target := "P" if chess.turn else "p"
 				if file > 1:
 					if chess.pieces[move.to_square + delta - 1] == target:
 						bonus -= 1000
@@ -265,11 +269,12 @@ func order_moves(chess : Chess, moves):
 	# Sort array
 	moves_and_bonuses.sort_custom(self, "sort_comparison")
 
-	var sorted_moves = []
+	var sorted_moves := []
 	for move_and_bonus in moves_and_bonuses:
 		sorted_moves.push_back(move_and_bonus[0])
 
 	return sorted_moves
 
-func sort_comparison(move_a, move_b):
+
+func sort_comparison(move_a: Array, move_b: Array) -> bool:
 	return move_a[1] > move_b[1]

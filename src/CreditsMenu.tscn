@@ -181,9 +181,6 @@ custom_colors/font_color = Color( 0.239216, 0.537255, 1, 1 )
 custom_colors/font_color_hover = Color( 0.439216, 0.662745, 1, 1 )
 custom_colors/font_color_pressed = Color( 0.1704, 0.38624, 0.71, 1 )
 text = "https://github.com/thearst3rd/stopwaitingforgodot-chess"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="CreditsInRepo" type="Label" parent="M/Panel/M/ScrollContainer/V"]
 margin_top = 244.0

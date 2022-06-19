@@ -7,9 +7,6 @@ margin_right = 250.0
 rect_min_size = Vector2( 265, 0 )
 color = Color( 0, 0, 0, 0.196078 )
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 anchor_right = 1.0
