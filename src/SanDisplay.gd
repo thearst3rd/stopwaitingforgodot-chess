@@ -1,20 +1,20 @@
 extends ColorRect
 
 
-onready var scroll_container := $ScrollContainer as ScrollContainer
-onready var scroll_bar := scroll_container.get_v_scrollbar()
-onready var sans := $ScrollContainer/Sans as GridContainer
+@onready var scroll_container := $ScrollContainer as ScrollContainer
+@onready var scroll_bar := scroll_container.get_v_scroll_bar()
+@onready var sans := $ScrollContainer/Sans as GridContainer
 
 
 func create_number_label(num: int) -> ColorRect:
 	var rect := ColorRect.new()
 	rect.color = Color(1, 1, 1, 0.13)
-	rect.rect_min_size = Vector2(50, 30)
+	rect.custom_minimum_size = Vector2(50, 30)
 	var label := Label.new()
 	label.text = str(num) + ". "
-	label.align = Label.ALIGN_RIGHT
-	label.valign = Label.VALIGN_CENTER
-	label.rect_min_size = rect.rect_min_size
+	label.align = HORIZONTAL_ALIGNMENT_RIGHT
+	label.valign = VERTICAL_ALIGNMENT_CENTER
+	label.custom_minimum_size = rect.custom_minimum_size
 	rect.add_child(label)
 	return rect
 
@@ -22,7 +22,7 @@ func create_number_label(num: int) -> ColorRect:
 func create_san_label(text: String) -> Label:
 	var label = Label.new()
 	label.text = text
-	label.rect_min_size = Vector2(100, 0)
+	label.custom_minimum_size = Vector2(100, 0)
 	return label
 
 
@@ -47,6 +47,6 @@ func update_moves(chess: Chess) -> void:
 		chess.play_move(move)
 
 	# Thanks to https://godotengine.org/qa/4106/how-to-change-scrollbarcontainers-scrollbar-position
-	yield(scroll_bar, "changed")
+	await scroll_bar.changed
 # warning-ignore:narrowing_conversion
 	scroll_container.set_v_scroll(scroll_bar.max_value)

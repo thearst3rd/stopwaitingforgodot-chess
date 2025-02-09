@@ -1,8 +1,8 @@
 extends ColorRect
 
 
-onready var version_text := $M/Panel/M/ScrollContainer/V/GameTitle/Version as Label
-onready var repo_link := $M/Panel/M/ScrollContainer/V/RepoLinkCenterer/RepoLink as LinkButton
+@onready var version_text := $M/Panel/M/ScrollContainer/V/GameTitle/Version as Label
+@onready var repo_link := $M/Panel/M/ScrollContainer/V/RepoLinkCenterer/RepoLink as LinkButton
 
 
 func _ready() -> void:

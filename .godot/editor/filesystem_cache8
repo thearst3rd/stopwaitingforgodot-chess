@@ -1,0 +1,55 @@
+ea4bc82a6ad023ab7ee23ee620429895
+::res://::1739109057
+CREDITS.md::TextFile::-1::1739106964::0::1::::<><>::
+default_env.tres::Environment::4128195198591321363::1739108598::0::1::::<><>::
+icon.png::CompressedTexture2D::4438140458039799030::1739106965::1739107059::1::::<><>::
+README.md::TextFile::-1::1739106964::0::1::::<><>::
+::res://assets/::1739106965
+::res://assets/orkney/::1739107058
+Orkney Bold Italic.otf::FontFile::2927636588944762618::1739106964::1739107058::1::::<><>::
+Orkney Bold.otf::FontFile::2955524696833409509::1739106964::1739107058::1::::<><>::
+Orkney Light Italic.otf::FontFile::8982104419386847749::1739106964::1739107058::1::::<><>::
+Orkney Light.otf::FontFile::5264247554660769308::1739106964::1739107058::1::::<><>::
+Orkney Medium Italic.otf::FontFile::5661387143352907655::1739106964::1739107058::1::::<><>::
+Orkney Medium.otf::FontFile::4524288516091808918::1739106964::1739107058::1::::<><>::
+Orkney Regular Italic.otf::FontFile::7296486870582219536::1739106964::1739107058::1::::<><>::
+Orkney Regular.otf::FontFile::982914612530865762::1739106964::1739107058::1::::<><>::
+Orkney-OFL.txt::TextFile::-1::1739106964::0::1::::<><>::
+Orkney.tres::FontFile::-1::1739107008::0::1::::<><>::res://assets/orkney/Orkney Regular.otf
+::res://assets/sound/::1739107059
+capture.wav::AudioStreamWAV::8908688787095426719::1739106964::1739107059::1::::<><>::
+check.wav::AudioStreamWAV::7412530697686055976::1739106964::1739107059::1::::<><>::
+move.wav::AudioStreamWAV::3940139940911337645::1739106964::1739107059::1::::<><>::
+terminal.wav::AudioStreamWAV::4956040245629756127::1739106965::1739107059::1::::<><>::
+::res://assets/tatiana/::1739107059
+bB.svg::CompressedTexture2D::4171649074485832424::1739106965::1739107059::1::::<><>::
+bK.svg::CompressedTexture2D::7673997784280727305::1739106965::1739107059::1::::<><>::
+bN.svg::CompressedTexture2D::3815889101465736980::1739106965::1739107059::1::::<><>::
+bP.svg::CompressedTexture2D::2633358751261249350::1739106965::1739107059::1::::<><>::
+bQ.svg::CompressedTexture2D::720037241337087357::1739106965::1739107059::1::::<><>::
+bR.svg::CompressedTexture2D::7161307951353402457::1739106965::1739107059::1::::<><>::
+wB.svg::CompressedTexture2D::4016754227621185633::1739106965::1739107059::1::::<><>::
+wK.svg::CompressedTexture2D::5558781139495457672::1739106965::1739107059::1::::<><>::
+wN.svg::CompressedTexture2D::5173930842741109752::1739106965::1739107059::1::::<><>::
+wP.svg::CompressedTexture2D::5598798313368582126::1739106965::1739107059::1::::<><>::
+wQ.svg::CompressedTexture2D::4800143052297541780::1739106965::1739107059::1::::<><>::
+wR.svg::CompressedTexture2D::6668112540817942792::1739106965::1739107059::1::::<><>::
+::res://src/::1739108598
+Board.gd::GDScript::-1::1739107008::0::1::::<>GridContainer<>::
+Board.tscn::PackedScene::-1::1739107008::0::1::::<><>::res://src/Board.gd
+BotThinkingIndicator.gd::GDScript::-1::1739107865::0::1::::<>Control<>::
+CreditsMenu.gd::GDScript::-1::1739107008::0::1::::<>ColorRect<>::
+CreditsMenu.tscn::PackedScene::356252725239916433::1739108598::0::1::::<><>::uid://bidxcbkineva8::::res://assets/orkney/Orkney Bold.otf<>res://src/CreditsMenu.gd<>uid://bhyf0nnv2h6je::::res://assets/orkney/Orkney Bold Italic.otf<>uid://oaepv3kovg87::::res://assets/orkney/Orkney Regular.otf<>uid://d0787hj745m7v::::res://assets/orkney/Orkney Light Italic.otf<>uid://cfyj5dempsrum::::res://assets/tatiana/wN.svg
+Game.gd::GDScript::-1::1739108588::0::1::::ChessGame<>Control<>::
+Game.tscn::PackedScene::6371007034616199598::1739108598::0::1::::<><>::res://src/Board.tscn<>uid://bidxcbkineva8::::res://assets/orkney/Orkney Bold.otf<>res://src/Game.gd<>res://src/SanDisplay.tscn<>res://src/SettingsMenu.tscn<>uid://bwevr8ykpn5mf::::res://assets/sound/move.wav<>uid://dduxkebeodh7u::::res://assets/sound/check.wav<>uid://dy6o2j8gx7x32::::res://assets/sound/capture.wav<>uid://ccu0i2ei68mup::::res://assets/sound/terminal.wav<>uid://fctovp54ejhp::::res://src/CreditsMenu.tscn<>res://src/BotThinkingIndicator.gd
+SanDisplay.gd::GDScript::-1::1739107832::0::1::::<>ColorRect<>::
+SanDisplay.tscn::PackedScene::-1::1739107008::0::1::::<><>::res://src/SanDisplay.gd
+Settings.gd::GDScript::-1::1739107914::0::1::::<>Node<>::
+SettingsMenu.gd::GDScript::-1::1739107008::0::1::::<>Window<>::
+SettingsMenu.tscn::PackedScene::-1::1739107008::0::1::::<><>::res://src/SettingsMenu.gd
+Square.gd::GDScript::-1::1739108594::0::1::::<>ColorRect<>::
+Square.tscn::PackedScene::-1::1739107008::0::1::::<><>::res://src/Square.gd
+::res://src/chess/::1739107682
+Chess.gd::GDScript::-1::1739107682::0::1::::Chess<>RefCounted<>::
+ChessEngine.gd::GDScript::-1::1739107008::0::1::::ChessEngine<>RefCounted<>::
+Move.gd::GDScript::-1::1739107008::0::1::::Move<>RefCounted<>::

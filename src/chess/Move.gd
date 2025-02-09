@@ -1,4 +1,4 @@
-extends Reference
+extends RefCounted
 class_name Move
 
 # Everything needed to play out or undo a move

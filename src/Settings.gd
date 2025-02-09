@@ -15,25 +15,19 @@ func _ready() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("toggle_fullscreen"):
-		OS.window_fullscreen = not OS.window_fullscreen
-		get_tree().set_input_as_handled()
+		get_window().mode = Window.MODE_EXCLUSIVE_FULLSCREEN if (not ((get_window().mode == Window.MODE_EXCLUSIVE_FULLSCREEN) or (get_window().mode == Window.MODE_FULLSCREEN))) else Window.MODE_WINDOWED
+		get_viewport().set_input_as_handled()
 
 
-# Save on quitting
-func _notification(what: int) -> void:
-	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
+func _exit_tree() -> void:
 		save_settings()
-		get_tree().quit() # default behavior
-
 
 func load_settings() -> void:
-	var f := File.new()
-	var error := f.open(SETTINGS_FILENAME, File.READ)
-	if error:
-		print("Error loading settings.json")
-		return
+	var file := FileAccess.open(SETTINGS_FILENAME, FileAccess.READ)
+	if (file == null):
+		return;
 
-	var d = str2var(f.get_as_text())
+	var d = str_to_var(file.get_as_text())
 	if typeof(d) != TYPE_DICTIONARY:
 		return
 
@@ -48,9 +42,7 @@ func load_settings() -> void:
 
 
 func save_settings() -> void:
-	var f := File.new()
-	var error := f.open(SETTINGS_FILENAME, File.WRITE)
-	assert(not error)
+	var file := FileAccess.open(SETTINGS_FILENAME, FileAccess.WRITE)
 
 	var d := {
 		"show_dests": show_dests,
@@ -59,4 +51,4 @@ func save_settings() -> void:
 		"sound_check": sound_check,
 	}
 
-	f.store_line(var2str(d))
+	file.store_line(var_to_str(d))

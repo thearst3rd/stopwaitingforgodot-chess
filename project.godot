@@ -6,34 +6,13 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
-
-_global_script_classes=[ {
-"base": "Reference",
-"class": "Chess",
-"language": "GDScript",
-"path": "res://src/chess/Chess.gd"
-}, {
-"base": "Reference",
-"class": "ChessEngine",
-"language": "GDScript",
-"path": "res://src/chess/ChessEngine.gd"
-}, {
-"base": "Reference",
-"class": "Move",
-"language": "GDScript",
-"path": "res://src/chess/Move.gd"
-} ]
-_global_script_class_icons={
-"Chess": "",
-"ChessEngine": "",
-"Move": ""
-}
+config_version=5
 
 [application]
 
 config/name="stopwaitingforgodot-chess"
 run/main_scene="res://src/Game.tscn"
+config/features=PackedStringArray("4.3")
 config/icon="res://icon.png"
 
 [autoload]
@@ -42,12 +21,10 @@ Settings="*res://src/Settings.gd"
 
 [display]
 
-window/size/width=1280
-window/size/height=720
-window/dpi/allow_hidpi=true
+window/size/viewport_width=1280
+window/size/viewport_height=720
 window/energy_saving/keep_screen_on=false
 window/stretch/mode="2d"
-window/stretch/aspect="keep"
 
 [global]
 
@@ -61,8 +38,8 @@ theme/custom_font="res://assets/orkney/Orkney.tres"
 
 toggle_fullscreen={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777254,"physical_scancode":0,"unicode":0,"echo":false,"script":null)
- ]
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194342,"physical_keycode":0,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
 }
 
 [physics]
@@ -71,7 +48,6 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
+environment/defaults/default_environment="res://default_env.tres"
 quality/driver/driver_name="GLES2"
 vram_compression/import_etc=true
-vram_compression/import_etc2=false
-environment/default_environment="res://default_env.tres"

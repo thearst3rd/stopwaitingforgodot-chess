@@ -1,4 +1,4 @@
-extends Reference
+extends RefCounted
 class_name ChessEngine
 
 # The class that handles the actual chess AI
@@ -115,9 +115,9 @@ func get_move(chess: Chess) -> Array:
 	num_positions_searched = 0
 	num_positions_searched_q = 0
 	num_positions_evaluated = 0
-	var before_time := OS.get_ticks_usec()
+	var before_time := Time.get_ticks_usec()
 	var r := negamax(chess, search_depth, -INF_SCORE, INF_SCORE)
-	search_time = OS.get_ticks_usec() - before_time
+	search_time = Time.get_ticks_usec() - before_time
 	# We generate the moves without notating them, but we need the final move notated
 	var moves := chess.generate_legal_moves()
 	for m in moves:
@@ -267,7 +267,7 @@ func order_moves(chess: Chess, moves: Array) -> Array:
 		moves_and_bonuses.push_back([move, bonus])
 
 	# Sort array
-	moves_and_bonuses.sort_custom(self, "sort_comparison")
+	moves_and_bonuses.sort_custom(Callable(self, "sort_comparison"))
 
 	var sorted_moves := []
 	for move_and_bonus in moves_and_bonuses:
