@@ -1,638 +1,494 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=20 format=3 uid="uid://fctovp54ejhp"]
 
-[ext_resource path="res://assets/orkney/Orkney Bold.otf" type="DynamicFontData" id=1]
-[ext_resource path="res://src/CreditsMenu.gd" type="Script" id=2]
-[ext_resource path="res://assets/orkney/Orkney Bold Italic.otf" type="DynamicFontData" id=3]
-[ext_resource path="res://assets/orkney/Orkney Regular.otf" type="DynamicFontData" id=4]
-[ext_resource path="res://assets/orkney/Orkney Light Italic.otf" type="DynamicFontData" id=5]
-[ext_resource path="res://assets/tatiana/wN.svg" type="Texture" id=6]
+[ext_resource type="FontFile" uid="uid://bidxcbkineva8" path="res://assets/orkney/Orkney Bold.otf" id="1"]
+[ext_resource type="Script" path="res://src/CreditsMenu.gd" id="2"]
+[ext_resource type="FontFile" uid="uid://bhyf0nnv2h6je" path="res://assets/orkney/Orkney Bold Italic.otf" id="3"]
+[ext_resource type="FontFile" uid="uid://oaepv3kovg87" path="res://assets/orkney/Orkney Regular.otf" id="4"]
+[ext_resource type="FontFile" uid="uid://d0787hj745m7v" path="res://assets/orkney/Orkney Light Italic.otf" id="5"]
+[ext_resource type="Texture2D" uid="uid://cfyj5dempsrum" path="res://assets/tatiana/wN.svg" id="6"]
 
-[sub_resource type="DynamicFont" id=1]
-size = 32
-font_data = ExtResource( 1 )
+[sub_resource type="FontFile" id="1"]
+fallbacks = Array[Font]([ExtResource("1"), ExtResource("1"), ExtResource("1")])
+subpixel_positioning = 0
+msdf_pixel_range = 14
+msdf_size = 128
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
 
-[sub_resource type="DynamicFont" id=2]
-size = 22
-font_data = ExtResource( 3 )
+[sub_resource type="FontFile" id="2"]
+fallbacks = Array[Font]([ExtResource("3"), ExtResource("3"), ExtResource("3")])
+subpixel_positioning = 0
+msdf_pixel_range = 14
+msdf_size = 128
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
 
-[sub_resource type="DynamicFont" id=3]
-font_data = ExtResource( 5 )
+[sub_resource type="FontFile" id="3"]
+fallbacks = Array[Font]([ExtResource("5")])
+subpixel_positioning = 0
+msdf_pixel_range = 14
+msdf_size = 128
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
 
-[sub_resource type="DynamicFont" id=4]
-size = 20
-font_data = ExtResource( 1 )
+[sub_resource type="FontFile" id="4"]
+fallbacks = Array[Font]([ExtResource("1"), ExtResource("1"), ExtResource("1")])
+subpixel_positioning = 0
+msdf_pixel_range = 14
+msdf_size = 128
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
 
-[sub_resource type="DynamicFont" id=6]
-size = 22
-font_data = ExtResource( 1 )
+[sub_resource type="FontFile" id="6"]
+fallbacks = Array[Font]([ExtResource("1"), ExtResource("1"), ExtResource("1")])
+subpixel_positioning = 0
+msdf_pixel_range = 14
+msdf_size = 128
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
 
-[sub_resource type="DynamicFont" id=7]
-size = 22
-font_data = ExtResource( 4 )
+[sub_resource type="FontFile" id="7"]
+fallbacks = Array[Font]([ExtResource("4"), ExtResource("4"), ExtResource("4")])
+subpixel_positioning = 0
+msdf_pixel_range = 14
+msdf_size = 128
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
 
-[sub_resource type="DynamicFont" id=8]
-size = 30
-font_data = ExtResource( 1 )
+[sub_resource type="FontFile" id="8"]
+fallbacks = Array[Font]([ExtResource("1"), ExtResource("1"), ExtResource("1")])
+subpixel_positioning = 0
+msdf_pixel_range = 14
+msdf_size = 128
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
 
-[sub_resource type="DynamicFont" id=9]
-font_data = ExtResource( 1 )
+[sub_resource type="FontFile" id="9"]
+fallbacks = Array[Font]([ExtResource("1"), ExtResource("1"), ExtResource("1")])
+subpixel_positioning = 0
+msdf_pixel_range = 14
+msdf_size = 128
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
 
-[sub_resource type="DynamicFont" id=10]
-size = 19
-font_data = ExtResource( 1 )
+[sub_resource type="FontFile" id="10"]
+fallbacks = Array[Font]([ExtResource("1"), ExtResource("1"), ExtResource("1")])
+subpixel_positioning = 0
+msdf_pixel_range = 14
+msdf_size = 128
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
 
-[sub_resource type="DynamicFont" id=11]
-size = 22
-font_data = ExtResource( 1 )
+[sub_resource type="FontFile" id="11"]
+fallbacks = Array[Font]([ExtResource("1"), ExtResource("1"), ExtResource("1")])
+subpixel_positioning = 0
+msdf_pixel_range = 14
+msdf_size = 128
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
 
-[sub_resource type="DynamicFont" id=12]
-size = 12
-font_data = ExtResource( 4 )
+[sub_resource type="FontFile" id="12"]
+fallbacks = Array[Font]([ExtResource("4"), ExtResource("4"), ExtResource("4")])
+subpixel_positioning = 0
+msdf_pixel_range = 14
+msdf_size = 128
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
 
-[sub_resource type="DynamicFont" id=13]
-size = 10
-font_data = ExtResource( 4 )
+[sub_resource type="FontFile" id="13"]
+fallbacks = Array[Font]([ExtResource("4"), ExtResource("4"), ExtResource("4")])
+subpixel_positioning = 0
+msdf_pixel_range = 14
+msdf_size = 128
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
 
-[sub_resource type="DynamicFont" id=14]
-size = 12
-font_data = ExtResource( 5 )
+[sub_resource type="FontFile" id="14"]
+fallbacks = Array[Font]([ExtResource("5")])
+subpixel_positioning = 0
+msdf_pixel_range = 14
+msdf_size = 128
+cache/0/16/0/ascent = 0.0
+cache/0/16/0/descent = 0.0
+cache/0/16/0/underline_position = 0.0
+cache/0/16/0/underline_thickness = 0.0
+cache/0/16/0/scale = 1.0
 
 [node name="CreditsMenu" type="ColorRect"]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0, 0, 0, 0.392157 )
-script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+color = Color(0, 0, 0, 0.392157)
+script = ExtResource("2")
 
 [node name="M" type="MarginContainer" parent="."]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_constants/margin_right = 75
-custom_constants/margin_top = 75
-custom_constants/margin_left = 75
-custom_constants/margin_bottom = 75
-__meta__ = {
-"_edit_use_anchors_": false
-}
+theme_override_constants/margin_left = 75
+theme_override_constants/margin_top = 75
+theme_override_constants/margin_right = 75
+theme_override_constants/margin_bottom = 75
 
 [node name="Panel" type="PanelContainer" parent="M"]
-margin_left = 75.0
-margin_top = 75.0
-margin_right = 1205.0
-margin_bottom = 645.0
+layout_mode = 2
 
 [node name="M" type="MarginContainer" parent="M/Panel"]
-margin_left = 7.0
-margin_top = 7.0
-margin_right = 1123.0
-margin_bottom = 563.0
-custom_constants/margin_right = 12
-custom_constants/margin_top = 12
-custom_constants/margin_left = 12
-custom_constants/margin_bottom = 12
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
 
 [node name="ScrollContainer" type="ScrollContainer" parent="M/Panel/M"]
-margin_left = 12.0
-margin_top = 12.0
-margin_right = 1104.0
-margin_bottom = 544.0
+layout_mode = 2
 size_flags_vertical = 3
-scroll_horizontal_enabled = false
 
 [node name="V" type="VBoxContainer" parent="M/Panel/M/ScrollContainer"]
-margin_right = 1080.0
-margin_bottom = 2432.0
+layout_mode = 2
 size_flags_horizontal = 3
-custom_constants/separation = 12
+theme_override_constants/separation = 12
 
 [node name="Title" type="Label" parent="M/Panel/M/ScrollContainer/V"]
-margin_right = 1080.0
-margin_bottom = 38.0
-custom_fonts/font = SubResource( 1 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("1")
 text = "Credits"
-align = 1
+horizontal_alignment = 1
 
 [node name="GameTitle" type="HBoxContainer" parent="M/Panel/M/ScrollContainer/V"]
-margin_top = 50.0
-margin_right = 1080.0
-margin_bottom = 76.0
-custom_constants/separation = 6
+layout_mode = 2
+theme_override_constants/separation = 6
 alignment = 1
 
 [node name="Name" type="Label" parent="M/Panel/M/ScrollContainer/V/GameTitle"]
-margin_left = 236.0
-margin_right = 553.0
-margin_bottom = 26.0
-custom_fonts/font = SubResource( 2 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("2")
 text = "#StopWaitingForGodot Chess"
 
 [node name="Version" type="Label" parent="M/Panel/M/ScrollContainer/V/GameTitle"]
-margin_left = 559.0
-margin_top = 2.0
-margin_right = 567.0
-margin_bottom = 23.0
-custom_fonts/font = SubResource( 3 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("3")
 text = "v"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="By" type="Label" parent="M/Panel/M/ScrollContainer/V/GameTitle"]
-margin_left = 573.0
-margin_top = 3.0
-margin_right = 593.0
-margin_bottom = 23.0
+layout_mode = 2
 text = "by"
 
 [node name="Author" type="Label" parent="M/Panel/M/ScrollContainer/V/GameTitle"]
-margin_left = 599.0
-margin_top = 1.0
-margin_right = 844.0
-margin_bottom = 25.0
-custom_fonts/font = SubResource( 4 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("4")
 text = "Terry Hearst (thearst3rd)"
 
 [node name="Desc" type="Label" parent="M/Panel/M/ScrollContainer/V"]
-margin_top = 88.0
-margin_right = 1080.0
-margin_bottom = 200.0
+layout_mode = 2
 text = "#StopWaitingForGodot Chess is my entry to Terry Cavanaugh's #StopWaitingForGodot game jam. I had a lot of fun working on this project! I previously attempted to make chess in Godot some months ago but failed miserably. But after participating in the GMTK Game Jam 2021 and using Godot for that, I felt I had a better shot and that I could give it another go. I learned a lot during this project, including how to use the built in drag and drop functionality, groups, singletons, and defining my own object classes! I documented some of the development process in the readme of the GitHub repository, go check it out if you're interested!"
-autowrap = true
 
 [node name="RepoLinkCenterer" type="Control" parent="M/Panel/M/ScrollContainer/V"]
-margin_top = 212.0
-margin_right = 1080.0
-margin_bottom = 232.0
-rect_min_size = Vector2( 0, 20 )
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
 
 [node name="RepoLink" type="LinkButton" parent="M/Panel/M/ScrollContainer/V/RepoLinkCenterer"]
+layout_mode = 0
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -221.0
-margin_top = -10.0
-margin_right = 221.0
-margin_bottom = 10.0
+offset_left = -221.0
+offset_top = -10.0
+offset_right = 221.0
+offset_bottom = 10.0
 size_flags_horizontal = 0
-custom_colors/font_color = Color( 0.239216, 0.537255, 1, 1 )
-custom_colors/font_color_hover = Color( 0.439216, 0.662745, 1, 1 )
-custom_colors/font_color_pressed = Color( 0.1704, 0.38624, 0.71, 1 )
+theme_override_colors/font_color = Color(0.239216, 0.537255, 1, 1)
+theme_override_colors/font_pressed_color = Color(0.1704, 0.38624, 0.71, 1)
+theme_override_colors/font_hover_color = Color(0.439216, 0.662745, 1, 1)
 text = "https://github.com/thearst3rd/stopwaitingforgodot-chess"
 
 [node name="CreditsInRepo" type="Label" parent="M/Panel/M/ScrollContainer/V"]
-margin_top = 244.0
-margin_right = 1080.0
-margin_bottom = 264.0
+layout_mode = 2
 text = "Additionally, these credits (with links and more detail) are available in the GitHub repo - in CREDITS.md."
-autowrap = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Spacer" type="Control" parent="M/Panel/M/ScrollContainer/V"]
-margin_top = 276.0
-margin_right = 1080.0
-margin_bottom = 286.0
-rect_min_size = Vector2( 0, 10 )
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
 
 [node name="Assets" type="Label" parent="M/Panel/M/ScrollContainer/V"]
-margin_top = 298.0
-margin_right = 1080.0
-margin_bottom = 336.0
-custom_fonts/font = SubResource( 1 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("1")
 text = "Assets"
-align = 1
+horizontal_alignment = 1
 
 [node name="CenterContainer" type="CenterContainer" parent="M/Panel/M/ScrollContainer/V"]
-margin_top = 348.0
-margin_right = 1080.0
-margin_bottom = 728.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+layout_mode = 2
 
 [node name="GridContainer" type="GridContainer" parent="M/Panel/M/ScrollContainer/V/CenterContainer"]
-margin_left = 113.0
-margin_right = 967.0
-margin_bottom = 380.0
-custom_constants/vseparation = 0
-custom_constants/hseparation = 20
+layout_mode = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 0
 columns = 5
 
 [node name="Control" type="Control" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_right = 60.0
-margin_bottom = 20.0
+layout_mode = 2
 
 [node name="Control2" type="Control" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 80.0
-margin_right = 197.0
-margin_bottom = 20.0
+layout_mode = 2
 
 [node name="Name" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 217.0
-margin_right = 432.0
-margin_bottom = 20.0
+layout_mode = 2
 text = "Name"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="Author" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 452.0
-margin_right = 613.0
-margin_bottom = 20.0
+layout_mode = 2
 text = "Author"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="License" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 633.0
-margin_right = 854.0
-margin_bottom = 20.0
+layout_mode = 2
 text = "License"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="TatianaRect" type="TextureRect" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_top = 20.0
-margin_right = 60.0
-margin_bottom = 80.0
-rect_min_size = Vector2( 60, 60 )
-texture = ExtResource( 6 )
-expand = true
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+texture = ExtResource("6")
+expand_mode = 1
 
 [node name="TatianaLabel1" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 80.0
-margin_top = 40.0
-margin_right = 197.0
-margin_bottom = 60.0
+layout_mode = 2
 text = "Piece Graphics"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="TatianaLabel2" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 217.0
-margin_top = 37.0
-margin_right = 432.0
-margin_bottom = 63.0
-custom_fonts/font = SubResource( 6 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("6")
 text = "tatiana"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="TatianaLabel3" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 452.0
-margin_top = 37.0
-margin_right = 613.0
-margin_bottom = 63.0
-custom_fonts/font = SubResource( 6 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("6")
 text = "sadsnake1"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="TatianaLabel4" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 633.0
-margin_top = 36.0
-margin_right = 854.0
-margin_bottom = 63.0
-custom_fonts/font = SubResource( 7 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("7")
 text = "CC BY-NC-SA 4.0"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="OrkneyLabel1" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_top = 80.0
-margin_right = 60.0
-margin_bottom = 140.0
-rect_min_size = Vector2( 0, 60 )
-custom_fonts/font = SubResource( 8 )
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_fonts/font = SubResource("8")
 text = "Abg"
-valign = 1
+vertical_alignment = 1
 
 [node name="OrkneyLabel2" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 80.0
-margin_top = 100.0
-margin_right = 197.0
-margin_bottom = 120.0
+layout_mode = 2
 text = "Font"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="OrkneyLabel3" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 217.0
-margin_top = 97.0
-margin_right = 432.0
-margin_bottom = 123.0
-custom_fonts/font = SubResource( 6 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("6")
 text = "Orkney"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="OrkneyLabel4" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 452.0
-margin_top = 87.0
-margin_right = 613.0
-margin_bottom = 132.0
-custom_constants/line_spacing = -6
-custom_fonts/font = SubResource( 9 )
+layout_mode = 2
+theme_override_constants/line_spacing = -6
+theme_override_fonts/font = SubResource("9")
 text = "Samuel Oakes
 and
 Alfredo Marco Pradil"
-align = 1
+horizontal_alignment = 1
 
 [node name="OrkneyLabel5" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 633.0
-margin_top = 84.0
-margin_right = 854.0
-margin_bottom = 135.0
-custom_constants/line_spacing = -3
-custom_fonts/font = SubResource( 7 )
+layout_mode = 2
+theme_override_constants/line_spacing = -3
+theme_override_fonts/font = SubResource("7")
 text = "SIL Open Font License
 (OFL, see below)"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="Control3" type="Control" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_top = 140.0
-margin_right = 60.0
-margin_bottom = 200.0
-rect_min_size = Vector2( 0, 60 )
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
 
 [node name="MoveLabel1" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 80.0
-margin_top = 160.0
-margin_right = 197.0
-margin_bottom = 180.0
+layout_mode = 2
 text = "Move Sound"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="MoveLabel2" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 217.0
-margin_top = 157.0
-margin_right = 432.0
-margin_bottom = 183.0
-custom_fonts/font = SubResource( 6 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("6")
 text = "move.wav"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="MoveLabel3" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 452.0
-margin_top = 157.0
-margin_right = 613.0
-margin_bottom = 183.0
-custom_fonts/font = SubResource( 6 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("6")
 text = "thearst3rd"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="MoveLabel4" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 633.0
-margin_top = 156.0
-margin_right = 854.0
-margin_bottom = 183.0
-custom_fonts/font = SubResource( 7 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("7")
 text = "CC0"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="Control4" type="Control" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_top = 200.0
-margin_right = 60.0
-margin_bottom = 260.0
-rect_min_size = Vector2( 0, 60 )
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
 
 [node name="CaptureLabel1" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 80.0
-margin_top = 220.0
-margin_right = 197.0
-margin_bottom = 240.0
+layout_mode = 2
 text = "Capture Sound"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="CaptureLabel2" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 217.0
-margin_top = 217.0
-margin_right = 432.0
-margin_bottom = 243.0
-custom_fonts/font = SubResource( 6 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("6")
 text = "capture.wav"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="CaptureLabel3" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 452.0
-margin_top = 217.0
-margin_right = 613.0
-margin_bottom = 243.0
-custom_fonts/font = SubResource( 6 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("6")
 text = "thearst3rd"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="CaptureLabel4" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 633.0
-margin_top = 216.0
-margin_right = 854.0
-margin_bottom = 243.0
-custom_fonts/font = SubResource( 7 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("7")
 text = "CC0"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="Control5" type="Control" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_top = 260.0
-margin_right = 60.0
-margin_bottom = 320.0
-rect_min_size = Vector2( 0, 60 )
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
 
 [node name="CheckLabel1" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 80.0
-margin_top = 280.0
-margin_right = 197.0
-margin_bottom = 300.0
+layout_mode = 2
 text = "Check Sound"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="CheckLabel2" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 217.0
-margin_top = 277.0
-margin_right = 432.0
-margin_bottom = 303.0
-custom_fonts/font = SubResource( 6 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("6")
 text = "Notification 1_1"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="CheckLabel3" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 452.0
-margin_top = 277.0
-margin_right = 613.0
-margin_bottom = 303.0
-custom_fonts/font = SubResource( 6 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("6")
 text = "Joao_Janz"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="CheckLabel4" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 633.0
-margin_top = 276.0
-margin_right = 854.0
-margin_bottom = 303.0
-custom_fonts/font = SubResource( 7 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("7")
 text = "CC BY-NC 3.0"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="Control6" type="Control" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_top = 320.0
-margin_right = 60.0
-margin_bottom = 380.0
-rect_min_size = Vector2( 0, 60 )
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
 
 [node name="TerminalLabel1" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 80.0
-margin_top = 340.0
-margin_right = 197.0
-margin_bottom = 360.0
+layout_mode = 2
 text = "Terminal Sound"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="TerminalLabel2" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 217.0
-margin_top = 338.0
-margin_right = 432.0
-margin_bottom = 361.0
-custom_fonts/font = SubResource( 10 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("10")
 text = "Chord Alert Notification"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="TerminalLabel3" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 452.0
-margin_top = 337.0
-margin_right = 613.0
-margin_bottom = 363.0
-custom_fonts/font = SubResource( 6 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("6")
 text = "graham_makes"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="TerminalLabel4" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer/GridContainer"]
-margin_left = 633.0
-margin_top = 336.0
-margin_right = 854.0
-margin_bottom = 363.0
-custom_fonts/font = SubResource( 7 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("7")
 text = "CC BY 3.0"
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
 
 [node name="Spacer2" type="Control" parent="M/Panel/M/ScrollContainer/V"]
-margin_top = 740.0
-margin_right = 1080.0
-margin_bottom = 750.0
-rect_min_size = Vector2( 0, 10 )
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
 
 [node name="Licenses" type="Label" parent="M/Panel/M/ScrollContainer/V"]
-margin_top = 762.0
-margin_right = 1080.0
-margin_bottom = 800.0
-custom_fonts/font = SubResource( 1 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("1")
 text = "Licenses"
-align = 1
+horizontal_alignment = 1
 
 [node name="CenterContainer2" type="CenterContainer" parent="M/Panel/M/ScrollContainer/V"]
-margin_top = 812.0
-margin_right = 1080.0
-margin_bottom = 2383.0
+layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="M/Panel/M/ScrollContainer/V/CenterContainer2"]
-margin_left = 38.0
-margin_right = 1042.0
-margin_bottom = 1571.0
+layout_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="M/Panel/M/ScrollContainer/V/CenterContainer2/HBoxContainer"]
-margin_right = 600.0
-margin_bottom = 1571.0
-custom_constants/separation = 28
+layout_mode = 2
+theme_override_constants/separation = 28
 
 [node name="Godot" type="VBoxContainer" parent="M/Panel/M/ScrollContainer/V/CenterContainer2/HBoxContainer/VBoxContainer"]
-margin_right = 600.0
-margin_bottom = 359.0
-custom_constants/separation = 12
+layout_mode = 2
+theme_override_constants/separation = 12
 
 [node name="Title" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer2/HBoxContainer/VBoxContainer/Godot"]
-margin_right = 600.0
-margin_bottom = 26.0
-custom_fonts/font = SubResource( 11 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("11")
 text = "Godot Engine"
-align = 1
+horizontal_alignment = 1
 
 [node name="License Text" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer2/HBoxContainer/VBoxContainer/Godot"]
-margin_top = 38.0
-margin_right = 600.0
-margin_bottom = 359.0
-rect_min_size = Vector2( 600, 0 )
-custom_fonts/font = SubResource( 12 )
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+theme_override_fonts/font = SubResource("12")
 text = "This game uses Godot Engine, available under the following license:
 
 Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur. Copyright (c) 2014-2021 Godot Engine contributors.
@@ -642,49 +498,37 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
-autowrap = true
 
 [node name="FreeType" type="VBoxContainer" parent="M/Panel/M/ScrollContainer/V/CenterContainer2/HBoxContainer/VBoxContainer"]
-margin_top = 387.0
-margin_right = 600.0
-margin_bottom = 440.0
-custom_constants/separation = 12
+layout_mode = 2
+theme_override_constants/separation = 12
 
 [node name="Title" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer2/HBoxContainer/VBoxContainer/FreeType"]
-margin_right = 600.0
-margin_bottom = 26.0
-custom_fonts/font = SubResource( 11 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("11")
 text = "FreeType"
-align = 1
+horizontal_alignment = 1
 
 [node name="License Text" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer2/HBoxContainer/VBoxContainer/FreeType"]
-margin_top = 38.0
-margin_right = 600.0
-margin_bottom = 53.0
-rect_min_size = Vector2( 600, 0 )
-custom_fonts/font = SubResource( 12 )
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+theme_override_fonts/font = SubResource("12")
 text = "Portions of this software are copyright © 2021 The FreeType Project (www.freetype.org). All rights reserved."
-autowrap = true
 
 [node name="ENet" type="VBoxContainer" parent="M/Panel/M/ScrollContainer/V/CenterContainer2/HBoxContainer/VBoxContainer"]
-margin_top = 468.0
-margin_right = 600.0
-margin_bottom = 791.0
-custom_constants/separation = 12
+layout_mode = 2
+theme_override_constants/separation = 12
 
 [node name="Title" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer2/HBoxContainer/VBoxContainer/ENet"]
-margin_right = 600.0
-margin_bottom = 26.0
-custom_fonts/font = SubResource( 11 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("11")
 text = "ENet"
-align = 1
+horizontal_alignment = 1
 
 [node name="License Text" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer2/HBoxContainer/VBoxContainer/ENet"]
-margin_top = 38.0
-margin_right = 600.0
-margin_bottom = 323.0
-rect_min_size = Vector2( 600, 0 )
-custom_fonts/font = SubResource( 12 )
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+theme_override_fonts/font = SubResource("12")
 text = "Copyright (c) 2002-2020 Lee Salzman
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -692,27 +536,21 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
-autowrap = true
 
 [node name="MBedTLS" type="VBoxContainer" parent="M/Panel/M/ScrollContainer/V/CenterContainer2/HBoxContainer/VBoxContainer"]
-margin_top = 819.0
-margin_right = 600.0
-margin_bottom = 1052.0
-custom_constants/separation = 12
+layout_mode = 2
+theme_override_constants/separation = 12
 
 [node name="Title" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer2/HBoxContainer/VBoxContainer/MBedTLS"]
-margin_right = 600.0
-margin_bottom = 26.0
-custom_fonts/font = SubResource( 11 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("11")
 text = "MBedTLS"
-align = 1
+horizontal_alignment = 1
 
 [node name="License Text" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer2/HBoxContainer/VBoxContainer/MBedTLS"]
-margin_top = 38.0
-margin_right = 600.0
-margin_bottom = 233.0
-rect_min_size = Vector2( 600, 0 )
-custom_fonts/font = SubResource( 12 )
+custom_minimum_size = Vector2(600, 0)
+layout_mode = 2
+theme_override_fonts/font = SubResource("12")
 text = "Copyright The Mbed TLS Contributors
 
 Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
@@ -720,32 +558,25 @@ Licensed under the Apache License, Version 2.0 (the \"License\"); you may not us
 http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License."
-autowrap = true
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="M/Panel/M/ScrollContainer/V/CenterContainer2/HBoxContainer"]
-margin_left = 604.0
-margin_right = 1004.0
-margin_bottom = 1571.0
-custom_constants/separation = 24
+layout_mode = 2
+theme_override_constants/separation = 24
 
 [node name="OFL" type="VBoxContainer" parent="M/Panel/M/ScrollContainer/V/CenterContainer2/HBoxContainer/VBoxContainer2"]
-margin_right = 400.0
-margin_bottom = 1571.0
-custom_constants/separation = 12
+layout_mode = 2
+theme_override_constants/separation = 12
 
 [node name="Title" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer2/HBoxContainer/VBoxContainer2/OFL"]
-margin_right = 400.0
-margin_bottom = 26.0
-custom_fonts/font = SubResource( 11 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("11")
 text = "Orkney (OFL)"
-align = 1
+horizontal_alignment = 1
 
 [node name="License Text" type="Label" parent="M/Panel/M/ScrollContainer/V/CenterContainer2/HBoxContainer/VBoxContainer2/OFL"]
-margin_top = 38.0
-margin_right = 400.0
-margin_bottom = 1571.0
-rect_min_size = Vector2( 400, 0 )
-custom_fonts/font = SubResource( 13 )
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_override_fonts/font = SubResource("13")
 text = "Copyright (c) 2015, Alfredo Marco Pradil (https://behance.net/pradil), Samuel Oakes (http://oakes.co/), Cristiano Sobral (https://www.behance.net/cssobral20f492), with Reserved Font Name Orkney.
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
@@ -840,31 +671,24 @@ DAMAGES, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF THE USE OR INABILITY TO USE THE FONT SOFTWARE OR FROM
 OTHER DEALINGS IN THE FONT SOFTWARE.
 "
-autowrap = true
 
 [node name="Spacer3" type="Control" parent="M/Panel/M/ScrollContainer/V"]
-margin_top = 2395.0
-margin_right = 1080.0
-margin_bottom = 2405.0
-rect_min_size = Vector2( 0, 10 )
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
 
 [node name="Footer" type="Label" parent="M/Panel/M/ScrollContainer/V"]
-margin_top = 2417.0
-margin_right = 1080.0
-margin_bottom = 2432.0
-custom_fonts/font = SubResource( 14 )
+layout_mode = 2
+theme_override_fonts/font = SubResource("14")
 text = "Man I spent way too long making this credits screen, I should've just linked to the GitHub and called it at that. It does look cool at least :)"
-align = 1
+horizontal_alignment = 1
 
 [node name="BackButton" type="Button" parent="."]
-margin_left = 1150.0
-margin_top = 40.0
-margin_right = 1196.0
-margin_bottom = 66.0
+layout_mode = 0
+offset_left = 1150.0
+offset_top = 40.0
+offset_right = 1196.0
+offset_bottom = 66.0
 text = "Back"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [connection signal="pressed" from="M/Panel/M/ScrollContainer/V/RepoLinkCenterer/RepoLink" to="." method="_on_RepoLink_pressed"]
 [connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]

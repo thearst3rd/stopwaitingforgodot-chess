@@ -1,4 +1,5 @@
 extends Control
+class_name ChessGame
 
 
 var chess := Chess.new()
@@ -8,33 +9,31 @@ var legal_moves = null
 var bot_thinking := false
 var bot_thinking_thread: Thread = null
 
-onready var board := $C/V/C/V/H/Board as GridContainer
-onready var title_label := $C/V/H/Title as Label
-onready var title_text := title_label.text
-onready var bot_timer := $C/V/C/V/H2/BotTimer as Timer
-onready var bot_check := $C/V/C/V/H2/BotCheck as CheckBox
+@onready var board := $C/V/C/V/H/Board as GridContainer
+@onready var title_label := $C/V/H/Title as Label
+@onready var title_text := title_label.text
+@onready var bot_timer := $C/V/C/V/H2/BotTimer as Timer
+@onready var bot_check := $C/V/C/V/H2/BotCheck as CheckBox
 
-onready var reset_button := $C/V/C/V/H2/ResetButton as Button
-onready var undo_button := $C/V/C/V/H2/UndoButton as Button
-onready var bot_button := $C/V/C/V/H2/BotButton as Button
-onready var fen_text := $C/V/H2/FenText as LineEdit
-onready var invalid_fen := $C/V/H2/InvalidFen as Label
-onready var invalid_fen_timer := $C/V/H2/InvalidFenTimer as Timer
+@onready var reset_button := $C/V/C/V/H2/ResetButton as Button
+@onready var undo_button := $C/V/C/V/H2/UndoButton as Button
+@onready var bot_button := $C/V/C/V/H2/BotButton as Button
+@onready var fen_text := $C/V/H2/FenText as LineEdit
+@onready var invalid_fen := $C/V/H2/InvalidFen as Label
+@onready var invalid_fen_timer := $C/V/H2/InvalidFenTimer as Timer
 
-onready var san_display := $C/V/C/V/H/SanDisplay as ColorRect
+@onready var san_display := $C/V/C/V/H/SanDisplay as ColorRect
 
-onready var move_sound := $MoveSound as AudioStreamPlayer
-onready var capture_sound := $CaptureSound as AudioStreamPlayer
-onready var check_sound := $CheckSound as AudioStreamPlayer
-onready var terminal_sound := $TerminalSound as AudioStreamPlayer
+@onready var move_sound := $MoveSound as AudioStreamPlayer
+@onready var capture_sound := $CaptureSound as AudioStreamPlayer
+@onready var check_sound := $CheckSound as AudioStreamPlayer
+@onready var terminal_sound := $TerminalSound as AudioStreamPlayer
 
 
 func _ready() -> void:
 	randomize()
-	get_tree().call_group("Squares", "connect", "piece_grabbed", self, "_on_Square_piece_grabbed")
-	get_tree().call_group("Squares", "connect", "piece_dropped", self, "_on_Square_piece_dropped")
+	get_tree().call_group("Squares", "_connect_square_signals", self)
 	update_state()
-
 
 # Thread must be disposed (or "joined"), for portability.
 func _exit_tree() -> void:
@@ -84,6 +83,7 @@ func _on_FenText_text_entered(new_text: String) -> void:
 
 
 func _on_Square_piece_grabbed(from_index: int) -> void:
+	print("piece grabbed")
 	if Settings.show_dests:
 		var target_squares := []
 		for move in legal_moves:
@@ -93,9 +93,9 @@ func _on_Square_piece_grabbed(from_index: int) -> void:
 			if square.index in target_squares:
 				var indicator = square.get_node("LegalMoveIndicator/ColorRect")
 				if chess.pieces[square.index] == null:
-					indicator.rect_min_size = Vector2(15, 15)
+					indicator.custom_minimum_size = Vector2(15, 15)
 				else:
-					indicator.rect_min_size = Vector2(40, 40)
+					indicator.custom_minimum_size = Vector2(40, 40)
 				indicator.get_parent().show()
 
 
@@ -150,7 +150,7 @@ func update_state(after_move := false) -> void:
 	if chess.move_stack.size() > 0:
 		last_move = chess.move_stack[-1]
 
-	var result := chess.get_result()
+	var result := chess.get_data()
 	var game_over: bool = result != Chess.RESULT.ONGOING
 
 	var result_text := title_text
@@ -197,7 +197,7 @@ func update_state(after_move := false) -> void:
 	undo_button.disabled = bot_thinking
 
 	if after_move and last_move:
-		if Settings.sounds and OS.can_use_threads():
+		if Settings.sounds and OS.has_feature("threads"):
 			if last_move.en_passant or last_move.captured_piece:
 				capture_sound.play()
 			else:
@@ -218,9 +218,9 @@ func bot_play(with_timeout := false) -> void:
 	if with_timeout:
 		bot_timer.start()
 	else:
-		if OS.can_use_threads():
+		if OS.has_feature("threads"):
 			bot_thinking_thread = Thread.new()
-			var error = bot_thinking_thread.start(self, "bot_think")
+			var error = bot_thinking_thread.start(Callable(self, "bot_think"))
 			assert(not error)
 		else:
 			bot_think()
@@ -232,7 +232,7 @@ func bot_think() -> void:
 
 
 func bot_finalize(result: Array) -> void:
-	if OS.can_use_threads():
+	if OS.has_feature("threads"):
 		bot_thinking_thread.wait_to_finish()
 		bot_thinking_thread = null
 	print("%s  score: %d  searched: %d %d  eval: %d  time: %dms" % [result[1].notation_san, result[0],

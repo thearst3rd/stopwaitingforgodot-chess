@@ -15,12 +15,17 @@ var grabbable := false
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
-		if event.button_index == BUTTON_LEFT and not event.pressed:
-			$Piece.modulate = Color.white
+		if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+			$Piece.modulate = Color.WHITE
 			$LegalMoveIndicator.hide()
 
+func _connect_square_signals(game: ChessGame):
+	print("here")
+	connect("piece_grabbed", game._on_Square_piece_grabbed);
+	connect("piece_dropped", game._on_Square_piece_dropped);
 
-func get_drag_data(_position: Vector2):
+
+func _get_drag_data(_position: Vector2):
 	if $Piece.texture == null or not grabbable:
 		return null
 
@@ -29,11 +34,11 @@ func get_drag_data(_position: Vector2):
 	var drag_preview_texture := TextureRect.new()
 	drag_preview_texture.expand = true
 	drag_preview_texture.texture = $Piece.texture
-	drag_preview_texture.rect_size = $Piece.rect_size
+	drag_preview_texture.size = $Piece.size
 
 	var drag_preview_control := Control.new()
 	drag_preview_control.add_child(drag_preview_texture)
-	drag_preview_texture.rect_position = -0.5 * $Piece.rect_size
+	drag_preview_texture.position = -0.5 * $Piece.size
 
 	set_drag_preview(drag_preview_control)
 
@@ -44,7 +49,7 @@ func get_drag_data(_position: Vector2):
 	return data
 
 
-func can_drop_data(_position: Vector2, data) -> bool:
+func _can_drop_data(_position: Vector2, data) -> bool:
 	if typeof(data) != TYPE_DICTIONARY:
 		return false
 
@@ -54,5 +59,5 @@ func can_drop_data(_position: Vector2, data) -> bool:
 	return true
 
 
-func drop_data(_position: Vector2, data) -> void:
+func _drop_data(_position: Vector2, data) -> void:
 	emit_signal("piece_dropped", data["from_square"], index)

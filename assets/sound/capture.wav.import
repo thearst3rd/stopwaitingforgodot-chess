@@ -1,13 +1,14 @@
 [remap]
 
 importer="wav"
-type="AudioStreamSample"
-path="res://.import/capture.wav-6749b4ec2c3633cde8cf3988fd7ab594.sample"
+type="AudioStreamWAV"
+uid="uid://dy6o2j8gx7x32"
+path="res://.godot/imported/capture.wav-6749b4ec2c3633cde8cf3988fd7ab594.sample"
 
 [deps]
 
 source_file="res://assets/sound/capture.wav"
-dest_files=[ "res://.import/capture.wav-6749b4ec2c3633cde8cf3988fd7ab594.sample" ]
+dest_files=["res://.godot/imported/capture.wav-6749b4ec2c3633cde8cf3988fd7ab594.sample"]
 
 [params]
 
@@ -17,5 +18,7 @@ force/max_rate=false
 force/max_rate_hz=44100
 edit/trim=false
 edit/normalize=false
-edit/loop=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
 compress/mode=0

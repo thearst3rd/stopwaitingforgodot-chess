@@ -1,4 +1,4 @@
-extends Reference
+extends RefCounted
 class_name Chess
 
 # This class contains all the code for a chess position, including legal move generation, game end conditions, etc
@@ -45,7 +45,7 @@ static func square_get_rank(square_index : int) -> int:
 static func square_get_name(square_index) -> String:
 	if typeof(square_index) != TYPE_INT or square_index < 0 or square_index >= 64:
 		return "-"
-	return char(ord("a") - 1 + square_get_file(square_index)) + str(square_get_rank(square_index))
+	return char("a".unicode_at(0) - 1 + square_get_file(square_index)) + str(square_get_rank(square_index))
 
 
 static func square_is_dark(square_index : int) -> bool:
@@ -57,13 +57,13 @@ static func square_is_dark(square_index : int) -> bool:
 static func square_index_from_name(square_name : String) -> int:
 	if square_name.length() < 2:
 		return -1
-	var file := ord(square_name[0]) - ord("a") + 1
+	var file := square_name[0].unicode_at(0) - "a".unicode_at(0) + 1
 	var rank := int(square_name[1])
 	return square_index(file, rank)
 
 
 static func piece_color(piece_char : String) -> bool:
-	return ord(piece_char) >= ord("a")
+	return piece_char.unicode_at(0) >= "a".unicode_at(0)
 
 
 var pieces := [
@@ -665,10 +665,10 @@ func generate_legal_moves(notate_san := true, only_captures := false) -> Array:
 ## GAME END CONDITIONS ##
 
 func is_game_over() -> bool:
-	return get_result() != RESULT.ONGOING
+	return get_data() != RESULT.ONGOING
 
 
-func get_result() -> int:
+func get_data() -> int:
 	# TODO: cache legal moves so we don't need to generate them again here
 	var moves := generate_legal_moves(false)
 	if moves.size() == 0:
@@ -894,7 +894,7 @@ func notate_moves(moves: Array) -> void:
 				if not (conflicting_files or conflicting_ranks):
 					conflicting_ranks = true
 				if conflicting_ranks:
-					move.notation_san += char(ord("a") + square_get_file(move.from_square) - 1)
+					move.notation_san += char("a".unicode_at(0) + square_get_file(move.from_square) - 1)
 				if conflicting_files:
 					move.notation_san += str(square_get_rank(move.from_square))
 

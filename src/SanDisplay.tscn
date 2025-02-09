@@ -3,8 +3,8 @@
 [ext_resource path="res://src/SanDisplay.gd" type="Script" id=1]
 
 [node name="SanDisplay" type="ColorRect"]
-margin_right = 250.0
-rect_min_size = Vector2( 265, 0 )
+offset_right = 250.0
+custom_minimum_size = Vector2( 265, 0 )
 color = Color( 0, 0, 0, 0.196078 )
 script = ExtResource( 1 )
 
@@ -17,7 +17,7 @@ __meta__ = {
 }
 
 [node name="Sans" type="GridContainer" parent="ScrollContainer"]
-custom_constants/vseparation = 0
+theme_override_constants/v_separation = 0
 columns = 3
 __meta__ = {
 "_edit_use_anchors_": false

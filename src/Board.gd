@@ -3,14 +3,14 @@ extends GridContainer
 
 const Square = preload("Square.tscn")
 
-export (Color) var light_square_color := Color(234.0/255.0, 223.0/255.0, 237.0/255.0)
-export (Color) var dark_square_color := Color(167.0/255.0, 129.0/255.0, 177.0/255.0)
+@export var light_square_color := Color(234.0/255.0, 223.0/255.0, 237.0/255.0)
+@export var dark_square_color := Color(167.0/255.0, 129.0/255.0, 177.0/255.0)
 
 
 func _ready() -> void:
 	for rank in range(8, 0, -1):
 		for file in range(1, 9):
-			var square := Square.instance()
+			var square := Square.instantiate()
 
 			square.file = file
 			square.rank = rank
