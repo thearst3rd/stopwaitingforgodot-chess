@@ -48,5 +48,5 @@ func update_moves(chess: Chess) -> void:
 
 	# Thanks to https://godotengine.org/qa/4106/how-to-change-scrollbarcontainers-scrollbar-position
 	await scroll_bar.changed
-# warning-ignore:narrowing_conversion
+	@warning_ignore("narrowing_conversion")
 	scroll_container.set_v_scroll(scroll_bar.max_value)

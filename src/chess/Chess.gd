@@ -33,24 +33,24 @@ static func square_index(file : int, rank : int) -> int:
 	return 8 * (8 - rank) + file - 1
 
 
-static func square_get_file(square_index : int) -> int:
-	return (square_index % 8) + 1
+static func square_get_file(square_idx : int) -> int:
+	return (square_idx % 8) + 1
 
 
-static func square_get_rank(square_index : int) -> int:
-# warning-ignore:integer_division
-	return 8 - (square_index / 8)
+static func square_get_rank(square_idx : int) -> int:
+	@warning_ignore("integer_division")
+	return 8 - (square_idx / 8)
 
 
-static func square_get_name(square_index) -> String:
-	if typeof(square_index) != TYPE_INT or square_index < 0 or square_index >= 64:
+static func square_get_name(square_idx) -> String:
+	if typeof(square_idx) != TYPE_INT or square_idx < 0 or square_idx >= 64:
 		return "-"
-	return char("a".unicode_at(0) - 1 + square_get_file(square_index)) + str(square_get_rank(square_index))
+	return char("a".unicode_at(0) - 1 + square_get_file(square_idx)) + str(square_get_rank(square_idx))
 
 
-static func square_is_dark(square_index : int) -> bool:
-	var file := square_get_file(square_index)
-	var rank := square_get_rank(square_index)
+static func square_is_dark(square_idx : int) -> bool:
+	var file := square_get_file(square_idx)
+	var rank := square_get_rank(square_idx)
 	return (rank + file) % 2 == 0
 
 
@@ -455,34 +455,34 @@ func generate_pseudo_legal_moves() -> Array:
 	return moves
 
 
-func generate_leaping_moves(col: bool, square_index: int, offsets: Array) -> Array:
+func generate_leaping_moves(col: bool, square_idx: int, offsets: Array) -> Array:
 	var moves := []
 	for offset in offsets:
 		var d_file := offset[0] as int
 		var d_rank := offset[1] as int
-		var file := square_get_file(square_index) + d_file
-		var rank := square_get_rank(square_index) + d_rank
+		var file := square_get_file(square_idx) + d_file
+		var rank := square_get_rank(square_idx) + d_rank
 		if file >= 1 and file <= 8 and rank >= 1 and rank <= 8:
 			var new_square := square_index(file, rank)
 			var piece = pieces[new_square]
 			if piece == null or piece_color(piece) != col:
-				moves.push_back(construct_move(square_index, new_square))
+				moves.push_back(construct_move(square_idx, new_square))
 	return moves
 
 
-func generate_sliding_moves(col: bool, square_index: int, offsets: Array) -> Array:
+func generate_sliding_moves(col: bool, square_idx: int, offsets: Array) -> Array:
 	var moves := []
 	for offset in offsets:
 		var d_file := offset[0] as int
 		var d_rank := offset[1] as int
-		var file := square_get_file(square_index) + d_file
-		var rank := square_get_rank(square_index) + d_rank
+		var file := square_get_file(square_idx) + d_file
+		var rank := square_get_rank(square_idx) + d_rank
 		while file >= 1 and file <= 8 and rank >= 1 and rank <= 8:
 			var new_square := square_index(file, rank)
 			var piece = pieces[new_square]
 			if piece != null && piece_color(piece) == col:
 				break
-			moves.push_back(construct_move(square_index, new_square))
+			moves.push_back(construct_move(square_idx, new_square))
 			if piece != null:
 				break
 			file += d_file
@@ -501,25 +501,25 @@ func generate_pawn_move_list(array: Array, from_square: int, to_square: int) -> 
 		array.push_back(construct_move(from_square, to_square))
 
 
-func generate_pawn_moves(col: bool, square_index: int) -> Array:
+func generate_pawn_moves(col: bool, square_idx: int) -> Array:
 	var moves := []
 	var delta := 8 if col else -8
-	if pieces[square_index + delta] == null:
-		generate_pawn_move_list(moves, square_index, square_index + delta)
+	if pieces[square_idx + delta] == null:
+		generate_pawn_move_list(moves, square_idx, square_idx + delta)
 		var target_rank = 7 if col else 2
-		if square_get_rank(square_index) == target_rank and pieces[square_index + 2 * delta] == null:
-			generate_pawn_move_list(moves, square_index, square_index + 2 * delta)
-	var file := square_get_file(square_index)
+		if square_get_rank(square_idx) == target_rank and pieces[square_idx + 2 * delta] == null:
+			generate_pawn_move_list(moves, square_idx, square_idx + 2 * delta)
+	var file := square_get_file(square_idx)
 	if file > 1:
-		var new_square := square_index + delta - 1
+		var new_square := square_idx + delta - 1
 		var piece = pieces[new_square]
 		if new_square == ep_target or (piece != null and piece_color(piece) != col):
-			generate_pawn_move_list(moves, square_index, new_square)
+			generate_pawn_move_list(moves, square_idx, new_square)
 	if file < 8:
-		var new_square := square_index + delta + 1
+		var new_square := square_idx + delta + 1
 		var piece = pieces[new_square]
 		if new_square == ep_target or (piece != null and piece_color(piece) != col):
-			generate_pawn_move_list(moves, square_index, new_square)
+			generate_pawn_move_list(moves, square_idx, new_square)
 	return moves
 
 
@@ -783,17 +783,17 @@ func is_repetition(other) -> bool:
 func is_nfold_repetition(n: int) -> bool:
 	if n <= 1:
 		return true
-	var reference = duplicate()
+	var board_reference = duplicate()
 	var repetitions := 1
-	while reference.move_stack.size() > 0:
+	while board_reference.move_stack.size() > 0:
 		# Optimization: if we reach an irreversable move (aka capture or pawn move), return false early
 		# This could also include moves that change castling rights. Potential TODO
-		var last_move := reference.move_stack[-1] as Move
-		if last_move.captured_piece or last_move.promotion or reference.pieces[last_move.to_square] in ["P", "p"]:
+		var last_move := board_reference.move_stack[-1] as Move
+		if last_move.captured_piece or last_move.promotion or board_reference.pieces[last_move.to_square] in ["P", "p"]:
 			return false
 
-		reference.undo()
-		if is_repetition(reference):
+		board_reference.undo()
+		if is_repetition(board_reference):
 			repetitions += 1
 			if repetitions >= n:
 				return true
@@ -823,16 +823,16 @@ func prune_ep_target() -> void:
 	var target_piece = "p" if turn else "P"
 	if file > 1:
 		if pieces[new_square - 1] == target_piece:
-			var reference = duplicate(false)
-			reference.play_move(construct_move(new_square - 1, ep_target))
-			if not reference.is_king_attacked(turn):
+			var board_reference = duplicate(false)
+			board_reference.play_move(construct_move(new_square - 1, ep_target))
+			if not board_reference.is_king_attacked(turn):
 				# found legal en passant!
 				return
 	if file < 8:
 		if pieces[new_square + 1] == target_piece:
-			var reference = duplicate(false)
-			reference.play_move(construct_move(new_square + 1, ep_target))
-			if not reference.is_king_attacked(turn):
+			var board_reference = duplicate(false)
+			board_reference.play_move(construct_move(new_square + 1, ep_target))
+			if not board_reference.is_king_attacked(turn):
 				# found legal en passant!
 				return
 

@@ -4,7 +4,7 @@
 [ext_resource type="FontFile" uid="uid://bidxcbkineva8" path="res://assets/orkney/Orkney Bold.otf" id="2"]
 [ext_resource type="Script" path="res://src/Game.gd" id="3"]
 [ext_resource type="PackedScene" path="res://src/SanDisplay.tscn" id="4"]
-[ext_resource type="PackedScene" path="res://src/SettingsMenu.tscn" id="5"]
+[ext_resource type="PackedScene" uid="uid://c0fhva7v6808" path="res://src/SettingsMenu.tscn" id="5"]
 [ext_resource type="AudioStream" uid="uid://bwevr8ykpn5mf" path="res://assets/sound/move.wav" id="6"]
 [ext_resource type="AudioStream" uid="uid://dduxkebeodh7u" path="res://assets/sound/check.wav" id="7"]
 [ext_resource type="AudioStream" uid="uid://dy6o2j8gx7x32" path="res://assets/sound/capture.wav" id="8"]
@@ -151,14 +151,10 @@ wait_time = 5.0
 one_shot = true
 
 [node name="SettingsMenu" parent="." instance=ExtResource("5")]
-position = Vector2i(0, 36)
 
 [node name="CreditsMenu" parent="." instance=ExtResource("10")]
 visible = false
-layout_mode = 0
-anchors_preset = 0
-anchor_right = 0.0
-anchor_bottom = 0.0
+layout_mode = 1
 
 [node name="MoveSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6")

@@ -182,13 +182,14 @@ func evaluate(chess: Chess) -> int:
 ## GAME TREE SEARCH ##
 
 func negamax(chess: Chess, depth: int, alpha: int, beta: int) -> Array:
+	var moves: Array
 	if depth <= 0:
 		if chess.in_check():
-			var moves := chess.generate_legal_moves(false)
+			moves = chess.generate_legal_moves(false)
 			if moves.size() == 0:
 				return [-MATE_SCORE, null]
 		return [negamax_quiescence(chess, quiescence_depth, alpha, beta), null]
-	var moves := order_moves(chess, chess.generate_legal_moves(false))
+	moves = order_moves(chess, chess.generate_legal_moves(false))
 	if moves.size() == 0:
 		return [-MATE_SCORE if chess.in_check() else 0, null]
 	var value := -INF_SCORE
@@ -267,7 +268,7 @@ func order_moves(chess: Chess, moves: Array) -> Array:
 		moves_and_bonuses.push_back([move, bonus])
 
 	# Sort array
-	moves_and_bonuses.sort_custom(Callable(self, "sort_comparison"))
+	moves_and_bonuses.sort_custom(sort_comparison)
 
 	var sorted_moves := []
 	for move_and_bonus in moves_and_bonuses:

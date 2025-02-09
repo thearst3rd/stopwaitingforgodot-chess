@@ -20,16 +20,15 @@ func _input(event: InputEvent) -> void:
 			$LegalMoveIndicator.hide()
 
 func _connect_square_signals(game: ChessGame):
-	print("here")
-	connect("piece_grabbed", game._on_Square_piece_grabbed);
-	connect("piece_dropped", game._on_Square_piece_dropped);
+	piece_grabbed.connect(game._on_Square_piece_grabbed)
+	piece_dropped.connect(game._on_Square_piece_dropped)
 
 
 func _get_drag_data(_position: Vector2):
 	if $Piece.texture == null or not grabbable:
 		return null
 
-	emit_signal("piece_grabbed", index)
+	piece_grabbed.emit(index)
 
 	var drag_preview_texture := TextureRect.new()
 	drag_preview_texture.expand = true
@@ -60,4 +59,4 @@ func _can_drop_data(_position: Vector2, data) -> bool:
 
 
 func _drop_data(_position: Vector2, data) -> void:
-	emit_signal("piece_dropped", data["from_square"], index)
+	piece_dropped.emit(data["from_square"], index)

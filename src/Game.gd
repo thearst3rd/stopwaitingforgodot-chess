@@ -46,7 +46,7 @@ func _on_ResetButton_pressed() -> void:
 	bot_timer.stop()
 	chess.reset()
 	update_state()
-	if bot_check.pressed and board.get_child(0).index == 63:
+	if bot_check.button_pressed and board.get_child(0).index == 63:
 		# Board is flipped, play move
 		bot_play(true)
 
@@ -83,7 +83,6 @@ func _on_FenText_text_entered(new_text: String) -> void:
 
 
 func _on_Square_piece_grabbed(from_index: int) -> void:
-	print("piece grabbed")
 	if Settings.show_dests:
 		var target_squares := []
 		for move in legal_moves:
@@ -105,7 +104,7 @@ func _on_Square_piece_dropped(from_index: int, to_index: int) -> void:
 		if m.from_square == lm.from_square and m.to_square == lm.to_square and m.promotion == lm.promotion:
 			chess.play_move(lm)
 			update_state(true)
-			if bot_check.pressed:
+			if bot_check.button_pressed:
 				bot_play(true)
 			break
 
@@ -220,7 +219,7 @@ func bot_play(with_timeout := false) -> void:
 	else:
 		if OS.has_feature("threads"):
 			bot_thinking_thread = Thread.new()
-			var error = bot_thinking_thread.start(Callable(self, "bot_think"))
+			var error = bot_thinking_thread.start(bot_think)
 			assert(not error)
 		else:
 			bot_think()

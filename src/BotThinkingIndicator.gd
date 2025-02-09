@@ -13,6 +13,7 @@ func _process(delta) -> void:
 	offset += ANG_SPEED * delta
 	if offset >= TAU:
 		offset -= TAU
+	queue_redraw()
 
 
 func _draw() -> void:

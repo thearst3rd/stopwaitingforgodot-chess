@@ -10,6 +10,7 @@ signal changed
 
 
 func _ready() -> void:
+	hide()
 	show_dests.button_pressed = Settings.show_dests
 	show_highlights.button_pressed = Settings.show_highlights
 	sounds.button_pressed = Settings.sounds
@@ -23,7 +24,7 @@ func _on_ShowDestsCheck_toggled(button_pressed: bool) -> void:
 
 func _on_ShowHighlightsCheck_toggled(button_pressed: bool) -> void:
 	Settings.show_highlights = button_pressed
-	emit_signal("changed")
+	changed.emit()
 
 
 func _on_SoundsCheck_toggled(button_pressed: bool) -> void:

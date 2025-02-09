@@ -1,73 +1,51 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://c0fhva7v6808"]
 
-[ext_resource path="res://src/SettingsMenu.gd" type="Script" id=2]
+[ext_resource type="Script" path="res://src/SettingsMenu.gd" id="2"]
 
 [node name="SettingsMenu" type="Window"]
-offset_left = 506.0
-offset_top = 255.0
-offset_right = 796.0
-offset_bottom = 403.0
+title = "Settings"
+position = Vector2i(0, 36)
+size = Vector2i(280, 144)
+transient = true
 exclusive = true
-window_title = "Settings"
-script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+unresizable = true
+script = ExtResource("2")
 
 [node name="M" type="MarginContainer" parent="."]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_top = 10
 theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="V" type="VBoxContainer" parent="M"]
-offset_left = 10.0
-offset_top = 10.0
-offset_right = 280.0
-offset_bottom = 138.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
+layout_mode = 2
 
 [node name="ShowDestsCheck" type="CheckBox" parent="M/V"]
-offset_right = 270.0
-offset_bottom = 28.0
+layout_mode = 2
 text = "Show Legal Move Destinations"
 
 [node name="ShowHighlightsCheck" type="CheckBox" parent="M/V"]
-offset_top = 32.0
-offset_right = 270.0
-offset_bottom = 60.0
+layout_mode = 2
 text = "Highlight Last Move/Check"
 
 [node name="SoundsCheck" type="CheckBox" parent="M/V"]
-offset_top = 64.0
-offset_right = 270.0
-offset_bottom = 92.0
+layout_mode = 2
 text = "Play Sounds"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="M" type="MarginContainer" parent="M/V"]
-offset_top = 96.0
-offset_right = 270.0
-offset_bottom = 124.0
+layout_mode = 2
 theme_override_constants/margin_left = 24
 
 [node name="SoundCheckCheck" type="CheckBox" parent="M/V/M"]
-offset_left = 24.0
-offset_right = 270.0
-offset_bottom = 28.0
+layout_mode = 2
 text = "Play Sound on Check"
 
+[connection signal="close_requested" from="." to="." method="hide"]
 [connection signal="toggled" from="M/V/ShowDestsCheck" to="." method="_on_ShowDestsCheck_toggled"]
 [connection signal="toggled" from="M/V/ShowHighlightsCheck" to="." method="_on_ShowHighlightsCheck_toggled"]
 [connection signal="toggled" from="M/V/SoundsCheck" to="." method="_on_SoundsCheck_toggled"]
